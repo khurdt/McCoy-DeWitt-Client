@@ -20,7 +20,7 @@ export default function Contact() {
 
   const sendContactInfo = () => {
     const token = 'undefined';
-    axios.post('http://127.0.0.1:8080/contact', {
+    axios.post('https://mccoydewitt.herokuapp.com/contact', {
       name: (firstName + ' ' + lastName),
       email: email,
       message: message,
