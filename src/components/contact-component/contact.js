@@ -83,7 +83,7 @@ export default function Contact() {
 
     return (
         <Container>
-            <Row className='justify-content-center'>
+            <Row className='justify-content-center mt-5'>
                 <h5 className='m-2' style={{ textAlign: 'center', opacity: '0.7' }}>Drop us a line!</h5>
                 <Form noValidate validated={validated} onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
                     {/* First Name */}
