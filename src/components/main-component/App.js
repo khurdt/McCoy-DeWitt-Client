@@ -1,6 +1,6 @@
 import './App.css';
 import Navigation from '../navbar-component/navbar';
-import Contact from './contact-component/contact';
+import Contact from '../contact-component/contact';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Row } from 'react-bootstrap';
 
