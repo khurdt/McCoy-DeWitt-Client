@@ -23,19 +23,21 @@ export default function Contact() {
     }
 
     const sendContactInfo = () => {
-        const { firstName, lastName, email, phone, message } = form
-        const token = 'undefined';
-        axios.post('https://mccoydewitt.herokuapp.com/contact', {
+        const { firstName, lastName, email, phone, message } = form;
+
+        axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
             name: (firstName + ' ' + lastName),
             email: email,
             phone: phone,
-            message: message
-        }).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+            message: message,
+        })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     const validateForm = () => {
         const { firstName, lastName, email, phone, message } = form
