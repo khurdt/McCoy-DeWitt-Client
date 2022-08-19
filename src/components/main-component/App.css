@@ -1,0 +1,30 @@
+.front-page-cover {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("../../images/dewitt-front-page2.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.cover-card.cover-card {
+  background-color: rgba(0, 0, 0, 0);
+  width: fit-content;
+  height: fit-content;
+  padding: 30px;
+}
+
+.card-wrapper.card-wrapper {
+  margin-top: 250px;
+}
+
+@media all and (max-width: 770px) {
+  .card-wrapper.card-wrapper {
+    margin-top: 100px;
+  }
+}
+
+@media all and (max-width: 500px) {
+  .card-wrapper.card-wrapper {
+    margin-top: 50px;
+  }
+}
