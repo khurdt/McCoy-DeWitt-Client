@@ -3,7 +3,6 @@ import Navigation from '../navbar-component/navbar';
 import Contact from '../contact-component/contact';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Card, Col } from 'react-bootstrap';
-import frontCover from '../../images/dewitt-front-page2.jpg';
 
 function App() {
   let navigate = useNavigate();
@@ -15,7 +14,7 @@ function App() {
           exact
           path="/"
           element={
-            <Container fluid style={{ margin: '0', padding: '0' }}>
+            <Container fluid style={{ margin: '0', padding: '0' }} className='intro intro'>
               <div className='front-page-cover'>
                 <Row className='justify-content-center'>
                   <Col className='card-wrapper card-wrapper' xs={6} sm={6} md={6}>

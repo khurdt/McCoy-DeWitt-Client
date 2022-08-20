@@ -1,9 +1,13 @@
 .front-page-cover {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background-image: url("../../images/dewitt-front-page2.jpg");
   background-size: 100%;
   background-repeat: no-repeat;
+}
+
+.row.row {
+  --bs-gutter-x: 0;
 }
 
 .cover-card.cover-card {
@@ -15,6 +19,23 @@
 
 .card-wrapper.card-wrapper {
   margin-top: 250px;
+}
+
+.intro.intro {
+  --bs-gutter-x: 0;
+}
+
+#container {
+  position: relative;
+  z-index: 100;
+  transform: translateX(0);
+  transition: all ease 0.6s;
+  background-color: #cacaca;
+}
+
+#container.remove {
+  transform: translateX(-100%);
+  transition: all ease 0.6s;
 }
 
 @media all and (max-width: 770px) {
