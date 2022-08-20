@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.16d793ea.css",
-    "main.js": "/static/js/main.b6d0dd45.js",
+    "main.css": "/static/css/main.7917a7d4.css",
+    "main.js": "/static/js/main.6154cdb1.js",
     "static/js/787.70cf6ddb.chunk.js": "/static/js/787.70cf6ddb.chunk.js",
     "static/media/dewitt-front-page2.jpg": "/static/media/dewitt-front-page2.f42acb33799c92b1ebcc.jpg",
     "index.html": "/index.html",
-    "main.16d793ea.css.map": "/static/css/main.16d793ea.css.map",
-    "main.b6d0dd45.js.map": "/static/js/main.b6d0dd45.js.map",
+    "static/media/hamburger.svg": "/static/media/hamburger.ad3d51601528bad1d771848f1ddc21ca.svg",
+    "main.7917a7d4.css.map": "/static/css/main.7917a7d4.css.map",
+    "main.6154cdb1.js.map": "/static/js/main.6154cdb1.js.map",
     "787.70cf6ddb.chunk.js.map": "/static/js/787.70cf6ddb.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.16d793ea.css",
-    "static/js/main.b6d0dd45.js"
+    "static/css/main.7917a7d4.css",
+    "static/js/main.6154cdb1.js"
   ]
 }
