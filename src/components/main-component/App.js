@@ -6,6 +6,7 @@ import { Button, Container, Row, Card, Col } from 'react-bootstrap';
 
 function App() {
   let navigate = useNavigate();
+  let isWindowSmall = (window.innerWidth < 600);
   return (
     <div className="App">
       <Navigation />
@@ -15,14 +16,17 @@ function App() {
           path="/"
           element={
             <Container fluid style={{ margin: '0', padding: '0' }} className='intro intro'>
-              <div className='front-page-cover'>
+              <div className='coverImage coverImage'>
+                <a style={{ display: 'none' }} href='https://www.freepik.com/photos/ny'>Ny photo created by wirestock - www.freepik.com</a>
                 <Row className='justify-content-center'>
-                  <Col className='card-wrapper card-wrapper' xs={6} sm={6} md={6}>
-                    <Card className='cover-card cover-card m-auto'>
-                      <Button style={{ maxWidth: '200px' }} as={Link} to='contact' variant='primary'>Contact Us</Button>
+                  <Col className='card-wrapper card-wrapper'>
+                    <Card className='cover-card cover-card mr-auto'>
+                      <Card.Title className='mb-3 firstTitle'>We Are Builders</Card.Title>
+                      <Card.Title className='mb-3 secondTitle' style={{ fontSize: '40px' }}>We Will Build What You Desire</Card.Title>
+                      <hr className='hr' />
+                      <Button className='Intro-button' style={{ maxWidth: '200px' }} as={Link} to='contact' variant='dark'>Contact Us</Button>
                     </Card>
                   </Col>
-                  <Col></Col>
                 </Row>
               </div>
             </Container>
