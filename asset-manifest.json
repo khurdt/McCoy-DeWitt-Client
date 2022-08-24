@@ -1,24 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.688ca566.css",
-    "main.js": "/static/js/main.aa724e0e.js",
+    "main.css": "/static/css/main.77a6e1b8.css",
+    "main.js": "/static/js/main.6a8796fe.js",
     "static/js/787.70cf6ddb.chunk.js": "/static/js/787.70cf6ddb.chunk.js",
     "static/media/roof.jpg": "/static/media/roof.92706936541a9cf02438.jpg",
     "static/media/siding.jpg": "/static/media/siding.4750a7b9d7f355cc5067.jpg",
-    "static/media/drywall.jpg": "/static/media/drywall.0296ebe2514349e4e7c8.jpg",
     "static/media/insurance.jpg": "/static/media/insurance.77b0fd7e131ccfd6a0cf.jpg",
     "static/media/soffit.jpg": "/static/media/soffit.f680ebdb98f6c4698272.jpg",
+    "static/media/paint.jpg": "/static/media/paint.8541469a95411cd2326f.jpg",
+    "static/media/flooring.jpg": "/static/media/flooring.7c982cbb60d82b3b9b6f.jpg",
     "static/media/contact.jpg": "/static/media/contact.febca30c6188a756d6c1.jpg",
     "static/media/storm.jpg": "/static/media/storm.bd4efda878d87dce38cc.jpg",
     "static/media/topPage2.jpg": "/static/media/topPage2.afae1e26f8841b54f662.jpg",
     "static/media/fascia.jpg": "/static/media/fascia.ba5ceeccb1e06bf95b29.jpg",
     "index.html": "/index.html",
-    "main.688ca566.css.map": "/static/css/main.688ca566.css.map",
-    "main.aa724e0e.js.map": "/static/js/main.aa724e0e.js.map",
+    "main.77a6e1b8.css.map": "/static/css/main.77a6e1b8.css.map",
+    "main.6a8796fe.js.map": "/static/js/main.6a8796fe.js.map",
     "787.70cf6ddb.chunk.js.map": "/static/js/787.70cf6ddb.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.688ca566.css",
-    "static/js/main.aa724e0e.js"
+    "static/css/main.77a6e1b8.css",
+    "static/js/main.6a8796fe.js"
   ]
 }
