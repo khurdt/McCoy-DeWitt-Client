@@ -1,7 +1,7 @@
 .hamburger {
   position: absolute;
   border: none;
-  top: 0;
+  top: 2.5px;
   right: 1.3rem;
   padding: 4px;
   z-index: 100;
@@ -13,11 +13,9 @@
 .menu-close-icon {
   position: absolute;
   border: none;
-  top: 0;
+  top: 2.5px;
   right: 1.3rem;
   padding: 4px;
-  width: 50px;
-  height: 50px;
   background: transparent;
   cursor: pointer;
 }
@@ -26,14 +24,13 @@
   color: white;
   list-style: none;
   position: absolute;
-  left: 0;
   right: 0;
   top: 0;
-  height: 300px;
+  left: 0;
   z-index: 99;
   margin: 0;
   padding: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 1);
   transition: all ease 0.6s;
 }
 
@@ -62,6 +59,13 @@
 .drop-down-item a {
   text-decoration: none;
   font-size: 25px;
+  opacity: 0.7;
+  color: white;
+}
+
+.drop-down-item a:hover {
+  color: #2ab400;
+  opacity: 0.7;
 }
 
 .drop-down-item {
@@ -74,7 +78,7 @@
 }
 
 .page-header {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.8);
   position: absolute;
   top: 0;
   left: 0;
@@ -82,6 +86,7 @@
   display: flex;
   z-index: 100;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  color: white;
 }
 
 .page-header__item:nth-child(1) {
@@ -104,9 +109,16 @@ div.nav a {
   z-index: 0;
   position: relative;
   cursor: pointer;
+  color: white;
+  opacity: 0.7;
 }
 
-div.decor a:before,
+div.nav a:hover {
+  color: #2ab400;
+  opacity: 0.7;
+}
+
+/* div.decor a:before,
 div.decor a:after {
   position: absolute;
   left: 0px;
@@ -132,7 +144,7 @@ div.decor a:hover:before,
 div.decor a:hover:after {
   opacity: 1;
   transform: translateX(0px);
-}
+} */
 
 .navigation-list__item {
   display: inline-block;
