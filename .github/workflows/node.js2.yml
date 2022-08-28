@@ -30,7 +30,8 @@ jobs:
     - run: npm ci
     - run: CI=false && npm run build --if-present
     - run: git config --global user.email "joshuahurdt@gmail.com"
-    - run: git config --global user.name "/khurdt"
+    - run: git config --global user.name "khurdt"
+    - run: git remote set-url origin https://$token:x-oauth-basic@github.com/$username/$repo.git
     - run: npm run deploy --if-present
       env:
         REACT_APP_CLOUD_ID: '${{ secrets.REACT_APP_CLOUD_ID }}'
