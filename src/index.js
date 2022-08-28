@@ -3,15 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './components/main-component/App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { CloudinaryContext } from 'cloudinary-react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <HashRouter>
+      <CloudinaryContext cloudName="dcrbfhcxx">
+        <App />
+      </CloudinaryContext>
+    </HashRouter>
   </React.StrictMode>
 );
 

@@ -1,0 +1,44 @@
+.notification-container {
+  --notification-size: 300px;
+  --gap: 25px;
+  --animation-duration: 0.35s;
+  --animation-easing: ease;
+  background-color: red;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--notification-size);
+}
+
+.notification-message {
+  background: #222;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 3px;
+  display: flex;
+  position: absolute;
+  bottom: var(--gap);
+  left: 0;
+  opacity: 0;
+  width: var(--notification-size);
+  justify-content: space-between;
+  gap: 15px;
+  transform: translate(0, calc(100% - var(--gap)));
+  animation: slide-vertically var(--animation-duration) var(--animation-easing) forwards;
+}
+
+.close-btn {
+  height: 25px;
+  width: 25px;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@keyframes slide-vertically {
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
