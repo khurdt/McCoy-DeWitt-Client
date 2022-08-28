@@ -12,7 +12,8 @@ on:
 env: 
   username: ${{ secrets.GITHUB_TOKEN }}
   password: ${{ secrets.PASSWORD }}
-  token: ${{ secrets.TOKEN }}
+  token: ${{ secrets.TOKEN_WORKFLOW }}
+  
 
 jobs:
   build:
