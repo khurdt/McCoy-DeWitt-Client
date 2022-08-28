@@ -11,7 +11,7 @@ import { Button, Container, Row, Card, Col } from 'react-bootstrap';
 function App() {
   let navigate = useNavigate();
   const [pageActive, setPageActive] = useState('');
-  // const isWindowSmall = (window.innerWidth < 600);
+  const isWindowSmall = (window.innerWidth < 600);
   return (
     <div className="App">
       <Navigation pageActive={pageActive} setPageActive={setPageActive} />
