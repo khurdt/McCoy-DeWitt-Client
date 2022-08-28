@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <CloudinaryContext cloudName={process.env.REACT_APP_CLOUD_ID}>
+      <CloudinaryContext cloudName='dcrbfhcxx'>
         <App />
       </CloudinaryContext>
     </HashRouter>
