@@ -16,13 +16,13 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v3
-      env:
-        REACT_APP_CLOUD_ID: dcrbfhcxx
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: CI=false
-    - run: npm build --if-present
-    - run: npm deploy --if-present
+    - run: npm run build # run the "build" package script
+    - run: npm run deploy # run the "deploy" package script
+      env:
+        REACT_APP_CLOUD_ID: dcrbfhcxx
