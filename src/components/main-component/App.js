@@ -31,7 +31,7 @@ function App() {
                 </Card>
               </div>
               <h3 className='m-4' style={{ textAlign: 'center' }}>Services</h3>
-              <hr />
+              <hr style={{ marginRight: '20px', marginLeft: '20px' }} />
               <Row className='m-auto'>
                 {services.map((s) => {
                   return (
