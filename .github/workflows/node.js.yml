@@ -11,7 +11,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env: 
+      REACT_APP_CLOUD_ID: dcrbfhcxx
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
