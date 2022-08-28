@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import { Container, Row, Button, FormGroup, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import { Wind, Send } from 'react-feather';
-import Snackbar from '../snackbar-component/snackbar';
+// import Snackbar from '../snackbar-component/snackbar';
 
 
 export default function Contact() {
