@@ -8,6 +8,10 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    
+env: 
+  username: ${{ secrets.GITHUB_TOKEN }}
+  password: ${{ secrets.PASSWORD }}
 
 jobs:
   build:
@@ -31,7 +35,7 @@ jobs:
     - run: CI=false && npm run build --if-present
     - run: git config --global user.email "joshuahurdt@gmail.com"
     - run: git config --global user.name "khurdt"
-    - run: git remote set-url origin https://github.com/khurdt/McCoy-DeWitt-Client.git
+    - run: git remote set-url origin https://${username}:${password}@github.com/${username}/McCoy-DeWitt-Client.git
     - run: npm run deploy --if-present
       env:
         REACT_APP_CLOUD_ID: '${{ secrets.REACT_APP_CLOUD_ID }}'
