@@ -8,12 +8,6 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
-env: 
-  username: ${{ secrets.GITHUB_TOKEN }}
-  password: ${{ secrets.PASSWORD }}
-  token: ${{ secrets.TOKEN_WORKFLOW }}
-  
 
 jobs:
   build:
