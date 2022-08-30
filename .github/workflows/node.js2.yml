@@ -32,6 +32,7 @@ jobs:
     - run: git config --global user.email "joshuahurdt@gmail.com"
     - run: git config --global user.name "khurdt"
     - run: git remote set-url origin git@github.com:khurdt/McCoy-DeWitt-Client.git
+    - run: ssh -T git@github.com
     - run: npm run deploy --if-present
       env:
         REACT_APP_CLOUD_ID: '${{ secrets.REACT_APP_CLOUD_ID }}'
