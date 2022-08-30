@@ -23,7 +23,7 @@ jobs:
       run: |
         npm install
         CI=false
-        npm run-script build
+        npm run build
       env:
         REACT_APP_CLOUD_ID: '${{ secrets.REACT_APP_CLOUD_ID }}'
 
