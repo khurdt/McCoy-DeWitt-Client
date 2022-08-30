@@ -24,14 +24,13 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
-        repo-token: ${{ GITHUB_TOKEN }}
+        repo-token: ${{ secrets.TOKEN_WORKFLOW }}
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
     - run: CI=false && npm run build --if-present
     - run: git config --global user.email "joshuahurdt@gmail.com"
     - run: git config --global user.name "khurdt"
-    - run: git remote set-url origin git@github.com:khurdt/McCoy-DeWitt-Client.git
     - run: npm run deploy --if-present
       env:
         REACT_APP_CLOUD_ID: '${{ secrets.REACT_APP_CLOUD_ID }}'
