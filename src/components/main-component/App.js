@@ -7,6 +7,7 @@ import Navigation from '../navbar-component/navbar';
 import Contact from '../contact-component/contact';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Row, Card, Col } from 'react-bootstrap';
+import { ChevronsRight } from 'react-feather'
 
 function App() {
   let navigate = useNavigate();
@@ -24,10 +25,12 @@ function App() {
               <div>
                 <Image publicId='frontpage_omrxle' className='coverImage coverImage' />
                 <Card className='cover-card cover-card mr-auto'>
-                  <Card.Title className='mb-3 firstTitle'>Restoration</Card.Title>
+                  <Card.Title className='mb-3 firstTitle'>Restoration <span>
+                    <ChevronsRight width={20} height={20} color='white' />
+                  </span></Card.Title>
                   <Card.Title className='mb-3 secondTitle' style={{ fontSize: '30px' }}>We Preserve What You Love <span><br /></span> With Honesty and Integrity</Card.Title>
                   <hr className='hr' />
-                  <Button className='Intro-button' onClick={() => setPageActive('contact')} style={{ width: '200px' }} as={Link} to='contact' variant='dark'>Contact Us</Button>
+                  <Button className='Intro-button' onClick={() => setPageActive('contact')} style={{ width: '200px' }} as={Link} to='contact' variant='light'>Contact Us</Button>
                 </Card>
               </div>
               <h3 className='m-4' style={{ textAlign: 'center' }}>Services</h3>
