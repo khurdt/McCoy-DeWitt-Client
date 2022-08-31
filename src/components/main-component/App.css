@@ -13,22 +13,22 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   width: fit-content;
   height: fit-content;
   padding: 30px;
-  border-color: rgb(42, 180, 0);
+  border-color: rgba(42, 180, 0, 0.8);
 }
 
 .firstTitle {
-  color: black;
+  color: white;
 }
 
 .secondTitle {
-  color: rgb(42, 180, 0);
-  -webkit-text-stroke-color: rgb(42, 180, 0);
+  color: white;
+  /* -webkit-text-stroke-color: black;
   -webkit-text-stroke-width: 0.5px;
-  -webkit-text-fill-color: black;
+  -webkit-text-fill-color: white; */
 }
 
 .Intro-button {
@@ -44,7 +44,7 @@
 .hr {
   border-width: 2px;
   height: 2px;
-  color: #004000;
+  color: rgba(42, 180, 0, 1);
 }
 
 /* #container {

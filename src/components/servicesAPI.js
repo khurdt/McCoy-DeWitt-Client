@@ -1,12 +1,3 @@
-// import Roof from '../images/roof.jpg';
-// import Siding from '../images/siding.jpg';
-// import Soffit from '../images/soffit.jpg';
-// import Fascia from '../images/fascia.jpg';
-// import Paint from '../images/paint.jpg';
-// import Insurance from '../images/insurance.jpg';
-// import Storm from '../images/storm.jpg';
-// import Flooring from '../images/flooring.jpg';
-
 export const services = [
   {
     _id: 1,
