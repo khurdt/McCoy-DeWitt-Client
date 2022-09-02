@@ -1,35 +1,40 @@
 .notification-container {
-  --notification-size: 300px;
-  --gap: 25px;
-  --animation-duration: 0.35s;
-  --animation-easing: ease;
-  background-color: red;
-  position: sticky;
+  position: fixed;
   left: 50%;
+  bottom: 10%;
   transform: translateX(-50%);
-  width: var(--notification-size);
+  z-index: 1000;
 }
 
 .notification-message {
   background: #222;
+  border: 1px solid rgb(42, 180, 0);
   color: #fff;
   padding: 15px 20px;
   border-radius: 3px;
-  display: flex;
-  position: sticky;
-  bottom: var(--gap);
-  left: 0;
+  display: grid;
+  grid-template-columns: 90% 10%;
   opacity: 0;
-  width: var(--notification-size);
-  justify-content: space-between;
-  gap: 15px;
-  transform: translate(0, calc(100% - var(--gap)));
-  animation: slide-vertically var(--animation-duration) var(--animation-easing) forwards;
+  max-height: 100px;
+  min-width: 300px;
+  max-width: 500px;
+  width: auto;
+  margin: auto;
+  transform: translate(0, calc(100% - 10%));
+}
+
+.notification-message.show {
+  animation: slide-vertically 0.35s ease forwards;
+}
+
+.notification-message.hide {
+  animation: hide 0.35s ease forwards;
 }
 
 .close-btn {
   height: 25px;
   width: 25px;
+  margin: auto;
   color: #fff;
   background: none;
   border: none;
@@ -40,5 +45,17 @@
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes hide {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(0, calc(100% - 10%));
+    opacity: 0;
   }
 }

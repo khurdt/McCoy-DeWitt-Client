@@ -1,0 +1,118 @@
+.coverImage.coverImage {
+  width: 100%;
+  height: 650px;
+  object-fit: cover;
+}
+
+.row.row {
+  --bs-gutter-x: 0;
+}
+
+.cover-card.cover-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  width: fit-content;
+  height: fit-content;
+  padding: 30px;
+  border-color: rgba(42, 180, 0, 0.8);
+}
+
+.firstTitle {
+  color: white;
+}
+
+.secondTitle {
+  color: white;
+  word-wrap: break-word;
+  max-width: 500px;
+  /* -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-fill-color: white; */
+}
+
+.Intro-button {
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+/* hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, .75), rgba(0, 0, 0, 0));
+} */
+
+.hr {
+  border-width: 2px;
+  height: 2px;
+  color: rgb(60, 255, 1);
+  width: 150px;
+}
+
+/* #container {
+  position: relative;
+  z-index: 100;
+  transform: translateX(0);
+  transition: all ease 0.6s;
+  background-color: #cacaca;
+}
+
+#container.remove {
+  transform: translateX(-100%);
+  transition: all ease 0.6s;
+} */
+
+.service-picture.service-picture {
+  object-fit: cover;
+  object-fit: 0 0;
+  width: 100%;
+  height: 100%;
+}
+
+.service-card.service-card {
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  color: white;
+  background-color: rgba(12, 17, 26, 0.2);
+  width: 300px;
+  height: 300px;
+  transform: translateY(30px);
+  display: none;
+  opacity: 0;
+}
+
+.service-card.visible {
+  display: block;
+  animation: fadeUp 2s forwards;
+}
+
+.service-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 120px;
+  text-align: center;
+  color: white;
+  font-weight: bolder;
+  font-size: 20px;
+  background-color: rgba(12, 17, 26, 0.5);
+}
+
+@keyframes fadeUp {
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media all and (max-width: 900px) {}
+
+@media all and (max-width: 770px) {}
+
+@media all and (max-width: 500px) {}

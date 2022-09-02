@@ -5,93 +5,85 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Container, Row, Button, FormGroup, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
-import { Wind, Send } from 'react-feather';
+import { Wind, Send, AlertCircle } from 'react-feather';
 import Snackbar from '../snackbar-component/snackbar';
 
 
 export default function Contact() {
-    const [validated, setValidated] = useState(false);
-    const [form, setForm] = useState({});
-    const [errors, setErrors] = useState({});
-    const [emailSent, setEmailSent] = useState(false);
-    const [emailSending, setEmailSending] = useState(false);
-    const [emailMessage, setEmailMessage] = useState({
-        title: 'Email Sent!',
-        message: 'Thank you for contacting us, we will get back to you shortly.',
-        error: false
-    })
-    const setField = (field, value) => {
-        setForm({
-            ...form,
-            [field]: value
-        })
-        if (!!errors[field]) {
-            setErrors({
-                ...errors,
-                [field]: null
-            })
-        }
-    }
+    const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState('initial');
+    const [emailMessage, setEmailMessage] = useState('');
 
-    const sendContactInfo = () => {
-        setEmailSending(true);
-        const { firstName, lastName, email, phone, message } = form;
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState(undefined);
+    const [message, setMessage] = useState('');
 
-        axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
-            name: (firstName + ' ' + lastName),
-            email: email,
-            phone: phone,
-            message: message,
-        })
-            .then((response) => {
-                console.log(response);
-                setEmailSending(false);
-                setEmailSent(true);
-            })
-            .catch(function (error) {
-                console.log(error);
-                setEmailSending(false);
-                setEmailSent(true);
-                setEmailMessage({
-                    title: 'Email failed to send',
-                    message: 'We apologize, Please try again at another time',
-                    error: true
-                })
-            });
-    };
+    const [firstNameErr, setFirstNameErr] = useState('');
+    const [lastNameErr, setLastNameErr] = useState('');
+    const [emailErr, setEmailErr] = useState('');
+    const [phoneErr, setPhoneErr] = useState('');
+    const [messageErr, setMessageErr] = useState('');
 
-    const validateForm = () => {
-        const { firstName, lastName, email, phone, message } = form
+    const validate = () => {
         const phoneNumberLength = phone.replace(/[^\d]/g, '').length
-        const newErrors = {};
-
-        if (!firstName || firstName === '') { newErrors.firstName = 'Please enter you first name' }
-        else if (firstName.length > 15) { newErrors.firstName = 'Please enter shorter name' }
-        if (!lastName || lastName === '') { newErrors.lastName = 'Please enter you last name' }
-        else if (lastName.length > 15) { newErrors.lastName = 'Please enter shorter name' }
-        if (!email || email === '') { newErrors.email = 'Please enter email' }
-        else if (email.indexOf('@') === -1) { newErrors.email = 'Please enter valid email' }
-        if (!phone || phone === '') { newErrors.phone = 'Please enter phone number' }
-        else if (phoneNumberLength !== 10) { newErrors.phone = 'Please enter valid phone number' }
-        if (!message || message === '') { newErrors.message = 'Please enter a message' }
-
-        return newErrors
-
+        let isReq = true;
+        if (!firstName) {
+            setFirstNameErr('required');
+            isReq = false;
+        }
+        if (!lastName) {
+            setLastNameErr('required');
+            isReq = false;
+        }
+        if (!email) {
+            setEmailErr('required');
+            isReq = false;
+        } else if (email.indexOf('@') === -1) {
+            setEmailErr('invalid');
+            isReq = false;
+        }
+        if (phoneNumberLength !== 10 || phone !== '' || phoneNumberLength !== 0) {
+            setPhoneErr('invalid');
+            isReq = false;
+        }
+        if (!message) {
+            setMessageErr('enter a message');
+            isReq = false;
+        }
+        return isReq;
     }
 
-    const handleSubmit = (event) => {
-        let currentform = event.currentTarget;
-        const formErrors = validateForm();
-        if (currentform.checkValidity() === false || Object.keys(formErrors).length > 0) {
-            event.preventDefault();
-            event.stopPropagation();
-            setErrors(formErrors);
-        } else {
-            event.preventDefault();
-            setValidated(true);
-            sendContactInfo();
+    const sendContactInfo = (e) => {
+        const isReq = validate();
+        console.log(isReq);
+        if (isReq) {
+            setLoading(true);
+            setShow(true);
+            axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
+                name: (firstName + ' ' + lastName),
+                email: email,
+                phone: phone,
+                message: message,
+            })
+                .then((response) => {
+                    console.log(response);
+                    setLoading(false);
+                    setEmailMessage('Email Sent! Thank you.');
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setLoading(false);
+                    setEmailMessage('Email failed to send. Please try another time.');
+                });
         }
     };
+
+    const handlePhoneNumber = (value) => {
+        let formattedNumber = formatPhoneNumber(value);
+        setPhone(formattedNumber)
+    }
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
@@ -113,134 +105,88 @@ export default function Contact() {
                 <Image publicId='contact_bxwt4y' className='contactImage contactImage' />
             </div>
             <div className='mt-4 mb-5'>
-                {(emailSent) ?
-                    <Row className='justify-content-center mt-5 mb-5' style={{ height: '460px' }}>
-                        <Card className='p-3' style={{ borderColor: '#2ab400', width: '300px', height: 'fit-content' }}>
-                            {emailMessage.error ?
-                                <Card.Title className='m-auto'>
-                                    {emailMessage.title}
-                                </Card.Title>
-                                :
-                                <Card.Title className='m-auto'>{emailMessage.title}
-                                    <Wind
-                                        style={{ width: '20px', height: '20px', paddingLeft: '5px' }}
-                                        alt='wind icon'
+                <Container className='mb-5'>
+                    <Row className='justify-content-center'>
+                        <Form style={{ maxWidth: '500px' }}>
+                            {/* First Name */}
+                            <Form.Group>
+                                <FloatingLabel
+                                    label='First Name'
+                                    className="mb-3">
+                                    <Form.Control value={firstName} placeholder='First Name' type='text' onChange={e => setFirstName(e.target.value)} />
+                                    {firstNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
+                                    {firstNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{firstNameErr}</p>}
+                                </FloatingLabel>
+                            </Form.Group>
+                            {/* Last Name */}
+                            <Form.Group>
+                                <FloatingLabel
+                                    label='Last Name'
+                                    className="mb-3">
+                                    <Form.Control
+                                        placeholder='Last Name'
+                                        type='text'
+                                        onChange={e => setLastName(e.target.value)}
+                                        value={lastName}
                                     />
-                                    <Send
-                                        style={{ width: '20px', height: '20px' }}
-                                        alt='send icon'
-                                    />
-                                </Card.Title>
-                            }
-                            <Card.Text className='p-4'>{emailMessage.message}</Card.Text>
-                        </Card>
-                    </Row>
-                    :
-                    (emailSending) ?
-                        <div style={{ height: '460px' }}>
-                            <div className='load'>
-                                <div className='m-auto pt-5'>
-                                    <div className='loading'>
-                                    </div>
+                                    {lastNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
+                                    {lastNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{lastNameErr}</p>}
+                                </FloatingLabel>
+                            </Form.Group>
+                            {/* Email */}
+                            <Form.Group >
+                                <FloatingLabel
+                                    label='Email Address'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={email}
+                                        type='text'
+                                        placeholder='Email Address'
+                                        onChange={(e) => setEmail(e.target.value)} />
+                                    {emailErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
+                                    {emailErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{emailErr}</p>}
+                                </FloatingLabel >
+                            </Form.Group>
+                            {/* Phone Number */}
+                            <Form.Group >
+                                <FloatingLabel
+                                    label='Phone Number'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={phone}
+                                        type='input'
+                                        onChange={(e) => handlePhoneNumber(e.target.value)}
+                                        placeholder='Phone Number' />
+                                    {phoneErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
+                                    {phoneErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{phoneErr}</p>}
+                                </FloatingLabel >
+                            </Form.Group>
+                            {/* Message */}
+                            <Form.Group className='mb-3'>
+                                <Form.Control
+                                    value={message}
+                                    as='textarea'
+                                    rows={4}
+                                    placeholder='Message'
+                                    onChange={(e) => setMessage(e.target.value)} />
+                                <div>
+                                    {messageErr && <p style={{ color: 'red', fontSize: '12px' }}>{messageErr}</p>}
                                 </div>
-                            </div>
-                        </div>
-                        :
-                        <Container>
-                            <Row className='justify-content-center'>
-                                <Form noValidate validated={validated} onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
-                                    {/* First Name */}
-                                    <FormGroup controlId="firstName">
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='First Name'
-                                            className="mb-3">
-                                            <Form.Control
-                                                required
-                                                value={form.firstName}
-                                                isInvalid={!!errors.firstName}
-                                                type='text'
-                                                placeholder='First Name'
-                                                onChange={(e) => setField('firstName', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.firstName}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Last Name */}
-                                    <FormGroup controlId="lastName">
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Last Name'
-                                            className="mb-3">
-                                            <Form.Control
-                                                required
-                                                value={form.lastName}
-                                                isInvalid={!!errors.lastName}
-                                                type='text'
-                                                placeholder='Last Name'
-                                                onChange={(e) => setField('lastName', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.lastName}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Email */}
-                                    <FormGroup controlId="email" >
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Email Address'
-                                            className="mb-3">
-                                            < Form.Control
-                                                required
-                                                value={form.email}
-                                                isInvalid={!!errors.email}
-                                                type='text'
-                                                placeholder='Email Address'
-                                                onChange={(e) => setField('email', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Phone Number */}
-                                    <FormGroup controlId='phone'>
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Phone Number'
-                                            className="mb-3">
-                                            <Form.Control
-                                                type='input'
-                                                required
-                                                value={form.phone}
-                                                isInvalid={!!errors.phone}
-                                                onChange={(e) => setField('phone', formatPhoneNumber(e.target.value))}
-                                                placeholder='Phone Number' />
-                                            <Form.Control.Feedback type='invalid'>{errors.phone}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Message */}
-                                    <Form.Group
-                                        label='Message'
-                                        className="mb-3"
-                                        controlId='message'>
-                                        <Form.Control
-                                            required
-                                            value={form.message}
-                                            isInvalid={!!errors.message}
-                                            as='textarea'
-                                            rows={4}
-                                            placeholder='Message'
-                                            onChange={(e) => setField('message', e.target.value)} />
-                                        <Form.Control.Feedback type='invalid'>{errors.message}</Form.Control.Feedback>
-                                    </Form.Group>
-                                    <Row className='justify-content-center'>
-                                        <Button type='submit' variant='dark' style={{ maxWidth: '300px' }}>
-                                            Send <Send
-                                                style={{ width: '20px', height: '20px' }}
-                                                alt='send icon'
-                                            /></Button>
-                                    </Row>
-                                </Form>
-                            </Row>
-                        </Container>
-                }
-            </div>
+
+                            </Form.Group>
+                            <Button type='submit' onClick={sendContactInfo} variant='dark' style={{ width: '300px', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                                Send <Send
+                                    style={{ width: '20px', height: '20px' }}
+                                    alt='send icon'
+                                /></Button>
+                        </Form>
+                    </Row>
+                </Container>
+            </div >
+            <div style={{ height: '40px' }}></div>
+            <Snackbar message={emailMessage} show={show} setShow={setShow} loading={loading} />
         </>
     )
+
 }
 
