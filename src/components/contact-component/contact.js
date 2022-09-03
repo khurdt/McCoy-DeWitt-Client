@@ -72,6 +72,7 @@ export default function Contact() {
         if (isReq) {
             setLoading(true);
             setShow(true);
+            setEmailMessage('Sending Email')
             axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
                 name: (firstName + ' ' + lastName),
                 email: email,
@@ -156,7 +157,7 @@ export default function Contact() {
                             {/* Phone Number */}
                             <Form.Group >
                                 <FloatingLabel
-                                    label='Phone Number (optional)'
+                                    label='Phone Number'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.phone}
@@ -189,7 +190,9 @@ export default function Contact() {
                 </Container>
             </div >
             <div style={{ height: '40px' }}></div>
-            <Snackbar message={emailMessage} show={show} setShow={setShow} loading={loading} />
+            {show !== 'initial' &&
+                <Snackbar message={emailMessage} show={show} setShow={setShow} loading={loading} />
+            }
         </>
     )
 
