@@ -1,6 +1,6 @@
 import './contact.css';
 import { Image } from 'cloudinary-react';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Container, Row, Button, Card } from 'react-bootstrap';
@@ -11,6 +11,7 @@ import Snackbar from '../snackbar-component/snackbar';
 
 
 export default function Contact() {
+    const formRef = useRef(null);
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState('initial');
     const [emailMessage, setEmailMessage] = useState('');
@@ -27,6 +28,17 @@ export default function Contact() {
                 [field]: null
             })
         }
+    }
+
+    const handleReset = () => {
+        formRef.current.reset();
+        setForm({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            message: ''
+        });
     }
 
     const validate = () => {
@@ -83,6 +95,7 @@ export default function Contact() {
                     console.log(response);
                     setLoading(false);
                     setEmailMessage('Email Sent! Thank you.');
+                    handleReset();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -114,7 +127,9 @@ export default function Contact() {
             <div className='mt-4 mb-5'>
                 <Container className='mb-5'>
                     <Row className='justify-content-center'>
-                        <Form style={{ maxWidth: '500px' }}>
+                        <Form
+                            ref={formRef}
+                            style={{ maxWidth: '500px' }}>
                             {/* First Name */}
                             <Form.Group>
                                 <FloatingLabel
