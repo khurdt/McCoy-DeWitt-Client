@@ -3,23 +3,19 @@ import { Image } from 'cloudinary-react';
 import React, { useState } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { Container, Row, Button, FormGroup, Col, Card } from 'react-bootstrap';
+import { Container, Row, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
-import { Wind, Send } from 'react-feather';
+import { Send } from 'react-feather';
+import FormAlert from '../formAlert-component/formAlert';
 import Snackbar from '../snackbar-component/snackbar';
 
 
 export default function Contact() {
-    const [validated, setValidated] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState('initial');
+    const [emailMessage, setEmailMessage] = useState('');
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
-    const [emailSent, setEmailSent] = useState(false);
-    const [emailSending, setEmailSending] = useState(false);
-    const [emailMessage, setEmailMessage] = useState({
-        title: 'Email Sent!',
-        message: 'Thank you for contacting us, we will get back to you shortly.',
-        error: false
-    })
     const setField = (field, value) => {
         setForm({
             ...form,
@@ -33,63 +29,65 @@ export default function Contact() {
         }
     }
 
-    const sendContactInfo = () => {
-        setEmailSending(true);
-        const { firstName, lastName, email, phone, message } = form;
+    const validate = () => {
+        let { firstName, lastName, email, phone, message } = form;
 
-        axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
-            name: (firstName + ' ' + lastName),
-            email: email,
-            phone: phone,
-            message: message,
-        })
-            .then((response) => {
-                console.log(response);
-                setEmailSending(false);
-                setEmailSent(true);
-            })
-            .catch(function (error) {
-                console.log(error);
-                setEmailSending(false);
-                setEmailSent(true);
-                setEmailMessage({
-                    title: 'Email failed to send',
-                    message: 'We apologize, Please try again at another time',
-                    error: true
-                })
-            });
-    };
-
-    const validateForm = () => {
-        const { firstName, lastName, email, phone, message } = form
-        const phoneNumberLength = phone.replace(/[^\d]/g, '').length
         const newErrors = {};
-
-        if (!firstName || firstName === '') { newErrors.firstName = 'Please enter you first name' }
-        else if (firstName.length > 15) { newErrors.firstName = 'Please enter shorter name' }
-        if (!lastName || lastName === '') { newErrors.lastName = 'Please enter you last name' }
-        else if (lastName.length > 15) { newErrors.lastName = 'Please enter shorter name' }
-        if (!email || email === '') { newErrors.email = 'Please enter email' }
-        else if (email.indexOf('@') === -1) { newErrors.email = 'Please enter valid email' }
-        if (!phone || phone === '') { newErrors.phone = 'Please enter phone number' }
-        else if (phoneNumberLength !== 10) { newErrors.phone = 'Please enter valid phone number' }
-        if (!message || message === '') { newErrors.message = 'Please enter a message' }
-
-        return newErrors
-
+        let isReq = true;
+        if (!firstName) {
+            newErrors.firstName = '*required'
+            isReq = false;
+        }
+        if (!lastName) {
+            newErrors.lastName = '*required'
+            isReq = false;
+        }
+        if (!email) {
+            newErrors.email = '*required'
+            isReq = false;
+        } else if (email.indexOf('@') === -1) {
+            newErrors.email = '*invalid'
+            isReq = false;
+        }
+        if (phone !== undefined) {
+            const phoneNumberLength = form.phone.replace(/[^\d]/g, '').length
+            if (phoneNumberLength > 0 && phoneNumberLength < 10) {
+                newErrors.phone = '*invalid'
+                isReq = false;
+            }
+        }
+        if (!message) {
+            newErrors.message = '*required'
+            isReq = false;
+        }
+        setErrors(newErrors);
+        return isReq;
     }
 
-    const handleSubmit = (event) => {
-        let currentform = event.currentTarget;
-        const formErrors = validateForm();
-        if (currentform.checkValidity() === false || Object.keys(formErrors).length > 0) {
-            event.preventDefault();
-            event.stopPropagation();
-            setErrors(formErrors);
-        } else {
-            event.preventDefault();
-            setValidated(true);
-            sendContactInfo();
+    const sendContactInfo = (event) => {
+        event.preventDefault()
+        const { firstName, lastName, email, phone, message } = form;
+        const isReq = validate();
+        console.log(isReq);
+        if (isReq) {
+            setLoading(true);
+            setShow(true);
+            axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
+                name: (firstName + ' ' + lastName),
+                email: email,
+                phone: phone,
+                message: message,
+            })
+                .then((response) => {
+                    console.log(response);
+                    setLoading(false);
+                    setEmailMessage('Email Sent! Thank you.');
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setLoading(false);
+                    setEmailMessage('Email failed to send. Please try another time.');
+                });
         }
     };
 
@@ -113,134 +111,87 @@ export default function Contact() {
                 <Image publicId='contact_bxwt4y' className='contactImage contactImage' />
             </div>
             <div className='mt-4 mb-5'>
-                {(emailSent) ?
-                    <Row className='justify-content-center mt-5 mb-5' style={{ height: '460px' }}>
-                        <Card className='p-3' style={{ borderColor: '#2ab400', width: '300px', height: 'fit-content' }}>
-                            {emailMessage.error ?
-                                <Card.Title className='m-auto'>
-                                    {emailMessage.title}
-                                </Card.Title>
-                                :
-                                <Card.Title className='m-auto'>{emailMessage.title}
-                                    <Wind
-                                        style={{ width: '20px', height: '20px', paddingLeft: '5px' }}
-                                        alt='wind icon'
+                <Container className='mb-5'>
+                    <Row className='justify-content-center'>
+                        <Form style={{ maxWidth: '500px' }}>
+                            {/* First Name */}
+                            <Form.Group>
+                                <FloatingLabel
+                                    label='First Name'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={form.firstName}
+                                        placeholder='First Name' type='text'
+                                        onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
+                                    {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
+                                </FloatingLabel>
+                            </Form.Group>
+                            {/* Last Name */}
+                            <Form.Group>
+                                <FloatingLabel
+                                    label='Last Name'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={form.lastName}
+                                        placeholder='Last Name'
+                                        type='text'
+                                        onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
                                     />
-                                    <Send
-                                        style={{ width: '20px', height: '20px' }}
-                                        alt='send icon'
-                                    />
-                                </Card.Title>
-                            }
-                            <Card.Text className='p-4'>{emailMessage.message}</Card.Text>
-                        </Card>
-                    </Row>
-                    :
-                    (emailSending) ?
-                        <div style={{ height: '460px' }}>
-                            <div className='load'>
-                                <div className='m-auto pt-5'>
-                                    <div className='loading'>
-                                    </div>
+                                    {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} />}
+                                </FloatingLabel>
+                            </Form.Group>
+                            {/* Email */}
+                            <Form.Group >
+                                <FloatingLabel
+                                    label='Email Address'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={form.email}
+                                        type='text'
+                                        placeholder='Email Address'
+                                        onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
+                                    {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
+                                </FloatingLabel >
+                            </Form.Group>
+                            {/* Phone Number */}
+                            <Form.Group >
+                                <FloatingLabel
+                                    label='Phone Number (optional)'
+                                    className="mb-3">
+                                    <Form.Control
+                                        value={form.phone}
+                                        type='input'
+                                        onChange={(e) => { setField('phone', formatPhoneNumber(e.target.value)); (errors.phone) && validate() }}
+                                        placeholder='Phone Number (optional)' />
+                                    {(errors.phone) && <FormAlert message={errors.phone} type={'error'} />}
+                                </FloatingLabel >
+                            </Form.Group>
+                            {/* Message */}
+                            <Form.Group className='mb-3'>
+                                <div style={{ position: 'relative' }}>
+                                    <Form.Control
+                                        style={{ padding: '20px' }}
+                                        value={form.message}
+                                        as='textarea'
+                                        rows={4}
+                                        placeholder='Message'
+                                        onChange={(e) => { setField('message', e.target.value); (errors.message) && validate() }} />
+                                    {(errors.message) && <FormAlert message={errors.message} type={'error'} />}
                                 </div>
-                            </div>
-                        </div>
-                        :
-                        <Container>
-                            <Row className='justify-content-center'>
-                                <Form noValidate validated={validated} onSubmit={handleSubmit} style={{ maxWidth: '500px' }}>
-                                    {/* First Name */}
-                                    <FormGroup controlId="firstName">
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='First Name'
-                                            className="mb-3">
-                                            <Form.Control
-                                                required
-                                                value={form.firstName}
-                                                isInvalid={!!errors.firstName}
-                                                type='text'
-                                                placeholder='First Name'
-                                                onChange={(e) => setField('firstName', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.firstName}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Last Name */}
-                                    <FormGroup controlId="lastName">
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Last Name'
-                                            className="mb-3">
-                                            <Form.Control
-                                                required
-                                                value={form.lastName}
-                                                isInvalid={!!errors.lastName}
-                                                type='text'
-                                                placeholder='Last Name'
-                                                onChange={(e) => setField('lastName', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.lastName}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Email */}
-                                    <FormGroup controlId="email" >
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Email Address'
-                                            className="mb-3">
-                                            < Form.Control
-                                                required
-                                                value={form.email}
-                                                isInvalid={!!errors.email}
-                                                type='text'
-                                                placeholder='Email Address'
-                                                onChange={(e) => setField('email', e.target.value)} />
-                                            <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Phone Number */}
-                                    <FormGroup controlId='phone'>
-                                        <FloatingLabel
-                                            controlId="floatingInput"
-                                            label='Phone Number'
-                                            className="mb-3">
-                                            <Form.Control
-                                                type='input'
-                                                required
-                                                value={form.phone}
-                                                isInvalid={!!errors.phone}
-                                                onChange={(e) => setField('phone', formatPhoneNumber(e.target.value))}
-                                                placeholder='Phone Number' />
-                                            <Form.Control.Feedback type='invalid'>{errors.phone}</Form.Control.Feedback>
-                                        </FloatingLabel >
-                                    </FormGroup>
-                                    {/* Message */}
-                                    <Form.Group
-                                        label='Message'
-                                        className="mb-3"
-                                        controlId='message'>
-                                        <Form.Control
-                                            required
-                                            value={form.message}
-                                            isInvalid={!!errors.message}
-                                            as='textarea'
-                                            rows={4}
-                                            placeholder='Message'
-                                            onChange={(e) => setField('message', e.target.value)} />
-                                        <Form.Control.Feedback type='invalid'>{errors.message}</Form.Control.Feedback>
-                                    </Form.Group>
-                                    <Row className='justify-content-center'>
-                                        <Button type='submit' variant='dark' style={{ maxWidth: '300px' }}>
-                                            Send <Send
-                                                style={{ width: '20px', height: '20px' }}
-                                                alt='send icon'
-                                            /></Button>
-                                    </Row>
-                                </Form>
-                            </Row>
-                        </Container>
-                }
-            </div>
+                            </Form.Group>
+                            <Button type='submit' onClick={sendContactInfo} variant='dark' style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px' }}>
+                                Send <Send
+                                    style={{ width: '20px', height: '20px' }}
+                                    alt='send icon'
+                                /></Button>
+                        </Form>
+                    </Row>
+                </Container>
+            </div >
+            <div style={{ height: '40px' }}></div>
+            <Snackbar message={emailMessage} show={show} setShow={setShow} loading={loading} />
         </>
     )
+
 }
 
