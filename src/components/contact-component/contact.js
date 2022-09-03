@@ -3,9 +3,10 @@ import { Image } from 'cloudinary-react';
 import React, { useState } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { Container, Row, Button, FormGroup, Col, Card } from 'react-bootstrap';
+import { Container, Row, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
-import { Wind, Send, AlertCircle } from 'react-feather';
+import { Send } from 'react-feather';
+import FormAlert from '../formAlert-component/formAlert';
 import Snackbar from '../snackbar-component/snackbar';
 
 
@@ -13,49 +14,59 @@ export default function Contact() {
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState('initial');
     const [emailMessage, setEmailMessage] = useState('');
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState(undefined);
-    const [message, setMessage] = useState('');
-
-    const [firstNameErr, setFirstNameErr] = useState('');
-    const [lastNameErr, setLastNameErr] = useState('');
-    const [emailErr, setEmailErr] = useState('');
-    const [phoneErr, setPhoneErr] = useState('');
-    const [messageErr, setMessageErr] = useState('');
+    const [form, setForm] = useState({});
+    const [errors, setErrors] = useState({});
+    const setField = (field, value) => {
+        setForm({
+            ...form,
+            [field]: value
+        })
+        if (!!errors[field]) {
+            setErrors({
+                ...errors,
+                [field]: null
+            })
+        }
+    }
 
     const validate = () => {
-        const phoneNumberLength = phone.replace(/[^\d]/g, '').length
+        let { firstName, lastName, email, phone, message } = form;
+
+        const newErrors = {};
         let isReq = true;
         if (!firstName) {
-            setFirstNameErr('required');
+            newErrors.firstName = '*required'
             isReq = false;
         }
         if (!lastName) {
-            setLastNameErr('required');
+            newErrors.lastName = '*required'
             isReq = false;
         }
         if (!email) {
-            setEmailErr('required');
+            newErrors.email = '*required'
             isReq = false;
         } else if (email.indexOf('@') === -1) {
-            setEmailErr('invalid');
+            newErrors.email = '*invalid'
             isReq = false;
         }
-        if (phoneNumberLength !== 10 || phone !== '' || phoneNumberLength !== 0) {
-            setPhoneErr('invalid');
-            isReq = false;
+        if (phone !== undefined) {
+            const phoneNumberLength = form.phone.replace(/[^\d]/g, '').length
+            if (phoneNumberLength > 0 && phoneNumberLength < 10) {
+                newErrors.phone = '*invalid'
+                isReq = false;
+            }
         }
         if (!message) {
-            setMessageErr('enter a message');
+            newErrors.message = '*required'
             isReq = false;
         }
+        setErrors(newErrors);
         return isReq;
     }
 
-    const sendContactInfo = (e) => {
+    const sendContactInfo = (event) => {
+        event.preventDefault()
+        const { firstName, lastName, email, phone, message } = form;
         const isReq = validate();
         console.log(isReq);
         if (isReq) {
@@ -79,11 +90,6 @@ export default function Contact() {
                 });
         }
     };
-
-    const handlePhoneNumber = (value) => {
-        let formattedNumber = formatPhoneNumber(value);
-        setPhone(formattedNumber)
-    }
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
@@ -113,9 +119,11 @@ export default function Contact() {
                                 <FloatingLabel
                                     label='First Name'
                                     className="mb-3">
-                                    <Form.Control value={firstName} placeholder='First Name' type='text' onChange={e => setFirstName(e.target.value)} />
-                                    {firstNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
-                                    {firstNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{firstNameErr}</p>}
+                                    <Form.Control
+                                        value={form.firstName}
+                                        placeholder='First Name' type='text'
+                                        onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
+                                    {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
                                 </FloatingLabel>
                             </Form.Group>
                             {/* Last Name */}
@@ -124,13 +132,12 @@ export default function Contact() {
                                     label='Last Name'
                                     className="mb-3">
                                     <Form.Control
+                                        value={form.lastName}
                                         placeholder='Last Name'
                                         type='text'
-                                        onChange={e => setLastName(e.target.value)}
-                                        value={lastName}
+                                        onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
                                     />
-                                    {lastNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
-                                    {lastNameErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{lastNameErr}</p>}
+                                    {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} />}
                                 </FloatingLabel>
                             </Form.Group>
                             {/* Email */}
@@ -139,42 +146,40 @@ export default function Contact() {
                                     label='Email Address'
                                     className="mb-3">
                                     <Form.Control
-                                        value={email}
+                                        value={form.email}
                                         type='text'
                                         placeholder='Email Address'
-                                        onChange={(e) => setEmail(e.target.value)} />
-                                    {emailErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
-                                    {emailErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{emailErr}</p>}
+                                        onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
+                                    {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
                                 </FloatingLabel >
                             </Form.Group>
                             {/* Phone Number */}
                             <Form.Group >
                                 <FloatingLabel
-                                    label='Phone Number'
+                                    label='Phone Number (optional)'
                                     className="mb-3">
                                     <Form.Control
-                                        value={phone}
+                                        value={form.phone}
                                         type='input'
-                                        onChange={(e) => handlePhoneNumber(e.target.value)}
-                                        placeholder='Phone Number' />
-                                    {phoneErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}><AlertCircle width={20} height={20} style={{ color: 'red' }} /></p>}
-                                    {phoneErr && <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '1%', top: '75%' }}>{phoneErr}</p>}
+                                        onChange={(e) => { setField('phone', formatPhoneNumber(e.target.value)); (errors.phone) && validate() }}
+                                        placeholder='Phone Number (optional)' />
+                                    {(errors.phone) && <FormAlert message={errors.phone} type={'error'} />}
                                 </FloatingLabel >
                             </Form.Group>
                             {/* Message */}
                             <Form.Group className='mb-3'>
-                                <Form.Control
-                                    value={message}
-                                    as='textarea'
-                                    rows={4}
-                                    placeholder='Message'
-                                    onChange={(e) => setMessage(e.target.value)} />
-                                <div>
-                                    {messageErr && <p style={{ color: 'red', fontSize: '12px' }}>{messageErr}</p>}
+                                <div style={{ position: 'relative' }}>
+                                    <Form.Control
+                                        style={{ padding: '20px' }}
+                                        value={form.message}
+                                        as='textarea'
+                                        rows={4}
+                                        placeholder='Message'
+                                        onChange={(e) => { setField('message', e.target.value); (errors.message) && validate() }} />
+                                    {(errors.message) && <FormAlert message={errors.message} type={'error'} />}
                                 </div>
-
                             </Form.Group>
-                            <Button type='submit' onClick={sendContactInfo} variant='dark' style={{ width: '300px', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                            <Button type='submit' onClick={sendContactInfo} variant='dark' style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px' }}>
                                 Send <Send
                                     style={{ width: '20px', height: '20px' }}
                                     alt='send icon'

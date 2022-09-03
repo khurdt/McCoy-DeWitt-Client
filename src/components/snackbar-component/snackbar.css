@@ -2,8 +2,17 @@
   position: fixed;
   left: 50%;
   bottom: 10%;
-  transform: translateX(-50%);
+  margin-left: -175px;
+  transform: translateY(250%);
   z-index: 1000;
+}
+
+.notification-container.show {
+  animation: slide-vertically 0.35s ease forwards;
+}
+
+.notification-container.hide {
+  animation: hide 0.35s ease forwards;
 }
 
 .notification-message {
@@ -14,21 +23,8 @@
   border-radius: 3px;
   display: grid;
   grid-template-columns: 90% 10%;
-  opacity: 0;
   max-height: 100px;
-  min-width: 300px;
-  max-width: 500px;
-  width: auto;
-  margin: auto;
-  transform: translate(0, calc(100% - 10%));
-}
-
-.notification-message.show {
-  animation: slide-vertically 0.35s ease forwards;
-}
-
-.notification-message.hide {
-  animation: hide 0.35s ease forwards;
+  width: 350px;
 }
 
 .close-btn {
@@ -55,7 +51,7 @@
   }
 
   100% {
-    transform: translate(0, calc(100% - 10%));
+    transform: translateY(250%);
     opacity: 0;
   }
 }

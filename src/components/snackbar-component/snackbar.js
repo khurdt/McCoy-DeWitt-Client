@@ -1,10 +1,18 @@
-import React, { useState } from "react"
+import React from "react"
 import './snackbar.css';
 export default function Snackbar(props) {
   let { message, show, setShow, loading } = props;
+  if (show && !loading) {
+    setTimeout(
+      () => {
+        setShow(false);
+      },
+      6000
+    );
+  }
   return (
-    <div className='notification-container'>
-      <div className={(show === 'initial') ? 'notification-message' : (show === true) ? 'notification-message show' : 'notification-message hide'}>
+    <div className={(show === 'initial') ? 'notification-container' : (show === true) ? 'notification-container show' : 'notification-container hide'}>
+      <div className='notification-message'>
         {loading ?
           <div style={{ height: '30px' }}>
             <div className='load'>
