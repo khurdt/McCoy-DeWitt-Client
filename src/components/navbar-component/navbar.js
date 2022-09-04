@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Mail, Home } from 'react-feather';
 import './navbar.css';
+import Logo from '../../images/logo2.png';
 
 export default function Navigation(props) {
   const { pageActive, setPageActive } = props;
@@ -29,7 +30,7 @@ export default function Navigation(props) {
   return (
     <>
       <header className="page-header">
-        <h4 className="page-header__item">McCoy DeWitt LLC</h4>
+        <h4 className="page-header__item"><span><img className='logo' src={Logo} /></span>McCoy DeWitt LLC</h4>
         {/* <img className="page-header__item" src="" alt="logo with title name Kevin Hurdt" /> */}
         <nav className="page-header__item navBar">
           <div className="nav decor">
