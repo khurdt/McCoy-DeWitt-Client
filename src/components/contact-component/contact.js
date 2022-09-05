@@ -118,7 +118,8 @@ export default function Contact() {
 
     return (
         <>
-            <div>
+            <div style={{ position: 'relative' }}>
+                <div className='topfront-background'></div>
                 <Card className='contactIntro contactIntro m-auto'>
                     <Card.Title className='m-auto' style={{ color: 'white' }}>Contact Us</Card.Title>
                 </Card>

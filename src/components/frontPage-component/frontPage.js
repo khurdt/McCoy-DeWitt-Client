@@ -12,11 +12,12 @@ export default function FrontPage(props) {
   return (
     <>
       <Container fluid style={{ margin: '0', padding: '0' }} className='intro intro mb-5'>
-        <div>
+        <div style={{ position: 'relative' }}>
+          <div className='topfront-background'></div>
           <Image publicId='frontpage_omrxle' className='coverImage coverImage' />
           <Card className='cover-card cover-card mr-auto'>
-            <Card.Title className='mb-3 firstTitle'>Restoration <span>
-              <ChevronsRight width={20} height={20} color='white' />
+            <Card.Title className='mb-3 firstTitle'>We are McCoy DeWitt <span>
+              <ChevronsRight width={20} height={20} style={{ marginBottom: '4px' }} color='white' />
             </span></Card.Title>
             <Card.Title className='mb-3 secondTitle' style={{ fontSize: '30px' }}>We Preserve What You Love With Honesty And Integrity</Card.Title>
             <hr className='hr' />
