@@ -3,25 +3,31 @@ import React, { useEffect, useState } from 'react';
 // import Nav from 'react-bootstrap/Nav';
 // import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
-import { Menu, X, Mail, Home } from 'react-feather';
+import { Menu, X, Mail, Home, LogIn, User, LogOut } from 'react-feather';
 import './navbar.css';
 import Logo from '../../images/logo3.png';
 
 export default function Navigation(props) {
-  const { pageActive, setPageActive } = props;
+  const { pageActive, setPageActive, setShowLogin } = props;
   const [navOpen, setNavOpen] = useState('hidden');
+  const isAuth = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
 
   useEffect(() => {
     (window.location.href.includes('user')) ? setPageActive('user') :
       (window.location.href.includes('contact')) ? setPageActive('contact') : setPageActive('home');
-    // else if (window.location.href.includes('register')) { this.setState({ pageActive: 'register' }) }
-  }, [])
+  }, []);
+
+  const onLoggedOut = () => {
+    localStorage.clear();
+    window.open('/', '_self');
+  }
 
   let homeTab = {
-    borderBottom: (!(window.location.href.includes('user' || 'contact')) && pageActive === 'home') ? '1px solid #2ab400' : 'none'
+    borderBottom: (!(window.location.href.includes('profile' || 'contact')) && pageActive === 'home') ? '1px solid #2ab400' : 'none'
   };
   let userTab = {
-    borderBottom: (pageActive === 'user' || window.location.href.includes('users')) ? '1px solid #2ab400' : 'none'
+    borderBottom: (pageActive === 'user' || window.location.href.includes('profile')) ? '1px solid #2ab400' : 'none'
   };
   let contactTab = {
     borderBottom: (pageActive === 'login' || window.location.href.includes('contact')) ? '1px solid #2ab400' : 'none'
@@ -42,18 +48,43 @@ export default function Navigation(props) {
                 <Link style={homeTab} as={Link} to='/' onClick={() => setPageActive('home')}>
                   <Home
                     className='mb-1'
-                    style={{ width: '20px', height: '20px' }}
+                    style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
                     alt='contact icon'
                   /> Home</Link>
               </li>
               <li className="navigation-list__item">
                 <Link style={contactTab} as={Link} to='contact' onClick={() => setPageActive('contact')}>
                   <Mail
-                    className='mb-1'
-                    style={{ width: '20px', height: '20px' }}
+                    style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
                     alt='contact icon'
                   /> Contact</Link>
               </li>
+              {(user && isAuth) ?
+                <>
+                  <li className="navigation-list__item">
+                    <Link style={userTab} as={Link} to='profile' onClick={() => { setPageActive('user') }}>
+                      <User
+                        style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                        alt='contact icon'
+                      />{user}</Link>
+                  </li>
+                  <li className="navigation-list__item">
+                    <div onClick={() => { onLoggedOut() }}>
+                      <LogOut
+                        style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                        alt='contact icon'
+                      />Logout</div>
+                  </li>
+                </>
+                :
+                <li className="navigation-list__item">
+                  <div onClick={() => { setShowLogin(true) }}>
+                    <LogIn
+                      style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                      alt='contact icon'
+                    /> Login</div>
+                </li>
+              }
             </ul>
           </div>
         </nav>
@@ -89,6 +120,32 @@ export default function Navigation(props) {
                 alt='contact icon'
               /> Contact</Link>
           </li>
+          {(user && isAuth) ?
+            <>
+              <li className="drop-down-item">
+                <Link style={userTab} as={Link} to='profile' onClick={() => { setNavOpen('close'); setPageActive('user') }}>
+                  <User
+                    style={{ width: '20px', height: '20px' }}
+                    alt='contact icon'
+                  />{user}</Link>
+              </li>
+              <li className="drop-down-item">
+                <div onClick={() => { onLoggedOut() }}>
+                  <LogOut
+                    style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                    alt='contact icon'
+                  />Logout</div>
+              </li>
+            </>
+            :
+            <li className="drop-down-item">
+              <div onClick={() => { setShowLogin(true) }}>
+                <LogIn
+                  style={{ width: '20px', height: '20px' }}
+                  alt='contact icon'
+                /> Login</div>
+            </li>
+          }
         </ul>
       </div>
     </>

@@ -7,14 +7,10 @@ import { Container, Row, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 import { Send } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
-import Snackbar from '../snackbar-component/snackbar';
 
-
-export default function Contact() {
+export default function Contact(props) {
+    const { setSnackBarInfo, snackbarBarInfo } = props;
     const formRef = useRef(null);
-    const [loading, setLoading] = useState(false);
-    const [show, setShow] = useState('initial');
-    const [emailMessage, setEmailMessage] = useState('');
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
     const setField = (field, value) => {
@@ -82,9 +78,11 @@ export default function Contact() {
         const isReq = validate();
         console.log(isReq);
         if (isReq) {
-            setLoading(true);
-            setShow(true);
-            setEmailMessage('Sending Email')
+            setSnackBarInfo({
+                message: 'Sending Email',
+                loading: true,
+                show: true
+            });
             axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
                 name: (firstName + ' ' + lastName),
                 email: email,
@@ -93,14 +91,20 @@ export default function Contact() {
             })
                 .then((response) => {
                     console.log(response);
-                    setLoading(false);
-                    setEmailMessage('Email Sent! Thank you.');
+                    setSnackBarInfo({
+                        show: true,
+                        message: 'Email Sent! Thank You',
+                        loading: false,
+                    });
                     handleReset();
                 })
                 .catch(function (error) {
                     console.log(error);
-                    setLoading(false);
-                    setEmailMessage('Email failed to send. Please try another time.');
+                    setSnackBarInfo({
+                        show: true,
+                        message: (error.message) ? error.message : 'Failed to Send Email, Please Try Another Time',
+                        loading: false
+                    });
                 });
         }
     };
@@ -206,9 +210,6 @@ export default function Contact() {
                 </Container>
             </div >
             <div style={{ height: '40px' }}></div>
-            {show !== 'initial' &&
-                <Snackbar message={emailMessage} show={show} setShow={setShow} loading={loading} />
-            }
         </>
     )
 

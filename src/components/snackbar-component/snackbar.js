@@ -1,12 +1,16 @@
 import React from "react"
 import './snackbar.css';
 export default function Snackbar(props) {
-  let { message, show, setShow, loading } = props;
+  let { setSnackBarInfo, snackBarInfo } = props;
+  let { show, loading, message } = snackBarInfo;
   if (loading === undefined) { loading = false };
   if (show && !loading) {
     setTimeout(
       () => {
-        setShow(false);
+        setSnackBarInfo({
+          ...snackBarInfo,
+          show: false
+        });
       },
       6000
     );
@@ -27,7 +31,12 @@ export default function Snackbar(props) {
           message
         }
         {!loading &&
-          <button type="button" className="close-btn" onClick={() => setShow(false)}>OK</button>
+          <button type="button" className="close-btn" onClick={() => {
+            setSnackBarInfo({
+              ...snackBarInfo,
+              show: false
+            })
+          }}>OK</button>
         }
       </div>
     </div>

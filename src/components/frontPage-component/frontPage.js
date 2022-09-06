@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './frontPage.css'
 import { Image } from 'cloudinary-react';
 import { services } from '../servicesAPI';
@@ -16,10 +16,13 @@ export default function FrontPage(props) {
           <div className='topfront-background'></div>
           <Image publicId='frontpage_omrxle' className='coverImage coverImage' />
           <Card className='cover-card cover-card mr-auto'>
-            <Card.Title className='mb-3 firstTitle'>We are McCoy DeWitt <span>
-              <ChevronsRight width={20} height={20} style={{ marginBottom: '4px' }} color='white' />
+            <Card.Title className='mb-3 firstTitle'>Restoring Buildings in the South Plains <span>
+              <ChevronsRight width={20} height={20} style={{ marginBottom: '4px' }} color='#3cff01' />
             </span></Card.Title>
-            <Card.Title className='mb-3 secondTitle' style={{ fontSize: '30px' }}>We Preserve What You Love With Honesty And Integrity</Card.Title>
+            <Card.Title className='mb-3 secondTitle' style={{ fontSize: '30px' }}>
+              We Preserve What You Love
+            </Card.Title>
+            <Card.Title style={{ color: 'white' }}>With Honesty And Integrity</Card.Title>
             <hr className='hr' />
             <Button className='Intro-button' onClick={() => setPageActive('contact')} style={{ width: '200px' }} as={Link} to='contact' variant='light'>Contact Us</Button>
           </Card>

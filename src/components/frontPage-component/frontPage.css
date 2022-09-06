@@ -26,7 +26,7 @@
   min-width: 340px;
   height: fit-content;
   padding: 30px;
-  border-color: rgba(42, 180, 0, 0.8);
+  border-color: rgb(60, 255, 1);
 }
 
 .firstTitle {
@@ -37,9 +37,18 @@
   color: white;
   word-wrap: break-word;
   max-width: 500px;
+  text-align: left;
   /* -webkit-text-stroke-color: black;
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-fill-color: white; */
+}
+
+.secondTitle .subtitle {
+  font-size: 20px;
+}
+
+.secondTitle br {
+  margin-bottom: 5px;
 }
 
 .Intro-button {
