@@ -1,3 +1,12 @@
+.modal-backdrop {
+  opacity: 0.5 !important;
+  z-index: 999 !important;
+}
+
+.background.modal-backdrop {
+  opacity: 0 !important;
+}
+
 .notification-container {
   position: fixed;
   right: 3%;
@@ -5,11 +14,12 @@
   opacity: 0;
   margin-left: -175px;
   transform: translateY(250%);
-  z-index: 1000;
+  z-index: 1000 !important;
 }
 
 .notification-container.show {
   animation: slide-vertically 0.35s ease forwards;
+  opacity: 1.5;
 }
 
 .notification-container.hide {
@@ -39,6 +49,7 @@
   border-radius: 3px;
   width: 54px;
   margin: auto;
+  z-index: 1000 !important;
 }
 
 @keyframes slide-vertically {

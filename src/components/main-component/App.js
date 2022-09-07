@@ -59,7 +59,7 @@ function App() {
         <Navigation pageActive={pageActive} setPageActive={setPageActive} setShowLogin={setShowLogin} />
         <Login showLogin={showLogin} setShowLogin={setShowLogin} setSnackBarInfo={setSnackBarInfo} snackBarInfo={snackBarInfo} onLoggedIn={onLoggedIn} />
         {snackBarInfo.show !== 'initial' &&
-          <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} />
+          <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} showLogin={showLogin} />
         }
         <Routes>
           <Route

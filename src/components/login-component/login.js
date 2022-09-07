@@ -93,9 +93,9 @@ export default function Login(props) {
         console.log(isReq);
         if (isReq) {
             setSnackBarInfo({
-                message: 'Attempting to Login',
-                loading: true,
-                show: 'true'
+                show: true,
+                message: 'Logging In',
+                loading: true
             });
             axios.post(`https://polar-tor-24509.herokuapp.com/login`, {
                 username: username,
@@ -106,7 +106,7 @@ export default function Login(props) {
                     onLoggedIn(data);
                     setSnackBarInfo({
                         show: true,
-                        message: 'Success',
+                        message: 'Successfully Logged In',
                         loading: false
                     });
                     setShowLogin(false);
@@ -115,7 +115,7 @@ export default function Login(props) {
                     console.log(error);
                     setSnackBarInfo({
                         show: true,
-                        message: (error.message) ? error.message : 'Failed to Login',
+                        message: (error.message.includes('400')) ? 'incorrect credentials' : 'Failed to Login',
                         loading: false
                     });
                 });
@@ -128,12 +128,13 @@ export default function Login(props) {
         console.log(isReq);
         if (isReq) {
             setSnackBarInfo({
-                message: 'Registering Your Account',
-                loading: true,
-                show: 'true'
+                show: true,
+                message: 'Registering Account',
+                loading: true
             });
             axios.post(`https://polar-tor-24509.herokuapp.com/users`, {
-                name: (firstName + ' ' + lastName),
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
                 phone: phone,
                 username: username,
@@ -142,10 +143,11 @@ export default function Login(props) {
                 .then((response) => {
                     setSnackBarInfo({
                         show: true,
-                        message: 'Success, now Logging in',
+                        message: 'Successfully Registered, Logging in',
                         loading: false
                     });
                     login();
+                    setShowLogin(false);
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -71,7 +71,7 @@ export default function Navigation(props) {
                   <li className="navigation-list__item">
                     <div onClick={() => { onLoggedOut() }}>
                       <LogOut
-                        style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                        style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
                         alt='contact icon'
                       />Logout</div>
                   </li>
@@ -80,7 +80,7 @@ export default function Navigation(props) {
                 <li className="navigation-list__item">
                   <div onClick={() => { setShowLogin(true) }}>
                     <LogIn
-                      style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
+                      style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
                       alt='contact icon'
                     /> Login</div>
                 </li>
