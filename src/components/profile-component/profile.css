@@ -1,46 +1,26 @@
-.movie-view {
-    box-shadow: 4px 4px 6px 4px rgba(12, 17, 26, 0.3);
-    min-height: 750px;
+.topfront-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.profile-card {
-    height: 90vh;
+.profileImage.profileImage {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: 50% 10%;
+    z-index: -1;
 }
 
-.little-card {
-    box-shadow: 1px 1px 2px 2px rgba(12, 17, 26, 0.3);
-}
-
-.heart {
-    opacity: 0.3;
-}
-
-.heart:hover {
-    cursor: pointer;
-}
-
-.heart-visible {
-    opacity: 1;
-}
-
-.heart-visible:hover {
-    cursor: pointer;
-}
-
-.label {
-    display: block;
-}
-
-@media all and (min-height: 630px) {
-    .movie-view-container {
-        height: auto;
-    }
-
-    .movie-view {
-        height: auto;
-    }
-
-    .profile-card {
-        height: auto;
-    }
+.profileIntro.profileIntro {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.0);
+    padding: 30px;
+    border-color: rgb(42, 180, 0);
 }

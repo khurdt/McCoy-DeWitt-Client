@@ -67,9 +67,7 @@ export default function Navigation(props) {
                         style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
                         alt='contact icon'
                       />{user}</Link>
-                  </li>
-                  <li className="navigation-list__item">
-                    <div onClick={() => { onLoggedOut() }}>
+                    <div style={{ marginLeft: '20px' }} onClick={() => { onLoggedOut() }}>
                       <LogOut
                         style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
                         alt='contact icon'
@@ -148,11 +146,14 @@ export default function Navigation(props) {
           }
         </ul>
       </div>
+
+
     </>
   )
 
 
 }
+
 
   // <Navbar bg="light" expand="lg" fluid style={{ margin: '0', padding: '0', height: '50px' }}>
   //   <Container>

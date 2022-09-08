@@ -25,30 +25,32 @@ export default function Snackbar(props) {
       {showLogin &&
         <div className="background modal-backdrop"></div>
       }
-      <div className={(show === 'initial') ? 'notification-container' : (show === true) ? 'notification-container show' : 'notification-container hide'}>
-        <div className='notification-message'>
-          {loading ?
-            <>
-              <div>{message}</div>
-              <div style={{ height: '30px' }}>
-                <div className='load'>
-                  <div className='loading' />
+      {show === true &&
+        <div className={(show === 'initial') ? 'notification-container' : (show === true) ? 'notification-container show' : 'notification-container hide'}>
+          <div className='notification-message'>
+            {loading ?
+              <>
+                <div>{message}</div>
+                <div style={{ height: '30px' }}>
+                  <div className='load'>
+                    <div className='loading' />
+                  </div>
                 </div>
-              </div>
-            </>
-            :
-            message
-          }
-          {!loading &&
-            <button type="button" className="close-btn" onClick={() => {
-              setSnackBarInfo({
-                ...snackBarInfo,
-                show: false
-              })
-            }}>OK</button>
-          }
+              </>
+              :
+              message
+            }
+            {!loading &&
+              <button type="button" className="close-btn" onClick={() => {
+                setSnackBarInfo({
+                  ...snackBarInfo,
+                  show: false
+                })
+              }}>OK</button>
+            }
+          </div>
         </div>
-      </div>
+      }
     </>
   )
 }

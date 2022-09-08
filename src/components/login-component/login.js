@@ -4,9 +4,10 @@ import axios from 'axios';
 import { LogIn, Send, UserPlus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import './login.css';
+import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackbarBarInfo, onLoggedIn } = props;
+    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn } = props;
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
     const formRef = useRef(null);
@@ -311,6 +312,9 @@ export default function Login(props) {
                                 </Row>
                             </Row>
                         </Container>
+                        {((snackBarInfo.show !== 'initial') || (showLogin)) &&
+                            <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} />
+                        }
                     </div >
                 </Modal.Body>
                 <Modal.Footer>
