@@ -1,4 +1,4 @@
-.topfront-background {
+.profile-background {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -16,11 +16,56 @@
 }
 
 .profileIntro.profileIntro {
+    background-color: white;
+    width: 75%;
+    margin-left: auto;
+    border: none;
+}
+
+.profile-badge {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.0);
-    padding: 30px;
-    border-color: rgb(42, 180, 0);
+    top: 32%;
+    left: 15%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    color: white;
+    z-index: 100;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.profile-name {
+    color: black;
+    width: 200px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.company-name {
+    width: 150px;
+    text-align: center;
+    margin-left: 30px
+}
+
+.project-card {
+    height: 300px;
+}
+
+@media all and (max-width: 700px) {
+    .profile-badge {
+        top: 35%;
+        left: 7%;
+        width: 130px;
+        height: 130px;
+    }
+
+    .profileIntro.profileIntro {
+        width: 65%;
+    }
 }

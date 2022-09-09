@@ -23,14 +23,13 @@ function App() {
     show: 'initial'
   });
   const [userData, setUserData] = useState({});
-  const [projects, setProjects] = useState();
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
     if ((accessToken) && !(isJwtExpired(accessToken))) {
       getUserData(accessToken);
       getProjects(accessToken);
-      console.log(projects, userData.firstName);
     } else {
       localStorage.clear();
     }
@@ -65,8 +64,7 @@ function App() {
     })
       .then((response) => {
         let incomingProjects = response.data;
-        setProjects(projects);
-        console.log(incomingProjects, projects);
+        setProjects(incomingProjects);
       })
       .catch(function (error) {
         console.log(error);

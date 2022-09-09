@@ -6,10 +6,12 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import axios from 'axios';
 import { Send } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
+import Badge from 'react-bootstrap/Badge';
+import { services } from '../servicesAPI';
+import Loading from '../loading-component/loading';
 
 export default function Profile(props) {
     const { projects, onBackClick, userData, callDispatch, setSnackBarInfo, snackbarBarInfo } = props;
-
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -17,18 +19,23 @@ export default function Profile(props) {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
+    const [typeOfClient, setTypeOfClient] = useState({})
 
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        console.log(projects);
         setUsername(userData.username);
         setEmail(userData.email);
         setFirstName(userData.firstName);
         setLastName(userData.lastName);
+        setTypeOfClient(userData.typeOfClient);
         (userData.phone) && setPhone(userData.phone);
         (userData.address) && setAddress(userData.address);
     }, [projects, userData]);
+
+    if (!firstName || !projects) {
+        return <Loading />
+    }
 
     // const updateUser = (e) => {
     //     e.preventDefault();
@@ -101,43 +108,6 @@ export default function Profile(props) {
         return isReq;
     }
 
-    // const sendContactInfo = (event) => {
-    //     event.preventDefault()
-    //     const { firstName, lastName, email, phone, message } = form;
-    //     const isReq = validate();
-    //     console.log(isReq);
-    //     if (isReq) {
-    //         setSnackBarInfo({
-    //             message: 'Sending Email',
-    //             loading: true,
-    //             show: true
-    //         });
-    //         axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
-    //             name: (firstName + ' ' + lastName),
-    //             email: email,
-    //             phone: phone,
-    //             message: message,
-    //         })
-    //             .then((response) => {
-    //                 console.log(response);
-    //                 setSnackBarInfo({
-    //                     show: true,
-    //                     message: 'Email Sent! Thank You',
-    //                     loading: false,
-    //                 });
-    //                 handleReset();
-    //             })
-    //             .catch(function (error) {
-    //                 console.log(error);
-    //                 setSnackBarInfo({
-    //                     show: true,
-    //                     message: (error.message) ? error.message : 'Failed to Send Email, Please Try Another Time',
-    //                     loading: false
-    //                 });
-    //             });
-    //     }
-    // };
-
     const formatPhoneNumber = (value) => {
         if (!value) return value;
         const phoneNumber = value.replace(/[^\d]/g, '');
@@ -149,20 +119,23 @@ export default function Profile(props) {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`
     }
 
+    const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
+
     return (
         <>
+            <div className='profile-badge'>{userInitials}</div>
             <div style={{ position: 'relative' }}>
-                <div className='topfront-background'></div>
-                <Card className='profileIntro profileIntro m-auto'>
-                    <Card.Title className='m-auto' style={{ color: 'white', width: '150px', textAlign: 'center' }}>Welcome {firstName}</Card.Title>
-                </Card>
+                <div className='profile-background'></div>
                 <Image publicId='cld-sample-2' className='profileImage profileImage' />
             </div>
             <div className='mt-4 mb-5'>
-                <Card className='m-auto movie-view profile-card' style={{ maxWidth: '1128px', color: 'black', border: 'none' }}>
-                    <Card.Title style={{ fontSize: '30px' }} className='m-3'>Personal Info</Card.Title>
+                <Card className='profileIntro profileIntro ml-auto'>
+                    <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
+                    <Card.Title className='company-name'>{typeOfClient.title}</Card.Title>
+                </Card>
+                <Card className='m-auto profile-card' style={{ maxWidth: '1128px', color: 'black', border: 'none', paddingTop: '30px' }}>
                     <Row>
-                        <Col className='m-3' xs={10} md={4}>
+                        {/* <Col className='m-3' xs={10} md={4}>
                             <Form>
                                 <Form.Group className='m-1'>
                                     <div style={{ position: 'relative' }}>
@@ -224,22 +197,26 @@ export default function Profile(props) {
                                         {(errors.address) && <FormAlert message={errors.address} type={'error'} />}
                                     </div>
                                 </Form.Group>
-                                {/* <Button className='m-3' variant='success' type='submit' onClick={(e) => updateUser(e)}>Update</Button>
-                                <Button className='m-3' variant='danger' onClick={() => onDeleteAccount()}>Delete Account</Button> */}
                             </Form>
-                        </Col>
+                        </Col>  */}
                         <Col className='my-1 mx-1'>
                             <Card style={{ color: 'black', borderColor: '#2ab400' }}>
                                 <Card.Title className='m-3'>Projects</Card.Title>
                                 <Row className='m-auto'>
-                                    {!projects && (
+                                    {projects.length === 0 && (
                                         <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
                                     )}
-                                    {projects.title && projects.map((project) => {
+                                    {projects.length > 0 && projects.map((project) => {
                                         return (
-                                            <Card key={project._id} className='m-1 little-card' style={{ backgroundColor: '#1E2127', color: 'white', }}>
-                                                {/* <Card.Img className='m-1' style={{ maxWidth: '140px', height: '207px' }} src={project.location} crossOrigin='anonymous' /> */}
-                                                <Card.Text style={{ fontSize: '12px' }} className='m-1' >{project.title}</Card.Text>
+                                            <Card className='mb-2' style={{ width: '18rem' }}>
+                                                <Image variant='top' style={{ objectFit: 'cover', paddingTop: '5px' }} publicId='roof' />
+                                                <Card.Body>
+                                                    <Card.Title>{project.service}</Card.Title>
+                                                    <Card.Text>
+                                                        {project.description}
+                                                    </Card.Text>
+                                                    <Button variant="primary">See Project</Button>
+                                                </Card.Body>
                                             </Card>
                                         )
                                     })}
