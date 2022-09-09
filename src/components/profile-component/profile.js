@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './profile.css';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Card, Dropdown } from 'react-bootstrap';
 import { Image } from 'cloudinary-react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import axios from 'axios';
-import { Send } from 'react-feather';
+import { Check, Edit, MoreVertical, Send, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import Badge from 'react-bootstrap/Badge';
 import { services } from '../servicesAPI';
 import Loading from '../loading-component/loading';
 
 export default function Profile(props) {
-    const { projects, onBackClick, userData, callDispatch, setSnackBarInfo, snackbarBarInfo } = props;
+    const { projects, onBackClick, userData, getUserData, setSnackBarInfo, snackbarBarInfo } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -20,6 +20,7 @@ export default function Profile(props) {
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const [typeOfClient, setTypeOfClient] = useState({})
+    const [editing, setEditing] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -33,32 +34,49 @@ export default function Profile(props) {
         (userData.address) && setAddress(userData.address);
     }, [projects, userData]);
 
-    if (!firstName || !projects) {
-        return <Loading />
-    }
+    const updateUser = () => {
+        const username = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+        const isReq = validate();
+        if (isReq) {
+            setSnackBarInfo({
+                show: true,
+                message: 'Updating Information',
+                loading: true
+            });
+            axios.put(`https://kh-movie-app.herokuapp.com/users/${username}`, {
+                username: username,
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                typeOfClient: typeOfClient,
+                phone: phone,
+                address: address
+            },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                    localStorage.setItem('user', username);
+                    setEditing(false);
+                    getUserData();
+                    setSnackBarInfo({
+                        show: true,
+                        message: 'Updated',
+                        loading: false
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setSnackBarInfo({
+                        show: true,
+                        message: 'failed to update',
+                        loading: false
+                    });
 
-    // const updateUser = (e) => {
-    //     e.preventDefault();
-    //     const username = localStorage.getItem('user');
-    //     const token = localStorage.getItem('token');
-    //     const isReq = validate();
-    //     if (isReq) {
-    //         axios.put(`https://kh-movie-app.herokuapp.com/users/${username}`, userInfo,
-    //             {
-    //                 headers: { Authorization: `Bearer ${token}` },
-    //             })
-    //             .then((response) => {
-    //                 localStorage.setItem('user', username);
-    //                 callDispatch();
-    //                 setUpdateSuccess('update successfull!');
-    //             })
-    //             .catch(function (error) {
-    //                 console.log(error);
-    //                 setUpdateFail('update failed');
-
-    //             });
-    //     }
-    // };
+                });
+        }
+    };
 
     // const onDeleteAccount = () => {
     //     const username = localStorage.getItem('user');
@@ -132,6 +150,20 @@ export default function Profile(props) {
                 <Card className='profileIntro profileIntro ml-auto'>
                     <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
                     <Card.Title className='company-name'>{typeOfClient.title}</Card.Title>
+                    {!editing ?
+                        <Dropdown className='editButton'>
+                            <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '30px', height: '30px' }} id="dropdown-basic" />
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setEditing(true)}>Edit Profile</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        :
+                        <>
+                            <Check onClick={() => updateUser()} className='editButton' style={{ color: 'green' }} />
+                            <X className='cancelButton' onClick={() => { setEditing(false); getUserData() }} />
+                        </>
+                    }
                 </Card>
                 <Card className='m-auto profile-card' style={{ maxWidth: '1128px', color: 'black', border: 'none', paddingTop: '30px' }}>
                     <Row>
@@ -200,16 +232,17 @@ export default function Profile(props) {
                             </Form>
                         </Col>  */}
                         <Col className='my-1 mx-1'>
-                            <Card style={{ color: 'black', borderColor: '#2ab400' }}>
-                                <Card.Title className='m-3'>Projects</Card.Title>
+                            <Card style={{ color: 'black', border: 'none' }}>
+                                <Card.Title className='m-1'>Projects</Card.Title>
+                                <hr />
                                 <Row className='m-auto'>
                                     {projects.length === 0 && (
                                         <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
                                     )}
                                     {projects.length > 0 && projects.map((project) => {
                                         return (
-                                            <Card className='mb-2' style={{ width: '18rem' }}>
-                                                <Image variant='top' style={{ objectFit: 'cover', paddingTop: '5px' }} publicId='roof' />
+                                            <Card className='mb-2' style={{ width: '18rem', margin: '0', padding: '0' }}>
+                                                <Card.Img as={Image} publicId='roof' />
                                                 <Card.Body>
                                                     <Card.Title>{project.service}</Card.Title>
                                                     <Card.Text>

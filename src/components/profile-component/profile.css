@@ -20,6 +20,7 @@
     width: 75%;
     margin-left: auto;
     border: none;
+    position: relative;
 }
 
 .profile-badge {
@@ -57,6 +58,23 @@
     height: 300px;
 }
 
+.editButton {
+    position: absolute;
+    top: 0;
+    right: 10%;
+    cursor: pointer;
+}
+
+.cancelButton {
+    position: absolute;
+    top: 40%;
+    right: 10%;
+    color: red;
+    cursor: pointer;
+}
+
+
+
 @media all and (max-width: 700px) {
     .profile-badge {
         top: 35%;
@@ -68,4 +86,8 @@
     .profileIntro.profileIntro {
         width: 65%;
     }
+
+    /* .cancelButton {
+        top: 35%;
+    } */
 }

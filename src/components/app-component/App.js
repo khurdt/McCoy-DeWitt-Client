@@ -24,12 +24,13 @@ function App() {
   });
   const [userData, setUserData] = useState({});
   const [projects, setProjects] = useState([]);
+  const [noProjects, setNoProjects] = useState(false);
 
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
     if ((accessToken) && !(isJwtExpired(accessToken))) {
-      getUserData(accessToken);
-      getProjects(accessToken);
+      getUserData();
+      getProjects();
     } else {
       localStorage.clear();
     }
@@ -42,7 +43,8 @@ function App() {
     getUserData(authData.token);
   }
 
-  const getUserData = (token) => {
+  const getUserData = () => {
+    let token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
     axios.get(`https://polar-tor-24509.herokuapp.com/users/${username}`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -57,14 +59,19 @@ function App() {
       })
   }
 
-  const getProjects = (token) => {
+  const getProjects = () => {
+    let token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
     axios.get(`https://polar-tor-24509.herokuapp.com/projects/${username}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((response) => {
         let incomingProjects = response.data;
-        setProjects(incomingProjects);
+        if (incomingProjects.length > 0) {
+          setProjects(incomingProjects);
+        } else {
+          setNoProjects(true);
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -97,14 +104,14 @@ function App() {
             <Route
               path="profile"
               element={
-                (projects && userData) ?
+                ((!noProjects && projects.length > 0) && userData.firstName) ?
                   <Profile
                     onBackClick={() => navigate(-1)}
                     setSnackBarInfo={setSnackBarInfo}
-                    snackBarInfo={snackBarInfo}
+                    snackBarInfo={snackBarInfo} getUserData={getUserData}
                     userData={userData} projects={projects} />
                   :
-                  null
+                  <Loading />
               }
             />
           </Routes>
