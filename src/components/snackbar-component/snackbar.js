@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import './snackbar.css';
 export default function Snackbar(props) {
   const { setSnackBarInfo, snackBarInfo, showLogin } = props;
   const [clear, setClear] = useState(true);
-  let { show, loading, message } = snackBarInfo;
+  let { show, loading, message, } = snackBarInfo;
   if (loading === undefined) { loading = false };
+  if (show === undefined) { show = false };
 
   if (show && !loading && clear) {
     setClear(false);
@@ -25,7 +26,7 @@ export default function Snackbar(props) {
       {showLogin &&
         <div className="background modal-backdrop"></div>
       }
-      {show === true &&
+      {(show) &&
         <div className={(show === 'initial') ? 'notification-container' : (show === true) ? 'notification-container show' : 'notification-container hide'}>
           <div className='notification-message'>
             {loading ?

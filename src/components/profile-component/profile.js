@@ -19,7 +19,7 @@ export default function Profile(props) {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
-    const [typeOfClient, setTypeOfClient] = useState({})
+    const [company, setCompany] = useState('');
     const [editing, setEditing] = useState(false);
 
     const [errors, setErrors] = useState({});
@@ -29,7 +29,7 @@ export default function Profile(props) {
         setEmail(userData.email);
         setFirstName(userData.firstName);
         setLastName(userData.lastName);
-        setTypeOfClient(userData.typeOfClient);
+        setCompany(userData.company);
         (userData.phone) && setPhone(userData.phone);
         (userData.address) && setAddress(userData.address);
     }, [projects, userData]);
@@ -38,21 +38,22 @@ export default function Profile(props) {
         const username = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         const isReq = validate();
+        const updatedData = {
+            username: username,
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            company: company,
+            phone: phone,
+            address: address
+        }
         if (isReq) {
             setSnackBarInfo({
                 show: true,
                 message: 'Updating Information',
                 loading: true
             });
-            axios.put(`https://kh-movie-app.herokuapp.com/users/${username}`, {
-                username: username,
-                email: email,
-                firstName: firstName,
-                lastName: lastName,
-                typeOfClient: typeOfClient,
-                phone: phone,
-                address: address
-            },
+            axios.put(`https://polar-tor-24509.herokuapp.com/users/${username}`, updatedData,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 })
@@ -62,7 +63,7 @@ export default function Profile(props) {
                     getUserData();
                     setSnackBarInfo({
                         show: true,
-                        message: 'Updated',
+                        message: 'Update Successful',
                         loading: false
                     });
                 })
@@ -70,7 +71,7 @@ export default function Profile(props) {
                     console.log(error);
                     setSnackBarInfo({
                         show: true,
-                        message: 'failed to update',
+                        message: 'Update Failed',
                         loading: false
                     });
 
@@ -149,7 +150,7 @@ export default function Profile(props) {
             <div className='mt-4 mb-5'>
                 <Card className='profileIntro profileIntro ml-auto'>
                     <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
-                    <Card.Title className='company-name'>{typeOfClient.title}</Card.Title>
+                    <Card.Title className='company-name'>{company}</Card.Title>
                     {!editing ?
                         <Dropdown className='editButton'>
                             <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '30px', height: '30px' }} id="dropdown-basic" />

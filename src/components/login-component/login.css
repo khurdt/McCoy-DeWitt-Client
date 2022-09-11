@@ -1,0 +1,41 @@
+/* .sectionZero {
+  display: none;
+
+}
+
+.sectionZero.active {
+  display: block;
+  animation: fadeIn 1s forwards;
+}
+
+.sectionOne {
+  display: none;
+
+}
+
+.sectionOne.active {
+  display: block;
+  animation: fadeIn 1s forwards;
+}
+
+.sectionTwo {
+  display: none;
+
+}
+
+.sectionTwo.active {
+  display: block;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+} */

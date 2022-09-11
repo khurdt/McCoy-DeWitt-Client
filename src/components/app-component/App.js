@@ -20,7 +20,7 @@ function App() {
   const [snackBarInfo, setSnackBarInfo] = useState({
     message: '',
     loading: false,
-    show: 'initial'
+    show: 'initial',
   });
   const [userData, setUserData] = useState({});
   const [projects, setProjects] = useState([]);
@@ -104,14 +104,21 @@ function App() {
             <Route
               path="profile"
               element={
-                ((!noProjects && projects.length > 0) && userData.firstName) ?
+                (noProjects && userData.firstName) ?
                   <Profile
                     onBackClick={() => navigate(-1)}
                     setSnackBarInfo={setSnackBarInfo}
                     snackBarInfo={snackBarInfo} getUserData={getUserData}
                     userData={userData} projects={projects} />
                   :
-                  <Loading />
+                  ((!noProjects && projects.length > 0) && userData.firstName) ?
+                    <Profile
+                      onBackClick={() => navigate(-1)}
+                      setSnackBarInfo={setSnackBarInfo}
+                      snackBarInfo={snackBarInfo} getUserData={getUserData}
+                      userData={userData} projects={projects} />
+                    :
+                    <Loading />
               }
             />
           </Routes>

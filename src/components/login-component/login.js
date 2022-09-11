@@ -8,6 +8,7 @@ import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
     const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn } = props;
+    const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
     const formRef = useRef(null);
@@ -27,11 +28,14 @@ export default function Login(props) {
     }
 
     const validate = () => {
-        let { firstName, lastName, email, phone, username, password } = form;
+        let { firstName, lastName, email, phone, username, password, company } = form;
 
         const newErrors = {};
         let isReq = true;
         if (notRegistered === true) {
+            if (!company) {
+                setField('company', 'Individual Client')
+            }
             if (!firstName) {
                 newErrors.firstName = 'required'
                 isReq = false;
@@ -124,7 +128,14 @@ export default function Login(props) {
     };
 
     const register = () => {
-        const { firstName, lastName, email, phone, username, password } = form;
+        if (errors.firstName || errors.lastName || errors.email) {
+            setPageNumber(0);
+        } else if (errors.address || errors.phone || errors.company) {
+            setPageNumber(1);
+        } else if (errors.username || errors.password) {
+            setPageNumber(2);
+        }
+        const { firstName, lastName, email, phone, username, password, company } = form;
         const isReq = validate();
         console.log(isReq);
         if (isReq) {
@@ -139,7 +150,8 @@ export default function Login(props) {
                 email: email,
                 phone: phone,
                 username: username,
-                password: password
+                password: password,
+                company: company
             })
                 .then((response) => {
                     setSnackBarInfo({
@@ -186,123 +198,179 @@ export default function Login(props) {
                     <div className='mt-4 mb-5'>
                         <Container className='mb-5'>
                             <Row className='justify-content-center'>
-                                {notRegistered ?
-                                    <Form
-                                        ref={formRef}
-                                        style={{ maxWidth: '500px' }}>
-                                        <div style={{ display: 'flex', gridGap: '5px' }}>
-                                            <Form.Group>
+                                {notRegistered &&
+                                    <>
+                                        {pageNumber === 0 ?
+                                            <>
+                                                <Form
+                                                    ref={formRef}
+                                                    style={{ maxWidth: '500px' }}>
+                                                    <Form.Group>
+                                                        <FloatingLabel
+                                                            label='First Name'
+                                                            className="mb-3">
+                                                            <Form.Control
+                                                                value={form.firstName}
+                                                                placeholder='First Name' type='text'
+                                                                onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
+                                                            {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
+                                                        </FloatingLabel>
+                                                    </Form.Group>
+                                                    <Form.Group>
+                                                        <FloatingLabel
+                                                            label='Last Name'
+                                                            className="mb-3">
+                                                            <Form.Control
+                                                                value={form.lastName}
+                                                                placeholder='Last Name'
+                                                                type='text'
+                                                                onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
+                                                            />
+                                                            {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} />}
+                                                        </FloatingLabel>
+                                                    </Form.Group>
+                                                    <Form.Group >
+                                                        <FloatingLabel
+                                                            label='Email Address'
+                                                            className="mb-3">
+                                                            <Form.Control
+                                                                value={form.email}
+                                                                type='email'
+                                                                placeholder='Email Address'
+                                                                onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
+                                                            {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
+                                                        </FloatingLabel >
+                                                    </Form.Group>
+                                                    <Row className='justify-content-right'>
+                                                        <Button onClick={() => setPageNumber(1)}>Next</Button>
+                                                    </Row>
+                                                </Form>
+                                            </>
+                                            :
+                                            (pageNumber === 1) ?
+                                                <>
+                                                    <Form
+                                                        ref={formRef}
+                                                        style={{ maxWidth: '500px' }}>
+                                                        <Button className='mb-3' onClick={() => setPageNumber(0)} >Return</Button>
+                                                        <Form.Group >
+                                                            <FloatingLabel
+                                                                label='Company Name (optional)'
+                                                                className="mb-3">
+                                                                <Form.Control
+                                                                    value={form.company}
+                                                                    type='input'
+                                                                    onChange={(e) => { setField('company', e.target.value); (errors.company) && validate() }}
+                                                                    placeholder='Company Name (optional)' />
+                                                                {(errors.company) && <FormAlert message={errors.company} type={'error'} />}
+                                                            </FloatingLabel >
+                                                        </Form.Group>
+                                                        <Form.Group >
+                                                            <FloatingLabel
+                                                                label='Phone (optional)'
+                                                                className="mb-3">
+                                                                <Form.Control
+                                                                    value={form.phone}
+                                                                    type='input'
+                                                                    onChange={(e) => { setField('phone', formatPhoneNumber(e.target.value)); (errors.phone) && validate() }}
+                                                                    placeholder='Phone (optional)' />
+                                                                {(errors.phone) && <FormAlert message={errors.phone} type={'error'} />}
+                                                            </FloatingLabel >
+                                                        </Form.Group>
+                                                        <Form.Group >
+                                                            <FloatingLabel
+                                                                label='Address (optional)'
+                                                                className="mb-3">
+                                                                <Form.Control
+                                                                    value={form.address}
+                                                                    type='text'
+                                                                    placeholder='Address (optional)'
+                                                                    onChange={(e) => { setField('address', e.target.value); (errors.address) && validate() }} />
+                                                                {(errors.address) && <FormAlert message={errors.address} type={'error'} />}
+                                                            </FloatingLabel >
+                                                        </Form.Group>
+                                                        <Row className='justify-content-right'>
+                                                            <Button onClick={() => setPageNumber(2)}>Next</Button>
+                                                        </Row>
+                                                    </Form>
+                                                </>
+                                                :
+                                                (pageNumber === 2) &&
+                                                <>
+                                                    <Form
+                                                        ref={formRef}
+                                                        style={{ maxWidth: '500px' }}>
+                                                        <Button className='mb-3' onClick={() => setPageNumber(1)} >Return</Button>
+                                                        <Form.Group >
+                                                            <FloatingLabel
+                                                                label='New Username'
+                                                                className="mb-3">
+                                                                <Form.Control
+                                                                    value={form.username}
+                                                                    type='text'
+                                                                    placeholder='New Username'
+                                                                    onChange={(e) => { setField('username', e.target.value); (errors.username) && validate() }} />
+                                                                {(errors.username) && <FormAlert message={errors.username} type={'error'} />}
+                                                            </FloatingLabel >
+                                                        </Form.Group>
+                                                        <Form.Group >
+                                                            <FloatingLabel
+                                                                label='New Password'
+                                                                className="mb-3">
+                                                                <Form.Control
+                                                                    value={form.password}
+                                                                    type='password'
+                                                                    placeholder='New Password'
+                                                                    onChange={(e) => { setField('password', e.target.value); (errors.password) && validate() }} />
+                                                                {(errors.password) && <FormAlert message={errors.password} type={'error'} />}
+                                                            </FloatingLabel >
+                                                        </Form.Group>
+                                                    </Form>
+                                                </>
+                                        }
+                                    </>
+                                }
+                                {!notRegistered &&
+                                    <>
+                                        <Form
+                                            ref={formRef}
+                                            style={{ maxWidth: '500px' }}>
+                                            <Form.Group >
                                                 <FloatingLabel
-                                                    label='First Name'
+                                                    label='Username'
                                                     className="mb-3">
                                                     <Form.Control
-                                                        value={form.firstName}
-                                                        placeholder='First Name' type='text'
-                                                        onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
-                                                    {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group>
-                                                <FloatingLabel
-                                                    label='Last Name'
-                                                    className="mb-3">
-                                                    <Form.Control
-                                                        value={form.lastName}
-                                                        placeholder='Last Name'
+                                                        value={form.username}
                                                         type='text'
-                                                        onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
-                                                    />
-                                                    {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} />}
-                                                </FloatingLabel>
+                                                        placeholder='Username'
+                                                        onChange={(e) => { setField('username', e.target.value); (errors.username) && validate() }} />
+                                                    {(errors.username) && <FormAlert message={errors.username} type={'error'} />}
+                                                </FloatingLabel >
                                             </Form.Group>
-                                        </div>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Email Address'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.email}
-                                                    type='email'
-                                                    placeholder='Email Address'
-                                                    onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
-                                                {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Phone (optional)'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.phone}
-                                                    type='input'
-                                                    onChange={(e) => { setField('phone', formatPhoneNumber(e.target.value)); (errors.phone) && validate() }}
-                                                    placeholder='Phone (optional)' />
-                                                {(errors.phone) && <FormAlert message={errors.phone} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Username'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.username}
-                                                    type='text'
-                                                    placeholder='Username'
-                                                    onChange={(e) => { setField('username', e.target.value); (errors.username) && validate() }} />
-                                                {(errors.username) && <FormAlert message={errors.username} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Password'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.password}
-                                                    type='password'
-                                                    placeholder='Password'
-                                                    onChange={(e) => { setField('password', e.target.value); (errors.password) && validate() }} />
-                                                {(errors.password) && <FormAlert message={errors.password} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                    </Form>
-                                    :
-                                    <Form
-                                        ref={formRef}
-                                        style={{ maxWidth: '500px' }}>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Username'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.username}
-                                                    type='text'
-                                                    placeholder='Username'
-                                                    onChange={(e) => { setField('username', e.target.value); (errors.username) && validate() }} />
-                                                {(errors.username) && <FormAlert message={errors.username} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                        <Form.Group >
-                                            <FloatingLabel
-                                                label='Password'
-                                                className="mb-3">
-                                                <Form.Control
-                                                    value={form.password}
-                                                    type='password'
-                                                    placeholder='Password'
-                                                    onChange={(e) => { setField('password', e.target.value); (errors.password) && validate() }} />
-                                                {(errors.password) && <FormAlert message={errors.password} type={'error'} />}
-                                            </FloatingLabel >
-                                        </Form.Group>
-                                    </Form>
+                                            <Form.Group >
+                                                <FloatingLabel
+                                                    label='Password'
+                                                    className="mb-3">
+                                                    <Form.Control
+                                                        value={form.password}
+                                                        type='password'
+                                                        placeholder='Password'
+                                                        onChange={(e) => { setField('password', e.target.value); (errors.password) && validate() }} />
+                                                    {(errors.password) && <FormAlert message={errors.password} type={'error'} />}
+                                                </FloatingLabel >
+                                            </Form.Group>
+                                        </Form>
+                                    </>
                                 }
                                 <Row className='justify-content-md-center'>
-                                    {notRegistered ?
+                                    {(notRegistered && pageNumber === 2) &&
                                         <Button onClick={register} variant='dark' style={{ width: '300px', textAlign: 'center' }}>
                                             Register <UserPlus
                                                 style={{ width: '20px', height: '20px' }}
                                                 alt='send icon'
                                             /></Button>
-                                        :
+                                    }
+                                    {!notRegistered &&
                                         <Button onClick={login} variant='dark' style={{ width: '300px', textAlign: 'center' }}>
                                             Login <LogIn
                                                 style={{ width: '20px', height: '20px' }}
