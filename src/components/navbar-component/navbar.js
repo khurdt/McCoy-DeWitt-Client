@@ -6,14 +6,13 @@ import Logo from '../../images/logo3.png';
 import { Offcanvas, Button, Nav, Container, Navbar, NavDropdown } from 'react-bootstrap';
 
 export default function Navigation(props) {
-  const { pageActive, setPageActive, setShowLogin } = props;
-  const [navOpen, setNavOpen] = useState('hidden');
+  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar } = props;
+  // const [navOpen, setNavOpen] = useState('hidden');
   const isAuth = localStorage.getItem('token');
   const user = localStorage.getItem('user');
-  const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShowNavBar(false);
+  const handleShow = () => setShowNavBar(true);
 
   const windowSmall = (window.innerWidth < 700);
 
@@ -97,9 +96,10 @@ export default function Navigation(props) {
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={onLoggedOut}>
                         <LogOut
-                          style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
+                          style={{ width: '20px', height: '20px', paddingBottom: '2px', paddingRight: '3px', cursor: 'pointer' }}
                           alt='contact icon'
-                        />Logout
+                        />
+                        Sign Out
                       </NavDropdown.Item>
                     </NavDropdown>
                   </Nav>
@@ -109,9 +109,9 @@ export default function Navigation(props) {
                   <Nav className='ml-auto'>
                     <Nav.Link onClick={() => { setShowLogin(true) }}>
                       <LogIn
-                        style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
+                        style={{ width: '20px', height: '20px', paddingBottom: '2px', paddingRight: '3px', cursor: 'pointer' }}
                         alt='contact icon'
-                      /> Login</Nav.Link>
+                      /> Sign In</Nav.Link>
                   </Nav>
                 </>
               }
@@ -121,7 +121,7 @@ export default function Navigation(props) {
       </Navbar>
       {windowSmall &&
         <>
-          <Offcanvas style={{ backgroundColor: '#262626', color: 'white' }} show={show} onHide={handleClose} responsive="lg">
+          <Offcanvas style={{ backgroundColor: 'white', color: 'black' }} show={showNavBar} onHide={handleClose} responsive="lg">
             <Offcanvas.Header closeButton>
               <Offcanvas.Title></Offcanvas.Title>
             </Offcanvas.Header>
@@ -129,15 +129,15 @@ export default function Navigation(props) {
               {(user && isAuth) ?
                 <Navbar bg='inherit' className='mb-3'>
                   <Container>
-                    <Nav.Link bg='dark' style={{ color: 'white' }}>
+                    <Nav.Link bg='dark' style={{ color: 'black' }}>
                       <NavDropdown bg='dark' className='offcanvas_item offcanvas_item' style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to='profile' onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to='profile' onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={onLoggedOut}>
+                        <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }}>
                           <LogOut
                             style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
                             alt='contact icon'
-                          />Logout
+                          />Sign Out
                         </NavDropdown.Item>
                       </NavDropdown>
                     </Nav.Link>
@@ -150,22 +150,25 @@ export default function Navigation(props) {
                       <LogIn
                         style={{ width: '20px', height: '20px' }}
                         alt='contact icon'
-                      /> Login</Nav.Link>
+                      /> Sign In</Nav.Link>
                   </Nav>
                 </>
               }
               <Nav>
                 <Nav.Link className='offcanvas_item' style={homeTab} as={Link} to='/' onClick={() => { handleClose(); setPageActive('home') }}>
+                  Home
                   <Home
                     className='mb-1'
-                    style={{ width: '20px', height: '20px' }}
+                    style={{ width: '20px', height: '20px', position: 'absolute', top: '12px', right: '5px' }}
                     alt='contact icon'
-                  /> Home</Nav.Link>
+                  /></Nav.Link>
                 <Nav.Link className='offcanvas_item' style={contactTab} as={Link} to='contact' onClick={() => { handleClose(); setPageActive('contact') }}>
+                  Contact
                   <Mail
-                    style={{ width: '20px', height: '20px' }}
+                    className='ml-auto'
+                    style={{ width: '20px', height: '20px', position: 'absolute', top: '12px', right: '5px' }}
                     alt='contact icon'
-                  /> Contact</Nav.Link>
+                  /> </Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </Offcanvas>

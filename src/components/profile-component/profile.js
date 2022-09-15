@@ -4,7 +4,7 @@ import { Container, Row, Col, Form, Button, Card, Dropdown } from 'react-bootstr
 import { Image } from 'cloudinary-react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import axios from 'axios';
-import { Check, Edit, MoreVertical, Send, X } from 'react-feather';
+import { AtSign, Check, Edit, MapPin, MoreVertical, Phone, Send, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import Badge from 'react-bootstrap/Badge';
 import { services } from '../servicesAPI';
@@ -104,25 +104,29 @@ export default function Profile(props) {
         if (!firstName) {
             newErrors.firstName = '*required'
             isReq = false;
-        }
+        } else { newErrors.firstName = '' }
+
         if (!lastName) {
             newErrors.lastName = '*required'
             isReq = false;
-        }
+        } else { newErrors.lastName = '' }
+
         if (!email) {
             newErrors.email = '*required'
             isReq = false;
         } else if (email.indexOf('@') === -1) {
             newErrors.email = '*invalid'
             isReq = false;
-        }
+        } else { newErrors.email = '' }
+
         if (phone !== undefined) {
             const phoneNumberLength = phone.replace(/[^\d]/g, '').length
             if (phoneNumberLength > 0 && phoneNumberLength < 10) {
                 newErrors.phone = '*invalid'
                 isReq = false;
             }
-        }
+        } else { newErrors.phone = '' }
+
         setErrors(newErrors);
         return isReq;
     }
@@ -142,15 +146,56 @@ export default function Profile(props) {
 
     return (
         <>
-            <div className='profile-badge'>{userInitials}</div>
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
                 <Image publicId='cld-sample-2' className='profileImage profileImage' />
+                <div className='profile-badge'>{userInitials}</div>
             </div>
             <div className='mt-4 mb-5'>
                 <Card className='profileIntro profileIntro ml-auto'>
-                    <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
-                    <Card.Title className='company-name'>{company}</Card.Title>
+                    {editing ?
+                        <>
+                            <Form style={{ display: 'flex', maxWidth: '200px' }}>
+                                <Form.Group className='m-1'>
+                                    <div style={{ position: 'relative' }}>
+                                        <Form.Control
+                                            type='text'
+                                            placeholder='First Name'
+                                            value={firstName}
+                                            onChange={(e) => { setFirstName(e.target.value); (errors.firstName) && validate() }} />
+                                        {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} profile={true} />}
+                                    </div>
+                                </Form.Group>
+                                <Form.Group className='m-1'>
+                                    <div style={{ position: 'relative' }}>
+                                        <Form.Control
+                                            type='text'
+                                            placeholder='Last Name'
+                                            value={lastName}
+                                            onChange={(e) => { setLastName(e.target.value); (errors.lastName) && validate() }} />
+                                        {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} profile={true} />}
+                                    </div>
+                                </Form.Group>
+                            </Form>
+                            <Form style={{ maxWidth: '200px' }}>
+                                <Form.Group className='m-1'>
+                                    <div style={{ position: 'relative' }}>
+                                        <Form.Control
+                                            type='text'
+                                            placeholder='Company'
+                                            value={company}
+                                            onChange={(e) => { setCompany(e.target.value); (errors.company) && validate() }} />
+                                        {(errors.company) && <FormAlert message={errors.company} type={'error'} profile={true} />}
+                                    </div>
+                                </Form.Group>
+                            </Form>
+                        </>
+                        :
+                        <>
+                            <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
+                            <Card.Title className='company-name'>{company}</Card.Title>
+                        </>
+                    }
                     {!editing ?
                         <Dropdown className='editButton'>
                             <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '30px', height: '30px' }} id="dropdown-basic" />
@@ -166,99 +211,106 @@ export default function Profile(props) {
                         </>
                     }
                 </Card>
-                <Card className='m-auto profile-card' style={{ maxWidth: '1128px', color: 'black', border: 'none', paddingTop: '30px' }}>
-                    <Row>
-                        {/* <Col className='m-3' xs={10} md={4}>
+                <Card className='secondaryInfo'>
+                    <Row className='justify-content-md-center mt-3'>
+                        {editing ?
                             <Form>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='text'
-                                            placeholder='First Name'
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)} />
-                                        {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='text'
-                                            placeholder='Last Name'
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)} />
-                                        {(errors.lastName) && <FormAlert message={errors.lastName} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='text'
-                                            placeholder='Username'
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)} />
-                                        {(errors.username) && <FormAlert message={errors.username} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='text'
-                                            placeholder='Email'
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)} />
-                                        {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='text'
-                                            name='password'
-                                            placeholder='New Password'
-                                            onChange={(e) => setPhone(formatPhoneNumber(e.target.value))} />
-                                        {(errors.phone) && <FormAlert message={errors.phone} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                                <Form.Group className='m-1'>
-                                    <div style={{ position: 'relative' }}>
-                                        <Form.Control
-                                            type='address'
-                                            value={address}
-                                            placeholder='Address'
-                                            onChange={(e) => setAddress(e.target.value)} />
-                                        {(errors.address) && <FormAlert message={errors.address} type={'error'} />}
-                                    </div>
-                                </Form.Group>
-                            </Form>
-                        </Col>  */}
-                        <Col className='my-1 mx-1'>
-                            <Card style={{ color: 'black', border: 'none' }}>
-                                <Card.Title className='m-1'>Projects</Card.Title>
-                                <hr />
-                                <Row className='m-auto'>
-                                    {projects.length === 0 && (
-                                        <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
-                                    )}
-                                    {projects.length > 0 && projects.map((project) => {
-                                        return (
-                                            <Card className='mb-2' style={{ width: '18rem', margin: '0', padding: '0' }}>
-                                                <Card.Img as={Image} publicId='roof' />
-                                                <Card.Body>
-                                                    <Card.Title>{project.service}</Card.Title>
-                                                    <Card.Text>
-                                                        {project.description}
-                                                    </Card.Text>
-                                                    <Button variant="primary">See Project</Button>
-                                                </Card.Body>
-                                            </Card>
-                                        )
-                                    })}
+                                <Row className='justify-content-md-center'>
+                                    <Col className='formSecondaryInfo'>
+                                        <Form.Group className='m-1 form_item'>
+                                            <div style={{ position: 'relative' }}>
+                                                <Form.Control
+                                                    type='text'
+                                                    placeholder='Username'
+                                                    value={username}
+                                                    onChange={(e) => { setUsername(e.target.value); (errors.username) && validate() }} />
+                                                {(errors.username) && <FormAlert message={errors.username} type={'error'} profile={true} />}
+                                            </div>
+                                        </Form.Group>
+                                        <Form.Group className='m-1 form_item'>
+                                            <div style={{ position: 'relative' }}>
+                                                <Form.Control
+                                                    type='text'
+                                                    placeholder='Email'
+                                                    value={email}
+                                                    onChange={(e) => { setEmail(e.target.value); (errors.email) && validate() }} />
+                                                {(errors.email) && <FormAlert message={errors.email} type={'error'} profile={true} />}
+                                            </div>
+                                        </Form.Group>
+                                        <Form.Group className='m-1 form_item'>
+                                            <div style={{ position: 'relative' }}>
+                                                <Form.Control
+                                                    type='text'
+                                                    placeholder='Phone'
+                                                    value={phone}
+                                                    onChange={(e) => { setPhone(formatPhoneNumber(e.target.value)); (errors.phone) && validate() }} />
+                                                {(errors.phone) && <FormAlert message={errors.phone} type={'error'} profile={true} />}
+                                            </div>
+                                        </Form.Group>
+                                        <Form.Group className='m-1 form_item'>
+                                            <div style={{ position: 'relative' }}>
+                                                <Form.Control
+                                                    type='text'
+                                                    placeholder='Address'
+                                                    value={address}
+                                                    onChange={(e) => { setAddress(e.target.value); (errors.address) && validate() }} />
+                                                {(errors.address) && <FormAlert message={errors.address} type={'error'} profile={true} />}
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
                                 </Row>
-                            </Card>
-                        </Col>
+                            </Form>
+                            :
+                            <>
+                                <Col className='m-2 notEditingSecondaryInfo'>
+                                    <Card.Title style={{ fontSize: '17px' }}>
+                                        <User style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        {username}
+                                    </Card.Title>
+                                    <Card.Title style={{ fontSize: '17px' }}>
+                                        <AtSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        {email}
+                                    </Card.Title>
+                                    <Card.Title style={{ fontSize: '17px' }}>
+                                        <Phone style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        {(!phone) ? 'none' : phone}
+                                    </Card.Title>
+                                    <Card.Title style={{ fontSize: '17px' }}>
+                                        <MapPin style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        {(!address) ? 'no address' : address}
+                                    </Card.Title>
+                                </Col>
+                            </>
+                        }
                     </Row>
-                </Card >
+                </Card>
+                <Row className='m-2'>
+                    <Col className='my-1 mx-1'>
+                        <Card style={{ color: 'black', border: 'none' }}>
+                            <Card.Title className='m-1'>Projects</Card.Title>
+                            <hr />
+                            <Row className='m-auto'>
+                                {projects.length === 0 && (
+                                    <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
+                                )}
+                                {projects.length > 0 && projects.map((project, index) => {
+                                    return (
+                                        <Card key={index} className='mb-2' style={{ width: '18rem', margin: '0', padding: '0' }}>
+                                            <Card.Img as={Image} publicId='custom' />
+                                            <Card.Body>
+                                                <Card.Title>{project.service}</Card.Title>
+                                                <Card.Text>
+                                                    {project.description}
+                                                </Card.Text>
+                                                <Button variant="primary">See Project</Button>
+                                            </Card.Body>
+                                        </Card>
+                                    )
+                                })}
+                            </Row>
+                        </Card>
+                    </Col>
+                </Row>
             </div>
         </>
     );

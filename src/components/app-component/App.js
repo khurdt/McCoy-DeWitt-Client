@@ -16,6 +16,7 @@ const Profile = lazy(() => import("../profile-component/profile"));
 function App() {
   let navigate = useNavigate();
   const [pageActive, setPageActive] = useState('');
+  const [showNavBar, setShowNavBar] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [snackBarInfo, setSnackBarInfo] = useState({
     message: '',
@@ -40,7 +41,8 @@ function App() {
   const onLoggedIn = (authData) => {
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.username);
-    getUserData(authData.token);
+    getUserData();
+    getProjects();
   }
 
   const getUserData = () => {
@@ -81,8 +83,19 @@ function App() {
   return (
     <>
       <div className="App">
-        <Navigation pageActive={pageActive} setPageActive={setPageActive} setShowLogin={setShowLogin} />
-        <Login showLogin={showLogin} setShowLogin={setShowLogin} setSnackBarInfo={setSnackBarInfo} snackBarInfo={snackBarInfo} onLoggedIn={onLoggedIn} />
+        <Navigation
+          pageActive={pageActive}
+          setPageActive={setPageActive}
+          setShowLogin={setShowLogin}
+          setShowNavBar={setShowNavBar}
+          showNavBar={showNavBar} />
+        <Login
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          setSnackBarInfo={setSnackBarInfo}
+          snackBarInfo={snackBarInfo}
+          onLoggedIn={onLoggedIn}
+          setShowNavBar={setShowNavBar} />
         {((snackBarInfo.show !== 'initial') || (showLogin === false)) &&
           <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} showLogin={showLogin} />
         }

@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Container, Row, Button, Modal, Form, FloatingLabel, Col } from 'react-bootstrap';
 import axios from 'axios';
-import { LogIn, Send, UserPlus } from 'react-feather';
+import { ArrowLeft, ArrowRight, LogIn, Send, UserPlus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import './login.css';
 import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn } = props;
+    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar } = props;
     const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -115,6 +115,7 @@ export default function Login(props) {
                         loading: false
                     });
                     setShowLogin(false);
+                    setShowNavBar(false);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -241,9 +242,12 @@ export default function Login(props) {
                                                             {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
                                                         </FloatingLabel >
                                                     </Form.Group>
-                                                    <Row className='justify-content-right'>
-                                                        <Button onClick={() => setPageNumber(1)}>Next</Button>
-                                                    </Row>
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                        <Button style={{ width: '100px', margin: 'auto' }} onClick={() => setPageNumber(1)}>
+                                                            Next
+                                                            <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px' }} />
+                                                        </Button>
+                                                    </div>
                                                 </Form>
                                             </>
                                             :
@@ -252,7 +256,10 @@ export default function Login(props) {
                                                     <Form
                                                         ref={formRef}
                                                         style={{ maxWidth: '500px' }}>
-                                                        <Button className='mb-3' onClick={() => setPageNumber(0)} >Return</Button>
+                                                        <Button className='mb-3' onClick={() => setPageNumber(0)} >
+                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px' }} />
+                                                            Back
+                                                        </Button>
                                                         <Form.Group >
                                                             <FloatingLabel
                                                                 label='Company Name (optional)'
@@ -289,9 +296,12 @@ export default function Login(props) {
                                                                 {(errors.address) && <FormAlert message={errors.address} type={'error'} />}
                                                             </FloatingLabel >
                                                         </Form.Group>
-                                                        <Row className='justify-content-right'>
-                                                            <Button onClick={() => setPageNumber(2)}>Next</Button>
-                                                        </Row>
+                                                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                            <Button onClick={() => setPageNumber(2)}>
+                                                                Next
+                                                                <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px' }} />
+                                                            </Button>
+                                                        </div>
                                                     </Form>
                                                 </>
                                                 :
@@ -300,7 +310,10 @@ export default function Login(props) {
                                                     <Form
                                                         ref={formRef}
                                                         style={{ maxWidth: '500px' }}>
-                                                        <Button className='mb-3' onClick={() => setPageNumber(1)} >Return</Button>
+                                                        <Button className='mb-3' onClick={() => setPageNumber(1)} >
+                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px' }} />
+                                                            Back
+                                                        </Button>
                                                         <Form.Group >
                                                             <FloatingLabel
                                                                 label='New Username'
@@ -384,7 +397,7 @@ export default function Login(props) {
                             <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} />
                         }
                     </div >
-                </Modal.Body>
+                </Modal.Body >
                 <Modal.Footer>
                     {notRegistered ?
                         <Button style={{ marginRight: 'auto' }} variant="dark" onClick={() => setNotRegistered(false)}>
@@ -399,7 +412,7 @@ export default function Login(props) {
                         Close
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal >
         </>
     );
 }

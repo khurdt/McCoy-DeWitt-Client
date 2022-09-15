@@ -33,17 +33,20 @@ div.nav div:hover {
 }
 
 .offcanvas_item {
-  color: white !important;
-  margin: auto;
+  position: relative;
+  color: black !important;
+  margin-right: auto;
+  width: 100%;
+  margin-bottom: 10px;
   font-size: 20px !important;
 }
 
 .offcanvas_item.offcanvas_item {
-  color: white !important;
+  color: black !important;
 }
 
 .turnWhite {
-  color: white !important;
+  color: black !important;
 }
 
 /* .menu-close-icon {

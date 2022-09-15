@@ -15,18 +15,11 @@
     z-index: -1;
 }
 
-.profileIntro.profileIntro {
-    background-color: white;
-    width: 75%;
-    margin-left: auto;
-    border: none;
-    position: relative;
-}
-
 .profile-badge {
     position: absolute;
-    top: 32%;
-    left: 15%;
+    bottom: 0;
+    left: 10%;
+    transform: translateY(70px);
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -41,21 +34,25 @@
     font-weight: bold;
 }
 
+.profileIntro.profileIntro {
+    background-color: white;
+    width: 70%;
+    margin-left: auto;
+    border: none;
+    position: relative;
+}
+
 .profile-name {
     color: black;
-    width: 200px;
+    width: auto;
     font-size: 30px;
-    text-align: center;
+    text-align: left;
 }
 
 .company-name {
-    width: 150px;
-    text-align: center;
+    width: auto;
+    text-align: left;
     margin-left: 30px
-}
-
-.project-card {
-    height: 300px;
 }
 
 .editButton {
@@ -73,18 +70,49 @@
     cursor: pointer;
 }
 
+.secondaryInfo {
+    border: none;
+    width: 100%;
+}
+
+.formSecondaryInfo {
+    max-width: 800px;
+    display: flex;
+}
+
+.form_item {
+    max-width: 330px;
+}
+
+.notEditingSecondaryInfo {
+    display: flex;
+    max-width: 700px;
+    justify-content: space-between;
+    align-content: center;
+}
+
 
 
 @media all and (max-width: 700px) {
     .profile-badge {
-        top: 35%;
-        left: 7%;
-        width: 130px;
-        height: 130px;
+        transform: translateY(50px);
+        left: 3%;
+        width: 100px;
+        height: 100px;
+    }
+
+    .notEditingSecondaryInfo {
+        display: block;
+        padding-left: 30px;
+    }
+
+    .restOfInfo {
+        max-width: 250px;
+        display: block;
     }
 
     .profileIntro.profileIntro {
-        width: 65%;
+        width: 70%;
     }
 
     /* .cancelButton {
