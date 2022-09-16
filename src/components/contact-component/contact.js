@@ -9,7 +9,7 @@ import { Send } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 
 export default function Contact(props) {
-    const { setSnackBarInfo, snackbarBarInfo } = props;
+    const { setSnackBarInfo, snackbarBarInfo, primaryColor, secondaryColor } = props;
     const formRef = useRef(null);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -43,29 +43,29 @@ export default function Contact(props) {
         const newErrors = {};
         let isReq = true;
         if (!firstName) {
-            newErrors.firstName = '*required'
+            newErrors.firstName = 'required'
             isReq = false;
         }
         if (!lastName) {
-            newErrors.lastName = '*required'
+            newErrors.lastName = 'required'
             isReq = false;
         }
         if (!email) {
-            newErrors.email = '*required'
+            newErrors.email = 'required'
             isReq = false;
         } else if (email.indexOf('@') === -1) {
-            newErrors.email = '*invalid'
+            newErrors.email = 'invalid'
             isReq = false;
         }
         if (phone !== undefined) {
             const phoneNumberLength = form.phone.replace(/[^\d]/g, '').length
             if (phoneNumberLength > 0 && phoneNumberLength < 10) {
-                newErrors.phone = '*invalid'
+                newErrors.phone = 'invalid'
                 isReq = false;
             }
         }
         if (!message) {
-            newErrors.message = '*required'
+            newErrors.message = 'required'
             isReq = false;
         }
         setErrors(newErrors);
@@ -124,7 +124,7 @@ export default function Contact(props) {
         <>
             <div style={{ position: 'relative' }}>
                 <div className='topfront-background'></div>
-                <Card className='contactIntro contactIntro m-auto'>
+                <Card className='contactIntro contactIntro m-auto' style={{ borderColor: primaryColor }}>
                     <Card.Title className='m-auto' style={{ color: 'white' }}>Contact Us</Card.Title>
                 </Card>
                 <Image publicId='contact_bxwt4y' className='contactImage contactImage' />
@@ -138,11 +138,11 @@ export default function Contact(props) {
                             {/* First Name */}
                             <Form.Group>
                                 <FloatingLabel
-                                    label='First Name'
+                                    label='First Name *'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.firstName}
-                                        placeholder='First Name' type='text'
+                                        placeholder='First Name *' type='text'
                                         onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
                                     {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
                                 </FloatingLabel>
@@ -150,11 +150,11 @@ export default function Contact(props) {
                             {/* Last Name */}
                             <Form.Group>
                                 <FloatingLabel
-                                    label='Last Name'
+                                    label='Last Name *'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.lastName}
-                                        placeholder='Last Name'
+                                        placeholder='Last Name *'
                                         type='text'
                                         onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
                                     />
@@ -164,12 +164,12 @@ export default function Contact(props) {
                             {/* Email */}
                             <Form.Group >
                                 <FloatingLabel
-                                    label='Email Address'
+                                    label='Email Address *'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.email}
                                         type='text'
-                                        placeholder='Email Address'
+                                        placeholder='Email Address *'
                                         onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
                                     {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
                                 </FloatingLabel >
@@ -195,14 +195,17 @@ export default function Contact(props) {
                                         value={form.message}
                                         as='textarea'
                                         rows={4}
-                                        placeholder='Message'
+                                        placeholder='Message *'
                                         onChange={(e) => { setField('message', e.target.value); (errors.message) && validate() }} />
                                     {(errors.message) && <FormAlert message={errors.message} type={'error'} />}
                                 </div>
                             </Form.Group>
-                            <Button type='submit' onClick={sendContactInfo} variant='dark' style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px' }}>
+                            <Button
+                                type='submit'
+                                onClick={sendContactInfo}
+                                style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px', backgroundColor: secondaryColor }}>
                                 Send <Send
-                                    style={{ width: '20px', height: '20px' }}
+                                    style={{ width: '20px', height: '20px', color: primaryColor }}
                                     alt='send icon'
                                 /></Button>
                         </Form>

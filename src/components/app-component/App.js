@@ -8,6 +8,8 @@ import Login from '../login-component/login';
 import Snackbar from '../snackbar-component/snackbar';
 import Navigation from '../navbar-component/navbar';
 import Loading from '../loading-component/loading';
+import Footer from '../footer-component/footer';
+
 const Contact = lazy(() => import("../contact-component/contact"));
 const FrontPage = lazy(() => import("../frontPage-component/frontPage"));
 const Profile = lazy(() => import("../profile-component/profile"));
@@ -15,6 +17,8 @@ const Profile = lazy(() => import("../profile-component/profile"));
 
 function App() {
   let navigate = useNavigate();
+  const primaryColor = '#2ab400';
+  const secondaryColor = '#262626';
   const [pageActive, setPageActive] = useState('');
   const [showNavBar, setShowNavBar] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -88,30 +92,47 @@ function App() {
           setPageActive={setPageActive}
           setShowLogin={setShowLogin}
           setShowNavBar={setShowNavBar}
-          showNavBar={showNavBar} />
+          showNavBar={showNavBar}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor} />
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           setSnackBarInfo={setSnackBarInfo}
           snackBarInfo={snackBarInfo}
           onLoggedIn={onLoggedIn}
-          setShowNavBar={setShowNavBar} />
-        {((snackBarInfo.show !== 'initial') || (showLogin === false)) &&
-          <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} showLogin={showLogin} />
+          setShowNavBar={setShowNavBar}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor} />
+        {((showLogin === false)) &&
+          <Snackbar
+            snackBarInfo={snackBarInfo}
+            setSnackBarInfo={setSnackBarInfo}
+            showLogin={showLogin}
+            primaryColor={primaryColor}
+            secondaryColor={secondaryColor}
+          />
         }
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading primaryColor={primaryColor} />}>
           <Routes>
             <Route
               exact
               path="/"
               element={
-                <FrontPage setPageActive={setPageActive} />
+                <FrontPage setPageActive={setPageActive}
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor} />
               }
             />
             <Route
               path="contact"
               element={
-                <Contact onBackClick={() => navigate(-1)} setSnackBarInfo={setSnackBarInfo} snackBarInfo={snackBarInfo} />
+                <Contact
+                  onBackClick={() => navigate(-1)}
+                  setSnackBarInfo={setSnackBarInfo}
+                  snackBarInfo={snackBarInfo}
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor} />
               }
             />
             <Route
@@ -122,20 +143,29 @@ function App() {
                     onBackClick={() => navigate(-1)}
                     setSnackBarInfo={setSnackBarInfo}
                     snackBarInfo={snackBarInfo} getUserData={getUserData}
-                    userData={userData} projects={projects} />
+                    userData={userData} projects={projects}
+                    primaryColor={primaryColor}
+                    secondaryColor={secondaryColor} />
                   :
                   ((!noProjects && projects.length > 0) && userData.firstName) ?
                     <Profile
                       onBackClick={() => navigate(-1)}
                       setSnackBarInfo={setSnackBarInfo}
                       snackBarInfo={snackBarInfo} getUserData={getUserData}
-                      userData={userData} projects={projects} />
+                      userData={userData} projects={projects}
+                      primaryColor={primaryColor}
+                      secondaryColor={secondaryColor} />
                     :
-                    <Loading />
+                    <Loading primaryColor={primaryColor} />
               }
             />
           </Routes>
         </Suspense>
+        <Footer
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          pageActive={pageActive}
+          setPageActive={setPageActive} />
       </div>
     </>
   );

@@ -8,27 +8,26 @@
 }
 
 .notification-container {
+  opacity: 0;
+  transform: translateY(250%);
   position: fixed;
   right: 3%;
   bottom: 3%;
-  opacity: 0;
   margin-left: -175px;
-  transform: translateY(250%);
   z-index: 1000 !important;
 }
 
 .notification-container.show {
-  animation: slide-vertically 0.35s ease forwards;
+  animation: slide-up 0.35s ease forwards;
   opacity: 1.5;
 }
 
 .notification-container.hide {
-  animation: hide 0.35s ease forwards;
+  animation: slide-down 0.35s ease forwards;
+  opacity: 0;
 }
 
 .notification-message {
-  background: #222;
-  border: 1px solid rgb(42, 180, 0);
   color: #fff;
   height: 55px;
   border-radius: 3px;
@@ -43,7 +42,6 @@
   color: #fff;
   border: none;
   cursor: pointer;
-  background-color: rgb(42, 180, 0);
   height: 54px;
   opacity: 1;
   border-radius: 3px;
@@ -52,14 +50,51 @@
   z-index: 1000 !important;
 }
 
-@keyframes slide-vertically {
+.load {
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+}
+
+.loading {
+  margin: auto;
+  border: 4px solid black;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-up {
   100% {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-@keyframes hide {
+@keyframes slide-down {
   0% {
     transform: translateY(0);
     opacity: 1;

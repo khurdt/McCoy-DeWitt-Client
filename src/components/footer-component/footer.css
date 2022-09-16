@@ -1,0 +1,29 @@
+.footer-container {
+  width: 100%;
+  height: 200px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  color: white;
+}
+
+.bottom-side {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.footer-icon:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.logo img {
+  margin-bottom: 3px;
+}

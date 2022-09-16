@@ -5,22 +5,21 @@ export default function FormAlert(props) {
   if (profile === undefined) { profile = false };
   return (
     <>
-      {(type === 'error' && !profile) ?
+      {(type === 'error' && !profile) &&
         <>
-          <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}>
-            <AlertCircle width={20} height={20} style={{ color: 'red' }} />
-          </p>
-          <p style={{ color: 'red', fontSize: '12px', position: 'absolute', left: '40%', top: '10%' }}>
+          {(profile) ?
+            <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '35%' }}>
+              <AlertCircle width={20} height={20} style={{ color: 'red' }} />
+            </p>
+            :
+            <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '25%' }}>
+              <AlertCircle width={20} height={20} style={{ color: 'red' }} />
+            </p>
+          }
+          <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '15%', top: '10%' }}>
             {message}
           </p>
         </>
-        :
-        (profile) ?
-          <p style={{ color: 'red', fontSize: '12px', position: 'absolute', right: '3%', top: '25%' }}>
-            <AlertCircle width={20} height={20} style={{ color: 'red' }} />
-          </p>
-          :
-          <></>
       }
     </>
   )

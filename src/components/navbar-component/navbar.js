@@ -6,7 +6,7 @@ import Logo from '../../images/logo3.png';
 import { Offcanvas, Button, Nav, Container, Navbar, NavDropdown } from 'react-bootstrap';
 
 export default function Navigation(props) {
-  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar } = props;
+  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar, primaryColor, secondaryColor } = props;
   // const [navOpen, setNavOpen] = useState('hidden');
   const isAuth = localStorage.getItem('token');
   const user = localStorage.getItem('user');
@@ -27,13 +27,16 @@ export default function Navigation(props) {
   }
 
   let homeTab = {
-    borderBottom: (!(window.location.href.includes('profile' || 'contact')) && pageActive === 'home') ? '1px solid #2ab400' : 'none'
+    borderBottom: (!(window.location.href.includes('profile' || 'contact')) && pageActive === 'home') ? `1px solid  ${primaryColor}` : 'none',
+    color: (windowSmall) && secondaryColor
   };
   let userTab = {
-    borderBottom: (pageActive === 'user' || window.location.href.includes('profile')) ? '1px solid #2ab400' : 'none',
+    borderBottom: (pageActive === 'user' || window.location.href.includes('profile')) ? `1px solid ${primaryColor}` : 'none',
+    color: (windowSmall) && secondaryColor
   };
   let contactTab = {
-    borderBottom: (pageActive === 'login' || window.location.href.includes('contact')) ? '1px solid #2ab400' : 'none'
+    borderBottom: (pageActive === 'login' || window.location.href.includes('contact')) ? `1px solid  ${primaryColor}` : 'none',
+    color: (windowSmall) && secondaryColor
   };
 
   const UserIcon = () => {
@@ -50,7 +53,7 @@ export default function Navigation(props) {
 
   return (
     <>
-      <Navbar bg="dark" variant="dark">
+      <Navbar style={{ backgroundColor: secondaryColor }} variant="dark">
         <Container>
           <Navbar.Brand style={{ color: 'white' }} href="#home">
             <img
@@ -121,7 +124,7 @@ export default function Navigation(props) {
       </Navbar>
       {windowSmall &&
         <>
-          <Offcanvas style={{ backgroundColor: 'white', color: 'black' }} show={showNavBar} onHide={handleClose} responsive="lg">
+          <Offcanvas style={{ backgroundColor: 'white', color: secondaryColor }} show={showNavBar} onHide={handleClose} responsive="lg">
             <Offcanvas.Header closeButton>
               <Offcanvas.Title></Offcanvas.Title>
             </Offcanvas.Header>
@@ -129,8 +132,8 @@ export default function Navigation(props) {
               {(user && isAuth) ?
                 <Navbar bg='inherit' className='mb-3'>
                   <Container>
-                    <Nav.Link bg='dark' style={{ color: 'black' }}>
-                      <NavDropdown bg='dark' className='offcanvas_item offcanvas_item' style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
+                    <Nav.Link style={{ color: secondaryColor }}>
+                      <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
                         <NavDropdown.Item as={Link} to='profile' onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }}>
@@ -146,7 +149,7 @@ export default function Navigation(props) {
                 :
                 <>
                   <Nav>
-                    <Nav.Link className='offcanvas_item' onClick={() => { setShowLogin(true) }}>
+                    <Nav.Link style={{ color: secondaryColor }} className='offcanvas_item' onClick={() => { setShowLogin(true) }}>
                       <LogIn
                         style={{ width: '20px', height: '20px' }}
                         alt='contact icon'
@@ -168,7 +171,7 @@ export default function Navigation(props) {
                     className='ml-auto'
                     style={{ width: '20px', height: '20px', position: 'absolute', top: '12px', right: '5px' }}
                     alt='contact icon'
-                  /> </Nav.Link>
+                  /></Nav.Link>
               </Nav>
             </Offcanvas.Body>
           </Offcanvas>

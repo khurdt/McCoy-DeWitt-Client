@@ -42,19 +42,6 @@
     position: relative;
 }
 
-.profile-name {
-    color: black;
-    width: auto;
-    font-size: 30px;
-    text-align: left;
-}
-
-.company-name {
-    width: auto;
-    text-align: left;
-    margin-left: 30px
-}
-
 .editButton {
     position: absolute;
     top: 0;
@@ -68,6 +55,19 @@
     right: 10%;
     color: red;
     cursor: pointer;
+}
+
+.profile-name {
+    color: black;
+    width: auto;
+    font-size: 30px;
+    text-align: left;
+}
+
+.company-name {
+    width: auto;
+    text-align: left;
+    margin-left: 30px
 }
 
 .secondaryInfo {
@@ -106,16 +106,12 @@
         padding-left: 30px;
     }
 
-    .restOfInfo {
-        max-width: 250px;
+    .formSecondaryInfo {
+        max-width: 300px;
         display: block;
     }
 
     .profileIntro.profileIntro {
         width: 70%;
     }
-
-    /* .cancelButton {
-        top: 35%;
-    } */
 }

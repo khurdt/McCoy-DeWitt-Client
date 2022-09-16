@@ -7,7 +7,7 @@ import './login.css';
 import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar } = props;
+    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor } = props;
     const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -33,9 +33,6 @@ export default function Login(props) {
         const newErrors = {};
         let isReq = true;
         if (notRegistered === true) {
-            if (!company) {
-                setField('company', 'Individual Client')
-            }
             if (!firstName) {
                 newErrors.firstName = 'required'
                 isReq = false;
@@ -208,22 +205,22 @@ export default function Login(props) {
                                                     style={{ maxWidth: '500px' }}>
                                                     <Form.Group>
                                                         <FloatingLabel
-                                                            label='First Name'
+                                                            label='First Name *'
                                                             className="mb-3">
                                                             <Form.Control
                                                                 value={form.firstName}
-                                                                placeholder='First Name' type='text'
+                                                                placeholder='First Name *' type='text'
                                                                 onChange={e => { setField('firstName', e.target.value); (errors.firstName) && validate() }} />
                                                             {(errors.firstName) && <FormAlert message={errors.firstName} type={'error'} />}
                                                         </FloatingLabel>
                                                     </Form.Group>
                                                     <Form.Group>
                                                         <FloatingLabel
-                                                            label='Last Name'
+                                                            label='Last Name *'
                                                             className="mb-3">
                                                             <Form.Control
                                                                 value={form.lastName}
-                                                                placeholder='Last Name'
+                                                                placeholder='Last Name *'
                                                                 type='text'
                                                                 onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
                                                             />
@@ -232,20 +229,20 @@ export default function Login(props) {
                                                     </Form.Group>
                                                     <Form.Group >
                                                         <FloatingLabel
-                                                            label='Email Address'
+                                                            label='Email Address *'
                                                             className="mb-3">
                                                             <Form.Control
                                                                 value={form.email}
                                                                 type='email'
-                                                                placeholder='Email Address'
+                                                                placeholder='Email Address *'
                                                                 onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
                                                             {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
                                                         </FloatingLabel >
                                                     </Form.Group>
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                                        <Button style={{ width: '100px', margin: 'auto' }} onClick={() => setPageNumber(1)}>
+                                                        <Button style={{ width: '100px', margin: 'auto', backgroundColor: secondaryColor }} onClick={() => setPageNumber(1)}>
                                                             Next
-                                                            <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px' }} />
+                                                            <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px', color: primaryColor }} />
                                                         </Button>
                                                     </div>
                                                 </Form>
@@ -256,8 +253,8 @@ export default function Login(props) {
                                                     <Form
                                                         ref={formRef}
                                                         style={{ maxWidth: '500px' }}>
-                                                        <Button className='mb-3' onClick={() => setPageNumber(0)} >
-                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px' }} />
+                                                        <Button className='mb-3' style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(0)} >
+                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px', color: 'red' }} />
                                                             Back
                                                         </Button>
                                                         <Form.Group >
@@ -297,9 +294,9 @@ export default function Login(props) {
                                                             </FloatingLabel >
                                                         </Form.Group>
                                                         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                                            <Button onClick={() => setPageNumber(2)}>
+                                                            <Button style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(2)}>
                                                                 Next
-                                                                <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px' }} />
+                                                                <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px', color: primaryColor }} />
                                                             </Button>
                                                         </div>
                                                     </Form>
@@ -310,13 +307,13 @@ export default function Login(props) {
                                                     <Form
                                                         ref={formRef}
                                                         style={{ maxWidth: '500px' }}>
-                                                        <Button className='mb-3' onClick={() => setPageNumber(1)} >
-                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px' }} />
+                                                        <Button className='mb-3' style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(1)} >
+                                                            <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px', color: 'red' }} />
                                                             Back
                                                         </Button>
                                                         <Form.Group >
                                                             <FloatingLabel
-                                                                label='New Username'
+                                                                label='New Username *'
                                                                 className="mb-3">
                                                                 <Form.Control
                                                                     value={form.username}
@@ -328,7 +325,7 @@ export default function Login(props) {
                                                         </Form.Group>
                                                         <Form.Group >
                                                             <FloatingLabel
-                                                                label='New Password'
+                                                                label='New Password *'
                                                                 className="mb-3">
                                                                 <Form.Control
                                                                     value={form.password}
@@ -377,34 +374,34 @@ export default function Login(props) {
                                 }
                                 <Row className='justify-content-md-center'>
                                     {(notRegistered && pageNumber === 2) &&
-                                        <Button onClick={register} variant='dark' style={{ width: '300px', textAlign: 'center' }}>
+                                        <Button onClick={register} style={{ width: '300px', textAlign: 'center', backgroundColor: secondaryColor }}>
                                             Register <UserPlus
-                                                style={{ width: '20px', height: '20px' }}
+                                                style={{ width: '20px', height: '20px', color: primaryColor }}
                                                 alt='send icon'
                                             /></Button>
                                     }
                                     {!notRegistered &&
-                                        <Button onClick={login} variant='dark' style={{ width: '300px', textAlign: 'center' }}>
+                                        <Button onClick={login} style={{ width: '300px', textAlign: 'center', backgroundColor: secondaryColor }}>
                                             Login <LogIn
-                                                style={{ width: '20px', height: '20px' }}
+                                                style={{ width: '20px', height: '20px', color: primaryColor }}
                                                 alt='send icon'
                                             /></Button>
                                     }
                                 </Row>
                             </Row>
                         </Container>
-                        {((snackBarInfo.show !== 'initial') || (showLogin)) &&
-                            <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} />
+                        {showLogin &&
+                            <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} primaryColor={primaryColor} secondaryColor={secondaryColor} />
                         }
                     </div >
                 </Modal.Body >
                 <Modal.Footer>
                     {notRegistered ?
-                        <Button style={{ marginRight: 'auto' }} variant="dark" onClick={() => setNotRegistered(false)}>
+                        <Button style={{ marginRight: 'auto', backgroundColor: secondaryColor }} onClick={() => setNotRegistered(false)}>
                             Login
                         </Button>
                         :
-                        <Button style={{ marginRight: 'auto' }} variant="dark" onClick={() => setNotRegistered(true)}>
+                        <Button style={{ marginRight: 'auto', backgroundColor: secondaryColor }} onClick={() => setNotRegistered(true)}>
                             Register
                         </Button>
                     }

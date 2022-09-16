@@ -29,13 +29,13 @@ export default function Profile(props) {
         setEmail(userData.email);
         setFirstName(userData.firstName);
         setLastName(userData.lastName);
-        setCompany(userData.company);
+        (userData.company) ? setCompany(userData.company) : setCompany('Individual Client');
         (userData.phone) && setPhone(userData.phone);
         (userData.address) && setAddress(userData.address);
     }, [projects, userData]);
 
     const updateUser = () => {
-        const username = localStorage.getItem('user');
+        const localStorageUsername = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         const isReq = validate();
         const updatedData = {
@@ -53,7 +53,7 @@ export default function Profile(props) {
                 message: 'Updating Information',
                 loading: true
             });
-            axios.put(`https://polar-tor-24509.herokuapp.com/users/${username}`, updatedData,
+            axios.put(`https://polar-tor-24509.herokuapp.com/users/${localStorageUsername}`, updatedData,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 })
@@ -110,6 +110,11 @@ export default function Profile(props) {
             newErrors.lastName = '*required'
             isReq = false;
         } else { newErrors.lastName = '' }
+
+        if (!username) {
+            newErrors.username = '*required'
+            isReq = false;
+        } else { newErrors.username = '' }
 
         if (!email) {
             newErrors.email = '*required'
@@ -284,8 +289,8 @@ export default function Profile(props) {
                         }
                     </Row>
                 </Card>
-                <Row className='m-2'>
-                    <Col className='my-1 mx-1'>
+                <Row style={{ maxWidth: '1000px' }} className='justify-content-center m-auto'>
+                    <Col className='m-auto'>
                         <Card style={{ color: 'black', border: 'none' }}>
                             <Card.Title className='m-1'>Projects</Card.Title>
                             <hr />

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react"
 import './snackbar.css';
 export default function Snackbar(props) {
-  const { setSnackBarInfo, snackBarInfo, showLogin } = props;
-  const [clear, setClear] = useState(true);
-  let { show, loading, message, } = snackBarInfo;
-  if (loading === undefined) { loading = false };
-  if (show === undefined) { show = false };
+  const { setSnackBarInfo, snackBarInfo, showLogin, primaryColor, secondaryColor } = props;
+  const [timeoutClear, setTimeoutClear] = useState(true);
+  let { show, loading, message } = snackBarInfo;
 
-  if (show && !loading && clear) {
-    setClear(false);
+  useEffect(() => {
+    if (show === undefined) { show = 'initial' };
+    (show && timeoutClear) && timeoutFunction();
+  }, []);
+
+  const timeoutFunction = () => {
+    setTimeoutClear(false);
     setTimeout(
       () => {
-        setClear(true);
+        setTimeoutClear(true);
         setSnackBarInfo({
           ...snackBarInfo,
           show: false
@@ -21,37 +24,39 @@ export default function Snackbar(props) {
     );
   }
 
+  if (show === 'initial') {
+    return undefined;
+  }
+
   return (
     <>
       {showLogin &&
         <div className="background modal-backdrop"></div>
       }
-      {(show) &&
-        <div className={(show === 'initial') ? 'notification-container' : (show === true) ? 'notification-container show' : 'notification-container hide'}>
-          <div className='notification-message'>
-            {loading ?
-              <>
-                <div>{message}</div>
-                <div style={{ height: '30px' }}>
-                  <div className='load'>
-                    <div className='loading' />
-                  </div>
+      <div className={(show) ? 'notification-container show' : 'notification-container hide'}>
+        <div className='notification-message' style={{ border: `1px solid ${primaryColor}`, backgroundColor: secondaryColor }}>
+          {loading ?
+            <>
+              <div>{message}</div>
+              <div style={{ height: '30px' }}>
+                <div className='load'>
+                  <div className='loading' style={{ borderTop: `4px solid ${primaryColor}` }} />
                 </div>
-              </>
-              :
-              message
-            }
-            {!loading &&
-              <button type="button" className="close-btn" onClick={() => {
-                setSnackBarInfo({
-                  ...snackBarInfo,
-                  show: false
-                })
-              }}>OK</button>
-            }
-          </div>
+              </div>
+            </>
+            :
+            message
+          }
+          {!loading &&
+            <button type="button" style={{ backgroundColor: primaryColor }} className="close-btn" onClick={() => {
+              setSnackBarInfo({
+                ...snackBarInfo,
+                show: false
+              })
+            }}>OK</button>
+          }
         </div>
-      }
+      </div>
     </>
-  )
+  );
 }
