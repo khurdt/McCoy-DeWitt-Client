@@ -15,3 +15,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.customButton:hover {
+  opacity: 0.8;
+  transition: ease 0.4s;
+}

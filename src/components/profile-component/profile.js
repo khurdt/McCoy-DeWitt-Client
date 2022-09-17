@@ -1,26 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './profile.css';
-import { Container, Row, Col, Form, Button, Card, Dropdown } from 'react-bootstrap';
-import { Image } from 'cloudinary-react';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Row, Col, Form, Button, Card, Dropdown } from 'react-bootstrap';
+import { Image } from 'cloudinary-react'
 import axios from 'axios';
-import { AtSign, Check, Edit, MapPin, MoreVertical, Phone, Send, User, X } from 'react-feather';
+import { AtSign, Check, MapPin, MoreVertical, Phone, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
-import Badge from 'react-bootstrap/Badge';
 import { services } from '../servicesAPI';
-import Loading from '../loading-component/loading';
+// import { ChromePicker } from 'react-color';
+// import FloatingLabel from 'react-bootstrap/FloatingLabel';
+// import Loading from '../loading-component/loading';
+// import Badge from 'react-bootstrap/Badge';
 
 export default function Profile(props) {
-    const { projects, onBackClick, userData, getUserData, setSnackBarInfo, snackbarBarInfo } = props;
+    const { projects, userData, getUserData, setSnackBarInfo, secondaryColor } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const [company, setCompany] = useState('');
     const [editing, setEditing] = useState(false);
+    const [myColor, setMyColor] = useState('');
 
     const [errors, setErrors] = useState({});
 
@@ -154,7 +156,10 @@ export default function Profile(props) {
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
                 <Image publicId='cld-sample-2' className='profileImage profileImage' />
-                <div className='profile-badge'>{userInitials}</div>
+                {/* <ChromePicker color={myColor} onChangeComplete={(color) => setMyColor(color.hex)} /> */}
+                <div>
+                    <div style={{ backgroundColor: myColor }} className='profile-badge'>{userInitials}</div>
+                </div>
             </div>
             <div className='mt-4 mb-5'>
                 <Card className='profileIntro profileIntro ml-auto'>
@@ -290,24 +295,31 @@ export default function Profile(props) {
                     </Row>
                 </Card>
                 <Row style={{ maxWidth: '1000px' }} className='justify-content-center m-auto'>
-                    <Col className='m-auto'>
+                    <Col className='m-4'>
                         <Card style={{ color: 'black', border: 'none' }}>
-                            <Card.Title className='m-1'>Projects</Card.Title>
+                            <Card.Title>Projects</Card.Title>
                             <hr />
                             <Row className='m-auto'>
                                 {projects.length === 0 && (
                                     <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
                                 )}
                                 {projects.length > 0 && projects.map((project, index) => {
+                                    let service = services.find((s) => project.service.toLowerCase().includes(s.image));
                                     return (
                                         <Card key={index} className='mb-2' style={{ width: '18rem', margin: '0', padding: '0' }}>
-                                            <Card.Img as={Image} publicId='custom' />
+                                            <div style={{ position: 'relative' }}>
+                                                <Card.Img as={Image} publicId={(service) ? service.image : 'custom'} />
+                                                <div className='service-title'>{project.service}</div>
+                                            </div>
                                             <Card.Body>
-                                                <Card.Title>{project.service}</Card.Title>
-                                                <Card.Text>
+                                                <Card.Text className='text-center'>
                                                     {project.description}
                                                 </Card.Text>
-                                                <Button variant="primary">See Project</Button>
+                                                <Card.Footer>
+                                                    <Row className='justify-content-center'>
+                                                        <Button className='customButton' style={{ backgroundColor: secondaryColor }}>See Project</Button>
+                                                    </Row>
+                                                </Card.Footer>
                                             </Card.Body>
                                         </Card>
                                     )

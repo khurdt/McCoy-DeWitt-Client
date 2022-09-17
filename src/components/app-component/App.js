@@ -17,7 +17,8 @@ const Profile = lazy(() => import("../profile-component/profile"));
 
 function App() {
   let navigate = useNavigate();
-  const primaryColor = '#2ab400';
+  // primary color options #22d1da #2ab400
+  const primaryColor = '#22d1da';
   const secondaryColor = '#262626';
   const [pageActive, setPageActive] = useState('');
   const [showNavBar, setShowNavBar] = useState(false);

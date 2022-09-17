@@ -125,7 +125,9 @@ export default function Contact(props) {
             <div style={{ position: 'relative' }}>
                 <div className='topfront-background'></div>
                 <Card className='contactIntro contactIntro m-auto' style={{ borderColor: primaryColor }}>
-                    <Card.Title className='m-auto' style={{ color: 'white' }}>Contact Us</Card.Title>
+                    <div className='contactIntro-body'>
+                        <Card.Title className='m-auto' style={{ color: 'white' }}>Contact Us</Card.Title>
+                    </div>
                 </Card>
                 <Image publicId='contact_bxwt4y' className='contactImage contactImage' />
             </div>

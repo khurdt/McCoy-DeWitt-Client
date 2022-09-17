@@ -18,7 +18,7 @@ export default function FrontPage(props) {
           <Card className='cover-card cover-card mr-auto' style={{ borderColor: primaryColor }}>
             <div className='frontPage-cardBody'>
               <Card.Title className='mb-3 firstTitle'>Restoring Buildings in the South Plains <span>
-                <ChevronsRight width={20} height={20} style={{ marginBottom: '4px' }} color={primaryColor} />
+                <ChevronsRight width={20} height={20} style={{ marginTop: '0px' }} color={primaryColor} />
               </span></Card.Title>
               <Card.Title className='mb-3 secondTitle' style={{ fontSize: '30px' }}>
                 We Preserve What You Love

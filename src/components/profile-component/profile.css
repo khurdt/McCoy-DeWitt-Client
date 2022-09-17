@@ -34,6 +34,17 @@
     font-weight: bold;
 }
 
+.changeBadgeColor {
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    transform: translateY(70px);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0);
+}
+
 .profileIntro.profileIntro {
     background-color: white;
     width: 70%;
@@ -89,6 +100,23 @@
     max-width: 700px;
     justify-content: space-between;
     align-content: center;
+}
+
+.service-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 80px;
+    text-align: center;
+    color: white;
+    font-weight: bolder;
+    font-size: 20px;
+    background-color: rgba(12, 17, 26, 0.5);
 }
 
 

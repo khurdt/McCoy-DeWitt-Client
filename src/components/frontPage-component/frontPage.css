@@ -23,9 +23,8 @@
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
-  height: 335px;
-  padding: 30px;
   animation-delay: 0.3s;
+  margin: auto;
   animation: openCard 1.5s ease forwards;
 }
 
@@ -36,12 +35,12 @@
 @keyframes fadeUp {
   0% {
     opacity: 0;
-    transform: translateY(100px);
+    transform: translateY(50px);
   }
 
   70% {
     opacity: 0;
-    transform: translateY(100px);
+    transform: translateY(50px);
   }
 
   100% {
@@ -53,11 +52,16 @@
 @keyframes openCard {
   0% {
     width: 0px;
+    height: 300px;
+    padding: 0;
   }
 
   100% {
-    width: 400px;
+    width: 450px;
+    height: 300px;
+    padding: 30px;
   }
+
 }
 
 .firstTitle {
@@ -94,10 +98,11 @@
 } */
 
 .hr {
+  margin-top: 30px !important;
   border-width: 2px;
-  height: 2px;
+  height: 0px;
   width: 110px;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 /* #container {
@@ -154,7 +159,22 @@
 }
 
 
-@media all and (max-width: 900px) {}
+@media all and (max-width: 460px) {
+  @keyframes openCard {
+    0% {
+      width: 0px;
+      padding: 0;
+      height: 360px;
+    }
+
+    100% {
+      width: 360px;
+      height: 360px;
+      padding: 30px;
+    }
+
+  }
+}
 
 @media all and (max-width: 770px) {}
 
