@@ -184,6 +184,9 @@ export default function Login(props) {
 
     return (
         <>
+            {(showLogin && snackBarInfo.show !== 'initial') &&
+                <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} primaryColor={primaryColor} secondaryColor={secondaryColor} />
+            }
             <Modal show={showLogin} onHide={handleClose} className='details-modal .modal-content'>
                 <Modal.Header closeButton>
                     {notRegistered ?
@@ -390,9 +393,6 @@ export default function Login(props) {
                                 </Row>
                             </Row>
                         </Container>
-                        {showLogin &&
-                            <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} primaryColor={primaryColor} secondaryColor={secondaryColor} />
-                        }
                     </div >
                 </Modal.Body >
                 <Modal.Footer>

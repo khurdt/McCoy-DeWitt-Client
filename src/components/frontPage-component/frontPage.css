@@ -23,9 +23,41 @@
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
-  min-width: 340px;
-  height: fit-content;
+  height: 335px;
   padding: 30px;
+  animation-delay: 0.3s;
+  animation: openCard 1.5s ease forwards;
+}
+
+.frontPage-cardBody {
+  animation: fadeUp 2.5s ease forwards;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  70% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes openCard {
+  0% {
+    width: 0px;
+  }
+
+  100% {
+    width: 400px;
+  }
 }
 
 .firstTitle {
@@ -121,12 +153,6 @@
   background-color: rgba(12, 17, 26, 0.5);
 }
 
-@keyframes fadeUp {
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 @media all and (max-width: 900px) {}
 

@@ -7,7 +7,7 @@ export default function Snackbar(props) {
 
   useEffect(() => {
     if (show === undefined) { show = 'initial' };
-    (show && timeoutClear) && timeoutFunction();
+    ((show === true) && timeoutClear) && timeoutFunction();
   }, []);
 
   const timeoutFunction = () => {
@@ -24,16 +24,15 @@ export default function Snackbar(props) {
     );
   }
 
-  if (show === 'initial') {
-    return undefined;
-  }
-
   return (
     <>
       {showLogin &&
         <div className="background modal-backdrop"></div>
       }
-      <div className={(show) ? 'notification-container show' : 'notification-container hide'}>
+      <div
+        className={(show === 'initial') ? 'notification-container' :
+          (show === true) ? 'notification-container show' :
+            (show === false) && 'notification-container hide'}>
         <div className='notification-message' style={{ border: `1px solid ${primaryColor}`, backgroundColor: secondaryColor }}>
           {loading ?
             <>

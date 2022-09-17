@@ -8,6 +8,7 @@
 }
 
 .notification-container {
+  transition: ease;
   opacity: 0;
   transform: translateY(250%);
   position: fixed;
@@ -19,12 +20,10 @@
 
 .notification-container.show {
   animation: slide-up 0.35s ease forwards;
-  opacity: 1.5;
 }
 
 .notification-container.hide {
   animation: slide-down 0.35s ease forwards;
-  opacity: 0;
 }
 
 .notification-message {

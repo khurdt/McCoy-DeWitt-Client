@@ -81,7 +81,7 @@ export default function Contact(props) {
             setSnackBarInfo({
                 message: 'Sending Email',
                 loading: true,
-                show: true
+                show: 'true'
             });
             axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
                 name: (firstName + ' ' + lastName),
@@ -92,7 +92,7 @@ export default function Contact(props) {
                 .then((response) => {
                     console.log(response);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: 'Email Sent! Thank You',
                         loading: false,
                     });
@@ -101,7 +101,7 @@ export default function Contact(props) {
                 .catch(function (error) {
                     console.log(error);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: (error.message) ? error.message : 'Failed to Send Email, Please Try Another Time',
                         loading: false
                     });
