@@ -55,7 +55,7 @@ export default function Navigation(props) {
     <>
       <Navbar style={{ backgroundColor: secondaryColor }} variant="dark">
         <Container>
-          <Navbar.Brand style={{ color: 'white' }} href="#home">
+          <Navbar.Brand as={Link} style={{ color: 'white' }} to="/">
             <img
               alt="logo"
               src={Logo}

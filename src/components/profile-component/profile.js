@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
-import { Row, Col, Form, Button, Card, Dropdown } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card, Dropdown, Badge } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import axios from 'axios';
 import { AtSign, Check, MapPin, MoreVertical, Phone, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
-// import { ChromePicker } from 'react-color';
 // import FloatingLabel from 'react-bootstrap/FloatingLabel';
 // import Loading from '../loading-component/loading';
-// import Badge from 'react-bootstrap/Badge';
 
 export default function Profile(props) {
-    const { projects, userData, getUserData, setSnackBarInfo, secondaryColor } = props;
+    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -34,6 +32,7 @@ export default function Profile(props) {
         (userData.company) ? setCompany(userData.company) : setCompany('Individual Client');
         (userData.phone) && setPhone(userData.phone);
         (userData.address) && setAddress(userData.address);
+        (userData.color) && setMyColor(userData.color);
     }, [projects, userData]);
 
     const updateUser = () => {
@@ -47,7 +46,8 @@ export default function Profile(props) {
             lastName: lastName,
             company: company,
             phone: phone,
-            address: address
+            address: address,
+            color: myColor
         }
         if (isReq) {
             setSnackBarInfo({
@@ -156,9 +156,12 @@ export default function Profile(props) {
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
                 <Image publicId='cld-sample-2' className='profileImage profileImage' />
-                {/* <ChromePicker color={myColor} onChangeComplete={(color) => setMyColor(color.hex)} /> */}
-                <div>
-                    <div style={{ backgroundColor: myColor }} className='profile-badge'>{userInitials}</div>
+                <div style={{ position: 'relative' }}>
+                    <div style={{ backgroundColor: myColor }} className='profile-badge'>{userInitials}
+                        {editing &&
+                            <input className='colorInput' type='color' value={myColor} onChange={(e) => setMyColor(e.target.value)} />
+                        }
+                    </div>
                 </div>
             </div>
             <div className='mt-4 mb-5'>
@@ -306,12 +309,13 @@ export default function Profile(props) {
                                 {projects.length > 0 && projects.map((project, index) => {
                                     let service = services.find((s) => project.service.toLowerCase().includes(s.image));
                                     return (
-                                        <Card key={index} className='mb-2' style={{ width: '18rem', margin: '0', padding: '0' }}>
+                                        <Card key={index} className='m-3' style={{ width: '18rem', margin: '0', padding: '0' }}>
                                             <div style={{ position: 'relative' }}>
-                                                <Card.Img as={Image} publicId={(service) ? service.image : 'custom'} />
+                                                <Card.Img style={{ minHeight: '190px' }} as={Image} publicId={(service) ? service.image : 'custom'} />
                                                 <div className='service-title'>{project.service}</div>
                                             </div>
                                             <Card.Body>
+                                                <Card.Text>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
                                                 <Card.Text className='text-center'>
                                                     {project.description}
                                                 </Card.Text>

@@ -7,7 +7,7 @@ import './login.css';
 import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor } = props;
+    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor, navigate } = props;
     const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -113,6 +113,7 @@ export default function Login(props) {
                     });
                     setShowLogin(false);
                     setShowNavBar(false);
+                    navigate('profile');
                 })
                 .catch(function (error) {
                     console.log(error);

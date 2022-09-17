@@ -104,7 +104,8 @@ function App() {
           onLoggedIn={onLoggedIn}
           setShowNavBar={setShowNavBar}
           primaryColor={primaryColor}
-          secondaryColor={secondaryColor} />
+          secondaryColor={secondaryColor}
+          navigate={navigate} />
         {((showLogin === false)) &&
           <Snackbar
             snackBarInfo={snackBarInfo}

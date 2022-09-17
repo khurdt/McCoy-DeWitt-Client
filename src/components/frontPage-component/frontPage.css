@@ -25,43 +25,11 @@
   background-color: rgba(0, 0, 0, 0);
   animation-delay: 0.3s;
   margin: auto;
-  animation: openCard 1.5s ease forwards;
+  animation: openCard 1s ease forwards;
 }
 
 .frontPage-cardBody {
-  animation: fadeUp 2.5s ease forwards;
-}
-
-@keyframes fadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-
-  70% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes openCard {
-  0% {
-    width: 0px;
-    height: 300px;
-    padding: 0;
-  }
-
-  100% {
-    width: 450px;
-    height: 300px;
-    padding: 30px;
-  }
-
+  animation: fadeUp 1.2s ease forwards;
 }
 
 .firstTitle {
@@ -73,9 +41,6 @@
   word-wrap: break-word;
   max-width: 500px;
   text-align: left;
-  /* -webkit-text-stroke-color: black;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-fill-color: white; */
 }
 
 .secondTitle .subtitle {
@@ -91,12 +56,6 @@
   margin-top: 20px;
 }
 
-/* hr {
-  border: 0;
-  height: 1px;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, .75), rgba(0, 0, 0, 0));
-} */
-
 .hr {
   margin-top: 30px !important;
   border-width: 2px;
@@ -104,19 +63,6 @@
   width: 110px;
   opacity: 1;
 }
-
-/* #container {
-  position: relative;
-  z-index: 100;
-  transform: translateX(0);
-  transition: all ease 0.6s;
-  background-color: #cacaca;
-}
-
-#container.remove {
-  transform: translateX(-100%);
-  transition: all ease 0.6s;
-} */
 
 .service-picture.service-picture {
   object-fit: cover;
@@ -158,8 +104,94 @@
   background-color: rgba(12, 17, 26, 0.5);
 }
 
+@-webkit-keyframes fadeUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+  }
+
+  70% {
+    opacity: 0;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+  }
+
+  70% {
+    opacity: 0;
+    -webkit-transform: translateY(50px);
+    transform: translateY(50px);
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes openCard {
+  0% {
+    width: 0px;
+    height: 300px;
+    padding: 0;
+  }
+
+  100% {
+    width: 450px;
+    height: 300px;
+    padding: 30px;
+  }
+
+}
+
+@keyframes openCard {
+  0% {
+    width: 0px;
+    height: 300px;
+    padding: 0;
+  }
+
+  100% {
+    width: 450px;
+    height: 300px;
+    padding: 30px;
+  }
+
+}
+
 
 @media all and (max-width: 460px) {
+
+  @-webkit-keyframes openCard {
+    0% {
+      width: 0px;
+      padding: 0;
+      height: 360px;
+    }
+
+    100% {
+      width: 360px;
+      height: 360px;
+      padding: 30px;
+    }
+
+  }
+
   @keyframes openCard {
     0% {
       width: 0px;

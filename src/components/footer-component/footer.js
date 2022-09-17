@@ -8,6 +8,7 @@ import { Home, Mail, User } from 'react-feather';
 export default function Footer(props) {
   const { primaryColor, secondaryColor, pageActive, setPageActive } = props;
   const windowSmall = (window.innerWidth < 1000);
+  const user = localStorage.getItem('user');
 
   useEffect(() => {
     (window.location.href.includes('user')) ? setPageActive('user') :
@@ -48,9 +49,11 @@ export default function Footer(props) {
           <Link to='contact' onClick={() => setPageActive('contact')} style={contactTab}>
             <Mail className="m-2 footer-icon" width={25} height={25} />
           </Link>
-          <Link to='profile' onClick={() => setPageActive('user')} style={userTab}>
-            <User className="m-2 footer-icon" width={25} height={25} />
-          </Link>
+          {user &&
+            <Link to='profile' onClick={() => setPageActive('user')} style={userTab}>
+              <User className="m-2 footer-icon" width={25} height={25} />
+            </Link>
+          }
         </div>
         <div style={{ textAlign: 'center', color: 'white', fontSize: '12px' }}>@Copyright. All rights reserved.</div>
       </Row>

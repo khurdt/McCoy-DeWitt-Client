@@ -13,7 +13,6 @@
     "jwt-check-expiration": "^1.0.5",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
-    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-intersection-observer": "^9.4.0",
