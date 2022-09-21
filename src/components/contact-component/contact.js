@@ -140,7 +140,7 @@ export default function Contact(props) {
                             {/* First Name */}
                             <Form.Group>
                                 <FloatingLabel
-                                    label='First Name *'
+                                    label='First Name'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.firstName}
@@ -152,11 +152,11 @@ export default function Contact(props) {
                             {/* Last Name */}
                             <Form.Group>
                                 <FloatingLabel
-                                    label='Last Name *'
+                                    label='Last Name'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.lastName}
-                                        placeholder='Last Name *'
+                                        placeholder='Last Name'
                                         type='text'
                                         onChange={e => { setField('lastName', e.target.value); (errors.lastName) && validate() }}
                                     />
@@ -166,12 +166,12 @@ export default function Contact(props) {
                             {/* Email */}
                             <Form.Group >
                                 <FloatingLabel
-                                    label='Email Address *'
+                                    label='Email Address'
                                     className="mb-3">
                                     <Form.Control
                                         value={form.email}
                                         type='text'
-                                        placeholder='Email Address *'
+                                        placeholder='Email Address'
                                         onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
                                     {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
                                 </FloatingLabel >
@@ -197,7 +197,7 @@ export default function Contact(props) {
                                         value={form.message}
                                         as='textarea'
                                         rows={4}
-                                        placeholder='Message *'
+                                        placeholder='Message'
                                         onChange={(e) => { setField('message', e.target.value); (errors.message) && validate() }} />
                                     {(errors.message) && <FormAlert message={errors.message} type={'error'} />}
                                 </div>

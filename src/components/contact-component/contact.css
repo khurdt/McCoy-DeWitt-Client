@@ -19,25 +19,25 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
     background-color: rgba(255, 255, 255, 0.0);
-    animation: openContactCard 0.8s ease forwards;
+    animation: openContactCard 1.7s ease forwards;
 }
 
 .contactIntro-body {
     margin: auto;
-    animation: fadeUp 1.1s ease forwards;
+    animation: fadeDown 1.7s ease forwards;
 }
 
-@keyframes fadeUp {
+@keyframes fadeDown {
     0% {
         opacity: 0;
-        transform: translateY(50px);
+        transform: translateY(-50px);
     }
 
     70% {
         opacity: 0;
-        transform: translateY(50px);
+        transform: translateY(-50px);
     }
 
     100% {
@@ -53,7 +53,17 @@
         padding: 0;
     }
 
+    70% {
+        -webkit-transform: translate(-50%, -40%);
+        transform: translate(-50%, -40%);
+        width: 200px;
+        height: 100px;
+        padding: 30px;
+    }
+
     100% {
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
         width: 200px;
         height: 100px;
         padding: 30px;

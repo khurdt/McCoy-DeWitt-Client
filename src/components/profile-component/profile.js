@@ -3,7 +3,7 @@ import './profile.css';
 import { Row, Col, Form, Button, Card, Dropdown, Badge } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import axios from 'axios';
-import { AtSign, Check, MapPin, MoreVertical, Phone, User, X } from 'react-feather';
+import { AtSign, Check, Mail, MapPin, MoreVertical, Phone, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
 // import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -281,7 +281,7 @@ export default function Profile(props) {
                                         {username}
                                     </Card.Title>
                                     <Card.Title style={{ fontSize: '17px' }}>
-                                        <AtSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        <Mail style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
                                         {email}
                                     </Card.Title>
                                     <Card.Title style={{ fontSize: '17px' }}>

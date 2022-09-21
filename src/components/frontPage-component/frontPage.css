@@ -21,15 +21,15 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -40%);
   background-color: rgba(0, 0, 0, 0);
   animation-delay: 0.3s;
   margin: auto;
-  animation: openCard 1s ease forwards;
+  animation: openCard 1.7s ease forwards;
 }
 
 .frontPage-cardBody {
-  animation: fadeUp 1.2s ease forwards;
+  animation: fadeDown 1.7s ease forwards;
 }
 
 .firstTitle {
@@ -104,37 +104,11 @@
   background-color: rgba(12, 17, 26, 0.5);
 }
 
-@-webkit-keyframes fadeUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(50px);
-    transform: translateY(50px);
-  }
-
-  70% {
-    opacity: 0;
-    -webkit-transform: translateY(50px);
-    transform: translateY(50px);
-  }
-
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 @keyframes fadeUp {
   0% {
     opacity: 0;
-    -webkit-transform: translateY(50px);
-    transform: translateY(50px);
-  }
-
-  70% {
-    opacity: 0;
-    -webkit-transform: translateY(50px);
-    transform: translateY(50px);
+    -webkit-transform: translateY(30px);
+    transform: translateY(30px);
   }
 
   100% {
@@ -144,19 +118,24 @@
   }
 }
 
-@-webkit-keyframes openCard {
+@keyframes fadeDown {
   0% {
-    width: 0px;
-    height: 300px;
-    padding: 0;
+    opacity: 0;
+    -webkit-transform: translateY(-50px);
+    transform: translateY(-50px);
+  }
+
+  70% {
+    opacity: 0;
+    -webkit-transform: translateY(-50px);
+    transform: translateY(-50px);
   }
 
   100% {
-    width: 450px;
-    height: 300px;
-    padding: 30px;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
   }
-
 }
 
 @keyframes openCard {
@@ -166,7 +145,17 @@
     padding: 0;
   }
 
+  70% {
+    -webkit-transform: translate(-50%, -40%);
+    transform: translate(-50%, -40%);
+    width: 450px;
+    height: 300px;
+    padding: 30px;
+  }
+
   100% {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     width: 450px;
     height: 300px;
     padding: 30px;
@@ -176,21 +165,6 @@
 
 
 @media all and (max-width: 460px) {
-
-  @-webkit-keyframes openCard {
-    0% {
-      width: 0px;
-      padding: 0;
-      height: 360px;
-    }
-
-    100% {
-      width: 360px;
-      height: 360px;
-      padding: 30px;
-    }
-
-  }
 
   @keyframes openCard {
     0% {
