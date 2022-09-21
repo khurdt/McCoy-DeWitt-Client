@@ -97,7 +97,8 @@
 
 .notEditingSecondaryInfo {
     display: flex;
-    max-width: 700px;
+    width: fit-content;
+    max-width: 65%;
     justify-content: space-between;
     align-content: center;
 }
@@ -148,7 +149,7 @@ input[type=color]::-webkit-color-swatch-wrapper {
 
 
 
-@media all and (max-width: 700px) {
+@media all and (max-width: 1000px) {
     .profile-badge {
         transform: translateY(50px);
         left: 3%;
