@@ -7,11 +7,10 @@ export default function Snackbar(props) {
 
   useEffect(() => {
     if (show === undefined) { show = 'initial' };
-    ((show === true) && timeoutClear) && timeoutFunction();
+    (show === true && timeoutClear) && timeoutFunction();
   }, []);
 
   const timeoutFunction = () => {
-    setTimeoutClear(false);
     setTimeout(
       () => {
         setTimeoutClear(true);

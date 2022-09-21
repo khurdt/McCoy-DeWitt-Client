@@ -19,6 +19,7 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    -webkit-transform: translate(-50%, -40%);
     transform: translate(-50%, -40%);
     background-color: rgba(255, 255, 255, 0.0);
     animation: openContactCard 1.7s ease forwards;
@@ -49,7 +50,7 @@
     }
 }
 
-@-webkit-keyframes openContactCard {
+@keyframes openContactCard {
     0% {
         width: 0px;
         height: 100px;
@@ -74,27 +75,30 @@
 
 }
 
-@keyframes openContactCard {
-    0% {
-        width: 0px;
-        height: 100px;
-        padding: 0;
-    }
+@media all and (max-width: 460px) {
 
-    70% {
-        -webkit-transform: translate(-50%, -40%);
-        transform: translate(-50%, -40%);
-        width: 200px;
-        height: 100px;
-        padding: 30px;
-    }
+    @keyframes openContactCard {
+        0% {
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 0px;
+            height: 100px;
+            padding: 0;
+        }
 
-    100% {
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        width: 200px;
-        height: 100px;
-        padding: 30px;
-    }
+        70% {
+            width: 200px;
+            height: 100px;
+            padding: 30px;
+        }
 
+        100% {
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 100px;
+            padding: 30px;
+        }
+
+    }
 }
