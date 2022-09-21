@@ -21,8 +21,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  -webkit-transform: translate(-50%, -40%);
-  transform: translate(-50%, -40%);
+  transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0);
   animation-delay: 0.3s;
   margin: auto;
@@ -141,6 +140,8 @@
 
 @keyframes openCard {
   0% {
+    -webkit-transform: translate(-50%, -40%);
+    transform: translate(-50%, -40%);
     width: 0px;
     height: 300px;
     padding: 0;
@@ -169,8 +170,6 @@
 
   @keyframes openCard {
     0% {
-      -webkit-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
       width: 0px;
       padding: 0;
       height: 360px;
@@ -183,13 +182,31 @@
     }
 
     100% {
-      -webkit-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
       width: 360px;
       height: 360px;
       padding: 30px;
     }
 
+  }
+
+  @keyframes fadeDown {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(50px);
+      transform: translateY(50px);
+    }
+
+    75% {
+      opacity: 0;
+      -webkit-transform: translateY(50px);
+      transform: translateY(50px);
+    }
+
+    100% {
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 }
 

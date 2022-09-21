@@ -86,6 +86,10 @@
     width: 100%;
 }
 
+.row {
+    --bs-gutter-x: 0rem;
+}
+
 .formSecondaryInfo {
     max-width: 800px;
     display: flex;
