@@ -39,6 +39,7 @@ function App() {
       getProjects();
     } else {
       localStorage.clear();
+      // window.open('/', '_self');
     }
   }, [])
 
