@@ -76,7 +76,6 @@ export default function Contact(props) {
         event.preventDefault()
         const { firstName, lastName, email, phone, message } = form;
         const isReq = validate();
-        console.log(isReq);
         if (isReq) {
             setSnackBarInfo({
                 message: 'Sending Email',

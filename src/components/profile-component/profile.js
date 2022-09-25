@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
-import { Row, Col, Form, Button, Card, Dropdown, Badge } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import axios from 'axios';
-import { AtSign, Check, Mail, MapPin, MoreVertical, Phone, User, X } from 'react-feather';
+import { Check, Mail, MapPin, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
-// import FloatingLabel from 'react-bootstrap/FloatingLabel';
-// import Loading from '../loading-component/loading';
+import CreateProject from '../createProject component/createProject';
+
 
 export default function Profile(props) {
     const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor } = props;
@@ -21,6 +21,7 @@ export default function Profile(props) {
     const [company, setCompany] = useState('');
     const [editing, setEditing] = useState(false);
     const [myColor, setMyColor] = useState('');
+    const [showCreateProject, setShowCreateProject] = useState(false);
 
     const [errors, setErrors] = useState({});
 
@@ -51,7 +52,7 @@ export default function Profile(props) {
         }
         if (isReq) {
             setSnackBarInfo({
-                show: true,
+                show: 'true',
                 message: 'Updating Information',
                 loading: true
             });
@@ -64,7 +65,7 @@ export default function Profile(props) {
                     setEditing(false);
                     getUserData();
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: 'Update Successful',
                         loading: false
                     });
@@ -72,7 +73,7 @@ export default function Profile(props) {
                 .catch(function (error) {
                     console.log(error);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: 'Update Failed',
                         loading: false
                     });
@@ -152,7 +153,10 @@ export default function Profile(props) {
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
 
     return (
-        <>
+        <div>
+            {showCreateProject &&
+                <CreateProject setShowCreateProject={setShowCreateProject} primaryColor={primaryColor} />
+            }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
                 <Image publicId='cld-sample-2' className='profileImage profileImage' />
@@ -164,7 +168,7 @@ export default function Profile(props) {
                     </div>
                 </div>
             </div>
-            <div className='mt-4 mb-5'>
+            <div className={(showCreateProject) ? 'hideProfile' : 'mt-4 mb-5'}>
                 <Card className='profileIntro profileIntro ml-auto'>
                     {editing ?
                         <>
@@ -300,7 +304,28 @@ export default function Profile(props) {
                 <Row style={{ maxWidth: '1000px' }} className='justify-content-center m-auto'>
                     <Col className='m-4'>
                         <Card style={{ color: 'black', border: 'none' }}>
-                            <Card.Title>Projects</Card.Title>
+                            <Row>
+                                <Col xs={4} sm={4} md={2} lg={2}>
+                                    <Card.Title>Projects</Card.Title>
+                                </Col>
+                                <Col xs={1} sm={1} md={1} lg={1}>
+                                    <OverlayTrigger
+                                        key='right'
+                                        placement='right'
+                                        overlay={
+                                            <Tooltip>
+                                                click to add or create project
+                                            </Tooltip>
+                                        }>
+                                        <Plus
+                                            width={20}
+                                            height={20}
+                                            color={primaryColor}
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => setShowCreateProject(true)} />
+                                    </OverlayTrigger>
+                                </Col>
+                            </Row>
                             <hr />
                             <Row className='m-auto'>
                                 {projects.length === 0 && (
@@ -333,6 +358,6 @@ export default function Profile(props) {
                     </Col>
                 </Row>
             </div>
-        </>
+        </div>
     );
 }

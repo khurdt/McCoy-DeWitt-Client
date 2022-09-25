@@ -1,0 +1,51 @@
+.createProjectContainer {
+  left: 50%;
+  top: 50%;
+  bottom: 50%;
+  right: 50%;
+  background: white;
+  z-index: 998;
+  opacity: 0;
+  animation: expand 0.5s forwards;
+}
+
+.createProjectContent {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeUp 0.5s 0.5s forwards;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.createProject-closeButton {
+  width: 35px;
+  height: 35px;
+  color: grey;
+  cursor: pointer;
+  margin: 15px;
+}
+
+/* .createProjectButton {
+  background-color: rgba(0, 0, 0, 0);
+  width: 200px;
+} */
+
+
+@keyframes fadeUp {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes expand {
+  100% {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+  }
+}

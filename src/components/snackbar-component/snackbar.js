@@ -8,16 +8,6 @@ export default function Snackbar(props) {
     if (show === undefined) { show = 'initial' };
   }, []);
 
-  setTimeout(
-    () => {
-      setSnackBarInfo({
-        ...snackBarInfo,
-        show: false
-      });
-    },
-    6000
-  );
-
   return (
     <>
       {showLogin &&
@@ -25,8 +15,8 @@ export default function Snackbar(props) {
       }
       <div
         className={(show === 'initial') ? 'notification-container' :
-          (show === true) ? 'notification-container show' :
-            (show === false) && 'notification-container hide'}>
+          (show === 'true') ? 'notification-container show' :
+            (show === 'false') && 'notification-container hide'}>
         <div className='notification-message' style={{ border: `1px solid ${primaryColor}`, backgroundColor: secondaryColor }}>
           {loading ?
             <>
@@ -43,8 +33,9 @@ export default function Snackbar(props) {
           {!loading &&
             <button type="button" style={{ backgroundColor: primaryColor }} className="close-btn" onClick={() => {
               setSnackBarInfo({
-                ...snackBarInfo,
-                show: false
+                message: message,
+                loading: false,
+                show: 'false'
               })
             }}>OK</button>
           }

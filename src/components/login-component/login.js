@@ -95,7 +95,7 @@ export default function Login(props) {
         console.log(isReq);
         if (isReq) {
             setSnackBarInfo({
-                show: true,
+                show: 'true',
                 message: 'Logging In',
                 loading: true
             });
@@ -107,7 +107,7 @@ export default function Login(props) {
                     const data = response.data;
                     onLoggedIn(data);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: 'Successfully Logged In',
                         loading: false
                     });
@@ -118,7 +118,7 @@ export default function Login(props) {
                 .catch(function (error) {
                     console.log(error);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: (error.message.includes('400')) ? 'incorrect credentials' : 'Failed to Login',
                         loading: false
                     });
@@ -139,7 +139,7 @@ export default function Login(props) {
         console.log(isReq);
         if (isReq) {
             setSnackBarInfo({
-                show: true,
+                show: 'true',
                 message: 'Registering Account',
                 loading: true
             });
@@ -154,7 +154,7 @@ export default function Login(props) {
             })
                 .then((response) => {
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: 'Successfully Registered, Logging in',
                         loading: false
                     });
@@ -164,7 +164,7 @@ export default function Login(props) {
                 .catch(function (error) {
                     console.log(error);
                     setSnackBarInfo({
-                        show: true,
+                        show: 'true',
                         message: (error.message) ? error.message : 'Failed to Register, Please Try Another Time',
                         loading: false
                     });
