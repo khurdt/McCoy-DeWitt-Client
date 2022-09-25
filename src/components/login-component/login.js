@@ -7,7 +7,7 @@ import './login.css';
 import Snackbar from '../snackbar-component/snackbar';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor, navigate } = props;
+    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor, navigate, createProjectButton } = props;
     const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -197,6 +197,12 @@ export default function Login(props) {
                     }
                 </Modal.Header>
                 <Modal.Body>
+                    {createProjectButton &&
+                        <Row className='text-center'>
+                            <div>
+                                <span style={{ color: 'red' }}>*</span>sign in to create project
+                            </div>
+                        </Row>}
                     <div className='mt-4 mb-5'>
                         <Container className='mb-5'>
                             <Row className='justify-content-center'>

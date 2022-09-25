@@ -10,7 +10,7 @@ import CreateProject from '../createProject component/createProject';
 
 
 export default function Profile(props) {
-    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor } = props;
+    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -26,6 +26,9 @@ export default function Profile(props) {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
+        if (createProjectButton) {
+            setShowCreateProject(true);
+        }
         setUsername(userData.username);
         setEmail(userData.email);
         setFirstName(userData.firstName);
@@ -81,6 +84,38 @@ export default function Profile(props) {
                 });
         }
     };
+
+    const removeProject = (project) => {
+        const username = localStorage.getItem('user');
+        const token = localStorage.getItem('token');
+        setSnackBarInfo({
+            message: 'Adding Project',
+            loading: true,
+            show: 'true'
+        });
+        axios.delete(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${project._id}`, { 'jwt': token },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                console.log(response);
+                setSnackBarInfo({
+                    show: 'true',
+                    message: 'Project Removed!',
+                    loading: false,
+                });
+                setShowCreateProject(false);
+                getProjects();
+            })
+            .catch(function (error) {
+                console.log(error);
+                setSnackBarInfo({
+                    show: 'true',
+                    message: (error.message) ? error.message : 'Failed to Remove Project',
+                    loading: false
+                });
+            });
+    }
 
     // const onDeleteAccount = () => {
     //     const username = localStorage.getItem('user');
@@ -156,7 +191,7 @@ export default function Profile(props) {
         <div>
             {showCreateProject &&
                 <CreateProject
-                    setShowCreateProject={setShowCreateProject}
+                    setShowCreateProject={setShowCreateProject} getProjects={getProjects}
                     primaryColor={primaryColor}
                     setSnackBarInfo={setSnackBarInfo} />
             }
@@ -304,33 +339,38 @@ export default function Profile(props) {
                         }
                     </Row>
                 </Card>
-                <Row style={{ maxWidth: '1000px' }} className='justify-content-center m-auto'>
+                <Row style={{ maxWidth: '1200px' }} className='justify-content-center m-auto'>
                     <Col className='m-4'>
                         <Card style={{ color: 'black', border: 'none' }}>
-                            <Row>
-                                <Col xs={4} sm={4} md={2} lg={2}>
-                                    <Card.Title>Projects</Card.Title>
-                                </Col>
-                                <Col xs={1} sm={1} md={1} lg={1}>
-                                    <OverlayTrigger
-                                        key='right'
-                                        placement='right'
-                                        overlay={
-                                            <Tooltip>
-                                                click to add or create project
-                                            </Tooltip>
-                                        }>
+                            <div style={{ display: 'flex' }}>
+                                <Card.Title>Projects</Card.Title>
+                                <div style={{ marginLeft: '20px' }}>
+                                    {window.innerWidth > 700 ?
+                                        <OverlayTrigger
+                                            key='right'
+                                            placement='right'
+                                            overlay={
+                                                <Tooltip>
+                                                    click to add or create project
+                                                </Tooltip>
+                                            }>
+                                            <Plus
+                                                width={20}
+                                                height={20}
+                                                style={{ cursor: 'pointer', color: '#808080' }}
+                                                onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} />
+                                        </OverlayTrigger>
+                                        :
                                         <Plus
                                             width={20}
                                             height={20}
-                                            color={primaryColor}
                                             style={{ cursor: 'pointer' }}
-                                            onClick={() => setShowCreateProject(true)} />
-                                    </OverlayTrigger>
-                                </Col>
-                            </Row>
+                                            onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} />
+                                    }
+                                </div>
+                            </div>
                             <hr />
-                            <Row className='m-auto'>
+                            <Row className='m-auto' style={{ justifyContent: 'center' }}>
                                 {projects.length === 0 && (
                                     <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
                                 )}

@@ -8,7 +8,16 @@ import { Button, Container, Row, Card, Col } from 'react-bootstrap';
 import { ChevronsRight } from 'react-feather'
 
 export default function FrontPage(props) {
-  const { setPageActive, primaryColor, secondaryColor } = props;
+  const { setPageActive, primaryColor, secondaryColor, setCreateProjectButton, setShowLogin } = props;
+
+  const handleCreateProject = () => {
+    setCreateProjectButton(true);
+    let user = localStorage.getItem('user');
+    if (!user) {
+      setShowLogin(true);
+    }
+  }
+
   return (
     <>
       <Container fluid style={{ margin: '0', padding: '0' }} className='intro intro mb-5'>
@@ -25,7 +34,11 @@ export default function FrontPage(props) {
               </Card.Title>
               <Card.Title style={{ color: 'white' }}>With Honesty And Integrity</Card.Title>
               <hr className='hr' style={{ color: primaryColor }} />
-              <Button className='Intro-button' onClick={() => setPageActive('contact')} style={{ width: '200px' }} as={Link} to='contact' variant='light'>Contact Us</Button>
+              <Button
+                className='Intro-button'
+                // onClick={() => setPageActive('contact')} 
+                onClick={handleCreateProject}
+                style={{ width: '250px' }} variant='light'>Create A Project With Us</Button>
             </div>
           </Card>
         </div>
