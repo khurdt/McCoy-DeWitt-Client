@@ -155,7 +155,10 @@ export default function Profile(props) {
     return (
         <div>
             {showCreateProject &&
-                <CreateProject setShowCreateProject={setShowCreateProject} primaryColor={primaryColor} />
+                <CreateProject
+                    setShowCreateProject={setShowCreateProject}
+                    primaryColor={primaryColor}
+                    setSnackBarInfo={setSnackBarInfo} />
             }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>

@@ -1,11 +1,12 @@
-import React, { useRef, createRef, useState } from 'react';
+import React, { useState } from 'react';
 import './createProject.css';
 import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
 import { FloatingLabel, Row, Card, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 export default function CreateProject(props) {
-  const { setShowCreateProject, primaryColor } = props;
+  const { setShowCreateProject, primaryColor, setSnackBarInfo } = props;
   const [currentOption, setCurrentOption] = useState({});
   const [custom, setCustom] = useState(false);
   const [page, setPage] = useState(1);
@@ -60,7 +61,7 @@ export default function CreateProject(props) {
         loading: true,
         show: 'true'
       });
-      axios.post(`https://polar-tor-24509.herokuapp.com/project`, projectData,
+      axios.post(`https://polar-tor-24509.herokuapp.com/projects`, projectData,
         {
           headers: { Authorization: `Bearer ${token}` },
         })
