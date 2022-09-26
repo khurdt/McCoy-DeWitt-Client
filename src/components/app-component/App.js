@@ -17,9 +17,10 @@ const Profile = lazy(() => import("../profile-component/profile"));
 
 function App() {
   let navigate = useNavigate();
-  // primary color options #22d1da #2ab400
-  const primaryColor = '#22d1da';
-  const secondaryColor = '#262626';
+  // primary color options #22d1da #2ab400 #ef2922
+  // secondary color options #262626
+  const [primaryColor, setPrimaryColor] = useState('#22d1da');
+  const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
   const [showNavBar, setShowNavBar] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -96,7 +97,9 @@ function App() {
           setShowNavBar={setShowNavBar}
           showNavBar={showNavBar}
           primaryColor={primaryColor}
-          secondaryColor={secondaryColor} />
+          secondaryColor={secondaryColor}
+          setPrimaryColor={setPrimaryColor}
+          setSecondaryColor={setSecondaryColor} />
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
@@ -127,7 +130,8 @@ function App() {
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   setCreateProjectButton={setCreateProjectButton}
-                  setShowLogin={setShowLogin} />
+                  setShowLogin={setShowLogin}
+                  navigate={navigate} />
               }
             />
             <Route
@@ -149,22 +153,28 @@ function App() {
                     onBackClick={() => navigate(-1)}
                     setSnackBarInfo={setSnackBarInfo}
                     snackBarInfo={snackBarInfo}
-                    getUserData={getUserData} getProjects={getProjects}
-                    userData={userData} projects={projects}
+                    getUserData={getUserData}
+                    getProjects={getProjects}
+                    userData={userData}
+                    projects={projects}
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
-                    createProjectButton={createProjectButton} />
+                    createProjectButton={createProjectButton}
+                    setCreateProjectButton={setCreateProjectButton} />
                   :
                   ((!noProjects && projects.length > 0) && userData.firstName) ?
                     <Profile
                       onBackClick={() => navigate(-1)}
                       setSnackBarInfo={setSnackBarInfo}
                       snackBarInfo={snackBarInfo}
-                      getUserData={getUserData} getProjects={getProjects}
-                      userData={userData} projects={projects}
+                      getUserData={getUserData}
+                      getProjects={getProjects}
+                      userData={userData}
+                      projects={projects}
                       primaryColor={primaryColor}
                       secondaryColor={secondaryColor}
-                      createProjectButton={createProjectButton} />
+                      createProjectButton={createProjectButton}
+                      setCreateProjectButton={setCreateProjectButton} />
                     :
                     <Loading primaryColor={primaryColor} />
               }

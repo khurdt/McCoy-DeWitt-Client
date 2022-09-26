@@ -222,7 +222,7 @@ export default function CreateProject(props) {
                   </Row>
                   :
                   <Row className='justify-content-center'>
-                    <Form style={{ maxWidth: '500px' }}>
+                    <Form style={{ maxWidth: '500px', marginRight: '20px', marginLeft: '20px' }}>
                       <Form.Group>
                         <FloatingLabel
                           label='Custom Service Type'
@@ -252,7 +252,7 @@ export default function CreateProject(props) {
                   Write A Brief Description Of You Want Done
                 </Card.Title>
                 <Row className='justify-content-center'>
-                  <Form style={{ maxWidth: '700px', margin: '20px' }}>
+                  <Form style={{ maxWidth: '700px', marginRight: '20px', marginLeft: '20px' }}>
                     <Form.Group className='mb-3'>
                       <div style={{ position: 'relative' }}>
                         <Form.Control
@@ -276,7 +276,7 @@ export default function CreateProject(props) {
                   Where Is The Location Of This Project?
                 </Card.Title>
                 <Row className='justify-content-center'>
-                  <Form style={{ maxWidth: '700px', margin: '20px' }}>
+                  <Form style={{ maxWidth: '700px', marginRight: '20px', marginLeft: '20px' }}>
                     <Form.Group>
                       <FloatingLabel
                         label='Location'

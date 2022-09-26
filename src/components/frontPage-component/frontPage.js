@@ -8,13 +8,16 @@ import { Button, Container, Row, Card, Col } from 'react-bootstrap';
 import { ChevronsRight } from 'react-feather'
 
 export default function FrontPage(props) {
-  const { setPageActive, primaryColor, secondaryColor, setCreateProjectButton, setShowLogin } = props;
+  const { setPageActive, primaryColor, secondaryColor, setCreateProjectButton, setShowLogin, navigate } = props;
 
   const handleCreateProject = () => {
     setCreateProjectButton(true);
     let user = localStorage.getItem('user');
     if (!user) {
       setShowLogin(true);
+    } else {
+      navigate('profile');
+      setPageActive('user');
     }
   }
 

@@ -10,7 +10,7 @@ import CreateProject from '../createProject component/createProject';
 
 
 export default function Profile(props) {
-    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton } = props;
+    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton, setCreateProjectButton } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -28,6 +28,7 @@ export default function Profile(props) {
     useEffect(() => {
         if (createProjectButton) {
             setShowCreateProject(true);
+            setCreateProjectButton(false);
         }
         setUsername(userData.username);
         setEmail(userData.email);
@@ -357,7 +358,7 @@ export default function Profile(props) {
                                             <Plus
                                                 width={20}
                                                 height={20}
-                                                style={{ cursor: 'pointer', color: '#808080' }}
+                                                style={{ cursor: 'pointer', color: primaryColor }}
                                                 onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} />
                                         </OverlayTrigger>
                                         :

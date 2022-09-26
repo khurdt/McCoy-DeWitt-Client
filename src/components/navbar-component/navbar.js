@@ -6,7 +6,7 @@ import Logo from '../../images/logo3.png';
 import { Offcanvas, Button, Nav, Container, Navbar, NavDropdown } from 'react-bootstrap';
 
 export default function Navigation(props) {
-  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar, primaryColor, secondaryColor } = props;
+  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar, primaryColor, secondaryColor, setPrimaryColor, setSecondaryColor } = props;
   // const [navOpen, setNavOpen] = useState('hidden');
   const isAuth = localStorage.getItem('token');
   const user = localStorage.getItem('user');
@@ -104,6 +104,22 @@ export default function Navigation(props) {
                         />
                         Sign Out
                       </NavDropdown.Item>
+                      {user === 'khurdt' &&
+                        <>
+                          <NavDropdown.Divider />
+                          <div style={{ paddingLeft: '20px', paddingTop: '10px' }}>
+                            <div style={{ display: 'flex', color: 'white' }}>Color
+                              <div>
+                                <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                              </div>
+                              <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                              <div>
+                                <input className='colorInput' type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      }
                     </NavDropdown>
                   </Nav>
                 </>
@@ -144,6 +160,14 @@ export default function Navigation(props) {
                         </NavDropdown.Item>
                       </NavDropdown>
                     </Nav.Link>
+                    {user === 'khurdt' &&
+                      <div style={{ paddingLeft: '20px', paddingTop: '10px' }}>
+                        <div style={{ display: 'flex', color: 'white' }}>Color
+                          <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                          <input className='colorInput' type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+                        </div>
+                      </div>
+                    }
                   </Container>
                 </Navbar>
                 :
