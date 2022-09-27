@@ -3,7 +3,7 @@ import './profile.css';
 import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import axios from 'axios';
-import { Check, Mail, MapPin, MoreVertical, Phone, Plus, User, X } from 'react-feather';
+import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
@@ -20,6 +20,7 @@ export default function Profile(props) {
     const [address, setAddress] = useState('');
     const [company, setCompany] = useState('');
     const [editing, setEditing] = useState(false);
+    const [deleteProject, setDeleteProject] = useState(false);
     const [myColor, setMyColor] = useState('');
     const [showCreateProject, setShowCreateProject] = useState(false);
 
@@ -29,6 +30,7 @@ export default function Profile(props) {
         if (createProjectButton) {
             setShowCreateProject(true);
             setCreateProjectButton(false);
+            window.scrollTo(0, 0);
         }
         setUsername(userData.username);
         setEmail(userData.email);
@@ -86,7 +88,7 @@ export default function Profile(props) {
         }
     };
 
-    const removeProject = (project) => {
+    const removeProject = (projectID) => {
         const username = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         setSnackBarInfo({
@@ -94,7 +96,7 @@ export default function Profile(props) {
             loading: true,
             show: 'true'
         });
-        axios.delete(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${project._id}`, { 'jwt': token },
+        axios.delete(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${projectID}`,
             {
                 headers: { Authorization: `Bearer ${token}` },
             })
@@ -112,7 +114,7 @@ export default function Profile(props) {
                 console.log(error);
                 setSnackBarInfo({
                     show: 'true',
-                    message: (error.message) ? error.message : 'Failed to Remove Project',
+                    message: 'Failed to Remove Project',
                     loading: false
                 });
             });
@@ -345,28 +347,39 @@ export default function Profile(props) {
                         <Card style={{ color: 'black', border: 'none' }}>
                             <div style={{ display: 'flex' }}>
                                 <Card.Title>Projects</Card.Title>
-                                <div style={{ marginLeft: '20px' }}>
-                                    {window.innerWidth > 700 ?
-                                        <OverlayTrigger
-                                            key='right'
-                                            placement='right'
-                                            overlay={
-                                                <Tooltip>
-                                                    click to add or create project
-                                                </Tooltip>
-                                            }>
-                                            <Plus
-                                                width={20}
-                                                height={20}
-                                                style={{ cursor: 'pointer', color: primaryColor }}
-                                                onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} />
-                                        </OverlayTrigger>
+                                <div>
+                                    {!deleteProject ?
+                                        <Dropdown style={{ marginLeft: '10px' }}>
+                                            <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} style={{ display: 'flex', margin: 'auto' }}>
+                                                    <div>
+                                                        <Plus
+                                                            width={20}
+                                                            height={20}
+                                                            style={{ color: 'green' }} />
+                                                    </div>
+                                                    <div className='text-center' style={{ marginTop: '2px' }}>
+                                                        Add Project
+                                                    </div>
+                                                </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => { setDeleteProject(true); }} style={{ display: 'flex', margin: 'auto' }}>
+                                                    <div>
+                                                        <Minus
+                                                            width={20}
+                                                            height={20}
+                                                            style={{ color: 'red' }} />
+                                                    </div>
+                                                    <div className='text-center' style={{ marginTop: '2px' }}>
+                                                        Remove Project
+                                                    </div>
+                                                </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                         :
-                                        <Plus
-                                            width={20}
-                                            height={20}
-                                            style={{ cursor: 'pointer' }}
-                                            onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} />
+                                        <>
+                                            <Check onClick={() => { setDeleteProject(false); getProjects(); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '10px' }} />
+                                        </>
                                     }
                                 </div>
                             </div>
@@ -390,7 +403,12 @@ export default function Profile(props) {
                                                 </Card.Text>
                                                 <Card.Footer>
                                                     <Row className='justify-content-center'>
-                                                        <Button className='customButton' style={{ backgroundColor: secondaryColor }}>See Project</Button>
+                                                        {deleteProject ?
+                                                            <Button variant='danger' onClick={() => { removeProject(project._id); }}>remove</Button>
+                                                            :
+                                                            <Button className='customButton' style={{ backgroundColor: secondaryColor }}>See Project</Button>
+                                                        }
+
                                                     </Row>
                                                 </Card.Footer>
                                             </Card.Body>
@@ -402,6 +420,6 @@ export default function Profile(props) {
                     </Col>
                 </Row>
             </div>
-        </div>
+        </div >
     );
 }

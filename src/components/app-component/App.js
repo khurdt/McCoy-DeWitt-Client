@@ -10,8 +10,10 @@ import Navigation from '../navbar-component/navbar';
 import Loading from '../loading-component/loading';
 import Footer from '../footer-component/footer';
 
-const Contact = lazy(() => import("../contact-component/contact"));
-const FrontPage = lazy(() => import("../frontPage-component/frontPage"));
+// const Contact = lazy(() => import("../contact-component/contact"));
+// const FrontPage = lazy(() => import("../frontPage-component/frontPage"));
+import Contact from '../contact-component/contact';
+import FrontPage from '../frontPage-component/frontPage';
 const Profile = lazy(() => import("../profile-component/profile"));
 
 

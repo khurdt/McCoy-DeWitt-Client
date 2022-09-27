@@ -107,14 +107,13 @@ export default function Navigation(props) {
                       {user === 'khurdt' &&
                         <>
                           <NavDropdown.Divider />
-                          <div style={{ paddingLeft: '20px', paddingTop: '10px' }}>
-                            <div style={{ display: 'flex', color: 'white' }}>Color
+                          <div className='pt-2'>
+                            <div style={{ display: 'flex', color: 'white', margin: 'auto' }}>Color
                               <div>
-                                <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                                <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
                               </div>
-                              <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
                               <div>
-                                <input className='colorInput' type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+                                <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
                               </div>
                             </div>
                           </div>

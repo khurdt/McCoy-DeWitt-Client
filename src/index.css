@@ -20,3 +20,25 @@ code {
   opacity: 0.8;
   transition: ease 0.4s;
 }
+
+.colorInput {
+  position: absolute;
+  bottom: 10%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.colorInput::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.colorInput::-webkit-color-swatch-wrapper {
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+}
