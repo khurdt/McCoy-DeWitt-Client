@@ -1,12 +1,24 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import './snackbar.css';
 export default function Snackbar(props) {
   const { setSnackBarInfo, snackBarInfo, showLogin, primaryColor, secondaryColor } = props;
   let { show, loading, message } = snackBarInfo;
+  const [timeoutOn, setTimeoutOn] = useState(false);
 
   useEffect(() => {
-    if (show === undefined) { show = 'initial' };
-  }, []);
+    if (show === undefined) { show = 'initial' }
+    if (show === 'true' && !timeoutOn) {
+      setTimeoutOn(true);
+      setTimeout(() => {
+        setTimeoutOn(false);
+        setSnackBarInfo({
+          message: message,
+          loading: false,
+          show: 'false'
+        })
+      }, 5000);
+    }
+  }, [show]);
 
   return (
     <>

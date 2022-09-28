@@ -404,7 +404,7 @@ export default function Profile(props) {
                                                 <Card.Footer>
                                                     <Row className='justify-content-center'>
                                                         {deleteProject ?
-                                                            <Button variant='danger' onClick={() => { removeProject(project._id); }}>remove</Button>
+                                                            <Button variant='danger' onClick={() => { removeProject(project._id); getProjects(); }}>remove</Button>
                                                             :
                                                             <Button className='customButton' style={{ backgroundColor: secondaryColor }}>See Project</Button>
                                                         }

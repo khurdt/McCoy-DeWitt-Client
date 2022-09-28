@@ -4,6 +4,7 @@ import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
 import { FloatingLabel, Row, Card, Button, Form } from 'react-bootstrap';
 import axios from 'axios';
+import FormAlert from '../formAlert-component/formAlert';
 
 export default function CreateProject(props) {
   const { setShowCreateProject, primaryColor, setSnackBarInfo, getProjects } = props;
@@ -11,6 +12,7 @@ export default function CreateProject(props) {
   const [custom, setCustom] = useState(false);
   const [addExistiingProject, setAddExistingProject] = useState(false);
   const [page, setPage] = useState(0);
+  const [errors, setErrors] = useState({});
 
   const [serviceType, setServiceType] = useState('');
   const [projectId, setProjectId] = useState('');
@@ -29,18 +31,21 @@ export default function CreateProject(props) {
 
   const validate = () => {
     let isReq = true;
+    let newErrors = {};
     if (!serviceType) {
+      newErrors.serviceType = '*required';
       isReq = false;
-      setPage(1);
     }
     if (!description) {
+      newErrors.description = '*required';
       isReq = false;
-      setPage(2);
     }
     if (!location) {
+      newErrors.location = '*required';
       isReq = false;
-      setPage(3);
     }
+    (newErrors.serviceType) ? setPage(1) : (newErrors.description) ? setPage(2) : (newErrors.location) && setPage(3);
+    setErrors(newErrors);
     return isReq;
   }
 
@@ -88,11 +93,26 @@ export default function CreateProject(props) {
     }
   }
 
+  const projectIdValidaton = () => {
+    if (!projectId) {
+      setErrors({
+        ...errors,
+        projectId: '*required'
+      });
+      return false;
+    } else {
+      setErrors({
+        ...errors,
+        projectId: ''
+      });
+      return true;
+    }
+  }
+
   const addProject = () => {
     const username = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-    const isReq = validate();
-    if (projectId) {
+    if (projectIdValidaton()) {
       setSnackBarInfo({
         message: 'Adding Project',
         loading: true,
@@ -116,7 +136,7 @@ export default function CreateProject(props) {
           console.log(error);
           setSnackBarInfo({
             show: 'true',
-            message: 'Failed to Add Project',
+            message: 'Incorrect Project ID',
             loading: false
           });
         });
@@ -130,7 +150,7 @@ export default function CreateProject(props) {
         <Row className='justify-content-end' style={{ width: '100%' }}>
           <X className='createProject-closeButton' onClick={() => setShowCreateProject(false)} />
         </Row>
-        <Row className='justify-content-center text-center'>
+        <Row className='justify-content-center text-center mb-3'>
           {page > 0 &&
             <div style={{ display: 'flex', justifyContent: 'center', marginRight: '60px' }}>
               <div style={{ width: '50px' }} >
@@ -171,7 +191,7 @@ export default function CreateProject(props) {
                       Add Your Project ID
                     </Card.Title>
                     <Row className='justify-content-center'>
-                      <Form style={{ maxWidth: '500px' }}>
+                      <Form style={{ maxWidth: '500px', paddingRight: '15px', paddingLeft: '15px' }}>
                         <Form.Group>
                           <FloatingLabel
                             label='Project ID'
@@ -179,7 +199,8 @@ export default function CreateProject(props) {
                             <Form.Control
                               value={projectId}
                               placeholder='Project ID' type='text'
-                              onChange={e => { setProjectId(e.target.value) }} />
+                              onChange={e => { setProjectId(e.target.value); (errors.projectId) && projectIdValidaton() }} />
+                            {(errors.projectId) && <FormAlert message={errors.projectId} type={'error'} />}
                           </FloatingLabel>
                         </Form.Group>
                       </Form>
@@ -222,7 +243,7 @@ export default function CreateProject(props) {
                   </Row>
                   :
                   <Row className='justify-content-center'>
-                    <Form style={{ maxWidth: '500px', marginRight: '20px', marginLeft: '20px' }}>
+                    <Form style={{ maxWidth: '500px', paddingRight: '15px', paddingLeft: '15px' }}>
                       <Form.Group>
                         <FloatingLabel
                           label='Custom Service Type'
@@ -230,7 +251,8 @@ export default function CreateProject(props) {
                           <Form.Control
                             value={serviceType}
                             placeholder='Custom Service Type' type='text'
-                            onChange={e => { setServiceType(e.target.value) }} />
+                            onChange={e => { setServiceType(e.target.value); (errors.serviceType) && validate() }} />
+                          {(errors.serviceType) && <FormAlert message={errors.serviceType} type={'error'} />}
                         </FloatingLabel>
                       </Form.Group>
                     </Form>
@@ -252,7 +274,7 @@ export default function CreateProject(props) {
                   Write A Brief Description Of You Want Done
                 </Card.Title>
                 <Row className='justify-content-center'>
-                  <Form style={{ maxWidth: '700px', marginRight: '20px', marginLeft: '20px' }}>
+                  <Form style={{ maxWidth: '700px', paddingRight: '15px', paddingLeft: '15px' }}>
                     <Form.Group className='mb-3'>
                       <div style={{ position: 'relative' }}>
                         <Form.Control
@@ -261,7 +283,8 @@ export default function CreateProject(props) {
                           as='textarea'
                           rows={4}
                           placeholder='Description'
-                          onChange={(e) => { setDescription(e.target.value); }} />
+                          onChange={(e) => { setDescription(e.target.value); (errors.description) && validate() }} />
+                        {(errors.description) && <FormAlert message={errors.description} type={'error'} />}
                       </div>
                     </Form.Group>
                   </Form>
@@ -276,7 +299,7 @@ export default function CreateProject(props) {
                   Where Is The Location Of This Project?
                 </Card.Title>
                 <Row className='justify-content-center'>
-                  <Form style={{ maxWidth: '700px', marginRight: '20px', marginLeft: '20px' }}>
+                  <Form style={{ maxWidth: '700px', paddingRight: '15px', paddingLeft: '15px' }}>
                     <Form.Group>
                       <FloatingLabel
                         label='Location'
@@ -284,7 +307,8 @@ export default function CreateProject(props) {
                         <Form.Control
                           value={location}
                           placeholder='Location' type='text'
-                          onChange={e => { setLocation(e.target.value) }} />
+                          onChange={e => { setLocation(e.target.value); (errors.location) && validate() }} />
+                        {(errors.location) && <FormAlert message={errors.location} type={'error'} />}
                       </FloatingLabel>
                     </Form.Group>
                   </Form>
@@ -297,13 +321,13 @@ export default function CreateProject(props) {
               {addExistiingProject ?
                 <Button
                   style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '200px' }}
-                  onClick={() => { addProject() }}
+                  onClick={(e) => { (e.detail === 1) && addProject(); }}
                 >Add Project</Button>
                 :
                 (page === 3) ?
                   <Button
                     style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '200px' }}
-                    onClick={() => { createProject() }}
+                    onClick={(e) => { (e.detail === 1) && createProject(); console.log(e.detail); }}
                   >Create Project</Button>
                   :
                   <Button
