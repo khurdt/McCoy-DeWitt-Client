@@ -359,7 +359,7 @@ export default function Profile(props) {
                                                             height={20}
                                                             style={{ color: 'green' }} />
                                                     </div>
-                                                    <div className='text-center' style={{ marginTop: '2px' }}>
+                                                    <div className='text-center'>
                                                         Add Project
                                                     </div>
                                                 </Dropdown.Item>
@@ -370,7 +370,7 @@ export default function Profile(props) {
                                                             height={20}
                                                             style={{ color: 'red' }} />
                                                     </div>
-                                                    <div className='text-center' style={{ marginTop: '2px' }}>
+                                                    <div className='text-center'>
                                                         Remove Project
                                                     </div>
                                                 </Dropdown.Item>

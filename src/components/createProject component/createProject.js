@@ -19,10 +19,17 @@ export default function CreateProject(props) {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
 
+  const [insuranceClaim, setInsuranceClaim] = useState({
+    using: false,
+    claimNumber: '',
+    dateOfDamage: '',
+    dateOfInspection: ''
+  });
+
   const handleChoice = (event) => {
     if (currentOption) {
       currentOption.backgroundColor = '';
-      currentOption.color = primaryColor;
+      currentOption.color = 'black';
     }
     setCurrentOption(event.target.style);
     event.target.style.backgroundColor = primaryColor;
@@ -150,7 +157,7 @@ export default function CreateProject(props) {
         <Row className='justify-content-end' style={{ width: '100%' }}>
           <X className='createProject-closeButton' onClick={() => setShowCreateProject(false)} />
         </Row>
-        <Row className='justify-content-center text-center mb-3'>
+        <Row className='justify-content-center text-center mb-3' style={{ height: (page === 1 && !custom) && '900px' }}>
           {page > 0 &&
             <div style={{ display: 'flex', justifyContent: 'center', marginRight: '60px' }}>
               <div style={{ width: '50px' }} >
@@ -174,13 +181,13 @@ export default function CreateProject(props) {
                       <div style={{ width: '200px', margin: '10px' }}>
                         <Button
                           variant="light"
-                          onClick={(e) => { handleChoice(e); }}
+                          onClick={(e) => { setPage(page + 1); }}
                           style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Create Project</Button>
                       </div>
                       <div style={{ width: '200px', margin: '10px' }}>
                         <Button
                           variant="light"
-                          onClick={(e) => { handleChoice(e); setAddExistingProject(true); }}
+                          onClick={(e) => { setAddExistingProject(true); }}
                           style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Add Existing Project</Button>
                       </div>
                     </Row>
@@ -316,6 +323,80 @@ export default function CreateProject(props) {
               </Card>
             </div>
           }
+          {page === 4 &&
+            <Card style={{ border: 'none' }}>
+              {!insuranceClaim.using ?
+                <>
+                  <Card.Title className='m-4'>
+                    Would You Like To Add A Insurance Claim Right Now?
+                  </Card.Title>
+                  <Row className='m-auto justify-content-center' style={{ width: '70%' }}>
+                    <div style={{ width: '200px', margin: '10px' }}>
+                      <Button
+                        variant="light"
+                        onClick={(e) => { setPage(page + 1); }}
+                        style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>No</Button>
+                    </div>
+                    <div style={{ width: '200px', margin: '10px' }}>
+                      <Button
+                        variant="light"
+                        onClick={(e) => { setInsuranceClaim({ ...insuranceClaim, using: true }); }}
+                        style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Yes</Button>
+                    </div>
+                  </Row>
+                </>
+                :
+                <>
+                  <Card.Title className='m-4'>
+                    Please Provide Your Insurance Claim Information
+                  </Card.Title>
+                  <Row className='justify-content-center'>
+                    <Form style={{ maxWidth: '700px', paddingRight: '15px', paddingLeft: '15px' }}>
+                      <Form.Group>
+                        <FloatingLabel
+                          label='Claim Number'
+                          className="mb-3">
+                          <Form.Control
+
+                            placeholder='Claim Number' type='text'
+                            onChange={e => { setInsuranceClaim({ ...insuranceClaim, claimNumber: e.target.value }); }} />
+                        </FloatingLabel>
+                      </Form.Group>
+                      <Form.Group>
+                        <FloatingLabel
+                          label='Date of when the damage occured'
+                          className="mb-3">
+                          <Form.Control
+
+                            placeholder='Date of when the damage occured' type='date'
+                            onChange={e => { setInsuranceClaim({ ...insuranceClaim, dateOfDamage: e.target.value }); }} />
+
+                        </FloatingLabel>
+                      </Form.Group>
+                      <Form.Group>
+                        <FloatingLabel
+                          label='Date of the inspection'
+                          className="mb-3">
+                          <Form.Control
+
+                            placeholder='Date of the inspection' type='date'
+                            onChange={e => { setInsuranceClaim({ ...insuranceClaim, dateOfInspection: e.target.value }); }} />
+                        </FloatingLabel>
+                      </Form.Group>
+                    </Form>
+                    <div>
+                      <ArrowLeft
+                        style={{ cursor: 'pointer' }}
+                        className='mt-3'
+                        width={30}
+                        height={30}
+                        onClick={() => setInsuranceClaim({ ...insuranceClaim, using: false })} />
+                    </div>
+                  </Row>
+                </>
+              }
+            </Card>
+          }
           <Row className='justify-content-end' style={{ width: '100%' }}>
             <div style={{ width: '200px', marginTop: '30px', marginLeft: 'auto', marginRight: 'auto' }}>
               {addExistiingProject ?
@@ -324,12 +405,13 @@ export default function CreateProject(props) {
                   onClick={(e) => { (e.detail === 1) && addProject(); }}
                 >Add Project</Button>
                 :
-                (page === 3) ?
+                (page === 5) ?
                   <Button
                     style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '200px' }}
                     onClick={(e) => { (e.detail === 1) && createProject(); console.log(e.detail); }}
                   >Create Project</Button>
                   :
+                  (page !== 0 && page !== 4) &&
                   <Button
                     style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '100px' }}
                     onClick={() => { setPage(page + 1); }}
