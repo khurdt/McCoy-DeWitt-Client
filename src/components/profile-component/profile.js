@@ -10,7 +10,7 @@ import CreateProject from '../createProject component/createProject';
 
 
 export default function Profile(props) {
-    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton, setCreateProjectButton } = props;
+    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton, setCreateProjectButton, navigate } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -406,7 +406,11 @@ export default function Profile(props) {
                                                         {deleteProject ?
                                                             <Button variant='danger' onClick={() => { removeProject(project._id); getProjects(); }}>remove</Button>
                                                             :
-                                                            <Button className='customButton' style={{ backgroundColor: secondaryColor }}>See Project</Button>
+                                                            <Button
+                                                                className='customButton'
+                                                                style={{ backgroundColor: secondaryColor }}
+                                                            // onClick={() => navigate('project', { replace: true, state: { project: project, service: service } })}
+                                                            >See Project</Button>
                                                         }
 
                                                     </Row>

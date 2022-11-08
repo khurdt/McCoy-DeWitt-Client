@@ -14,6 +14,7 @@ import Footer from '../footer-component/footer';
 // const FrontPage = lazy(() => import("../frontPage-component/frontPage"));
 import Contact from '../contact-component/contact';
 import FrontPage from '../frontPage-component/frontPage';
+import Project from '../projectView-component/project';
 const Profile = lazy(() => import("../profile-component/profile"));
 
 
@@ -162,7 +163,8 @@ function App() {
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
                     createProjectButton={createProjectButton}
-                    setCreateProjectButton={setCreateProjectButton} />
+                    setCreateProjectButton={setCreateProjectButton}
+                    navigate={navigate} />
                   :
                   ((!noProjects && projects.length > 0) && userData.firstName) ?
                     <Profile
@@ -176,11 +178,23 @@ function App() {
                       primaryColor={primaryColor}
                       secondaryColor={secondaryColor}
                       createProjectButton={createProjectButton}
-                      setCreateProjectButton={setCreateProjectButton} />
+                      setCreateProjectButton={setCreateProjectButton}
+                      navigate={navigate} />
                     :
                     <Loading primaryColor={primaryColor} />
               }
             />
+            {/* <Route
+              path="project/:id"
+              element={
+                <Project
+                  onBackClick={() => navigate(-1)}
+                  setSnackBarInfo={setSnackBarInfo}
+                  snackBarInfo={snackBarInfo}
+                  primaryColor={primaryColor}
+                  secondaryColor={secondaryColor} />
+              }
+            /> */}
           </Routes>
         </Suspense>
         <Footer

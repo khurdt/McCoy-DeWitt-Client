@@ -13,6 +13,7 @@ export default function CreateProject(props) {
   const [addExistiingProject, setAddExistingProject] = useState(false);
   const [page, setPage] = useState(0);
   const [errors, setErrors] = useState({});
+  const windowSmall = (window.innerWidth < 700);
 
   const [serviceType, setServiceType] = useState('');
   const [projectId, setProjectId] = useState('');
@@ -157,14 +158,21 @@ export default function CreateProject(props) {
         <Row className='justify-content-end' style={{ width: '100%' }}>
           <X className='createProject-closeButton' onClick={() => setShowCreateProject(false)} />
         </Row>
-        <Row className='justify-content-center text-center mb-3' style={{ height: (page === 1 && !custom) && '900px' }}>
+        <Row className='justify-content-center text-center mb-3' style={{ height: (page === 1 && !custom && windowSmall) && '900px' }}>
           {page > 0 &&
             <div style={{ display: 'flex', justifyContent: 'center', marginRight: '60px' }}>
-              <div style={{ width: '50px' }} >
-                <ArrowLeft style={{ cursor: 'pointer' }}
-                  width={17}
-                  height={17}
-                  onClick={() => setPage(page - 1)} />
+              <div style={{ width: '50px' }}>
+                {(insuranceClaim.using && page === 4) ?
+                  <ArrowLeft style={{ cursor: 'pointer' }}
+                    width={17}
+                    height={17}
+                    onClick={() => setInsuranceClaim({ ...insuranceClaim, using: false })} />
+                  :
+                  <ArrowLeft style={{ cursor: 'pointer' }}
+                    width={17}
+                    height={17}
+                    onClick={() => setPage(page - 1)} />
+                }
               </div>
               <div style={{ width: '20px' }}>{page} -</div>
             </div>
@@ -258,7 +266,7 @@ export default function CreateProject(props) {
                           <Form.Control
                             value={serviceType}
                             placeholder='Custom Service Type' type='text'
-                            onChange={e => { setServiceType(e.target.value); (errors.serviceType) && validate() }} />
+                            onChange={e => { setServiceType(e.target.value); }} />
                           {(errors.serviceType) && <FormAlert message={errors.serviceType} type={'error'} />}
                         </FloatingLabel>
                       </Form.Group>
@@ -290,7 +298,7 @@ export default function CreateProject(props) {
                           as='textarea'
                           rows={4}
                           placeholder='Description'
-                          onChange={(e) => { setDescription(e.target.value); (errors.description) && validate() }} />
+                          onChange={(e) => { setDescription(e.target.value); }} />
                         {(errors.description) && <FormAlert message={errors.description} type={'error'} />}
                       </div>
                     </Form.Group>
@@ -314,7 +322,7 @@ export default function CreateProject(props) {
                         <Form.Control
                           value={location}
                           placeholder='Location' type='text'
-                          onChange={e => { setLocation(e.target.value); (errors.location) && validate() }} />
+                          onChange={e => { setLocation(e.target.value); }} />
                         {(errors.location) && <FormAlert message={errors.location} type={'error'} />}
                       </FloatingLabel>
                     </Form.Group>
@@ -334,7 +342,7 @@ export default function CreateProject(props) {
                     <div style={{ width: '200px', margin: '10px' }}>
                       <Button
                         variant="light"
-                        onClick={(e) => { setPage(page + 1); }}
+                        onClick={(e) => { setPage(page + 1); setInsuranceClaim({ ...insuranceClaim, using: false }); }}
                         style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>No</Button>
                     </div>
                     <div style={{ width: '200px', margin: '10px' }}>
@@ -385,16 +393,21 @@ export default function CreateProject(props) {
                       </Form.Group>
                     </Form>
                     <div>
-                      <ArrowLeft
-                        style={{ cursor: 'pointer' }}
-                        className='mt-3'
-                        width={30}
-                        height={30}
-                        onClick={() => setInsuranceClaim({ ...insuranceClaim, using: false })} />
+                      <Button
+                        style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '100px', marginTop: '30px' }}
+                        onClick={() => { setPage(page + 1); }}
+                      >OK</Button>
                     </div>
                   </Row>
                 </>
               }
+            </Card>
+          }
+          {page === 5 &&
+            <Card style={{ border: 'none' }}>
+              <Card.Title className='m-5'>
+                Ready To Submit?
+              </Card.Title>
             </Card>
           }
           <Row className='justify-content-end' style={{ width: '100%' }}>
