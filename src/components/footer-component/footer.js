@@ -13,14 +13,14 @@ export default function Footer(props) {
   useEffect(() => {
     (window.location.href.includes('user')) ? setPageActive('user') :
       (window.location.href.includes('contact')) ? setPageActive('contact') :
-        setPageActive('home');
+        (window.location.href.includes('project')) ? setPageActive('user') : setPageActive('home');
   }, []);
 
   let homeTab = {
-    color: (!(window.location.href.includes('profile' || 'contact')) && pageActive === 'home') ? primaryColor : 'white'
+    color: (!(window.location.href.includes('profile' || 'contact' || 'project')) && pageActive === 'home') ? primaryColor : 'white'
   };
   let userTab = {
-    color: (pageActive === 'user' || window.location.href.includes('profile')) ? primaryColor : 'white'
+    color: (pageActive === 'user' || window.location.href.includes('profile') || window.location.href.includes('project')) ? primaryColor : 'white'
   };
   let contactTab = {
     color: (pageActive === 'login' || window.location.href.includes('contact')) ? primaryColor : 'white'

@@ -18,7 +18,8 @@ export default function Navigation(props) {
 
   useEffect(() => {
     (window.location.href.includes('user')) ? setPageActive('user') :
-      (window.location.href.includes('contact')) ? setPageActive('contact') : setPageActive('home');
+      (window.location.href.includes('contact')) ? setPageActive('contact') :
+        (window.location.href.includes('project')) ? setPageActive('user') : setPageActive('home');
   }, []);
 
   const onLoggedOut = () => {
@@ -27,11 +28,11 @@ export default function Navigation(props) {
   }
 
   let homeTab = {
-    borderBottom: (!(window.location.href.includes('profile' || 'contact')) && pageActive === 'home') ? `1px solid  ${primaryColor}` : 'none',
+    borderBottom: (!(window.location.href.includes('profile' || 'contact' || 'project')) && pageActive === 'home') ? `1px solid  ${primaryColor}` : 'none',
     color: (windowSmall) && secondaryColor
   };
   let userTab = {
-    borderBottom: (pageActive === 'user' || window.location.href.includes('profile')) ? `1px solid ${primaryColor}` : 'none',
+    borderBottom: (pageActive === 'user' || window.location.href.includes('profile') || window.location.href.includes('project')) ? `1px solid ${primaryColor}` : 'none',
     color: (windowSmall) && secondaryColor
   };
   let contactTab = {

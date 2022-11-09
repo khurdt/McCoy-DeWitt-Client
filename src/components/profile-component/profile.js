@@ -10,7 +10,16 @@ import CreateProject from '../createProject component/createProject';
 
 
 export default function Profile(props) {
-    const { projects, userData, getUserData, setSnackBarInfo, primaryColor, secondaryColor, getProjects, createProjectButton, setCreateProjectButton, navigate } = props;
+    const { projects,
+        userData,
+        getUserData,
+        setSnackBarInfo,
+        primaryColor,
+        secondaryColor,
+        getProjects,
+        createProjectButton,
+        setCreateProjectButton,
+        navigate } = props;
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -322,19 +331,19 @@ export default function Profile(props) {
                             <>
                                 <Col className='m-2 notEditingSecondaryInfo'>
                                     <Card.Title style={{ fontSize: '17px' }}>
-                                        <User style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        <User style={{ width: '17px', height: '17px', color: myColor, marginRight: '10px' }} />
                                         {username}
                                     </Card.Title>
                                     <Card.Title style={{ fontSize: '17px' }}>
-                                        <Mail style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        <Mail style={{ width: '17px', height: '17px', color: myColor, marginRight: '10px' }} />
                                         {email}
                                     </Card.Title>
                                     <Card.Title style={{ fontSize: '17px' }}>
-                                        <Phone style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        <Phone style={{ width: '17px', height: '17px', color: myColor, marginRight: '10px' }} />
                                         {(!phone) ? 'none' : phone}
                                     </Card.Title>
                                     <Card.Title style={{ fontSize: '17px' }}>
-                                        <MapPin style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                                        <MapPin style={{ width: '17px', height: '17px', color: myColor, marginRight: '10px' }} />
                                         {(!address) ? 'no address' : address}
                                     </Card.Title>
                                 </Col>
@@ -409,7 +418,11 @@ export default function Profile(props) {
                                                             <Button
                                                                 className='customButton'
                                                                 style={{ backgroundColor: secondaryColor }}
-                                                            // onClick={() => navigate('project', { replace: true, state: { project: project, service: service } })}
+                                                                onClick={() => {
+                                                                    navigate('project', {
+                                                                        state: { selectedProject: project, selectedService: service }
+                                                                    });
+                                                                }}
                                                             >See Project</Button>
                                                         }
 
@@ -422,8 +435,8 @@ export default function Profile(props) {
                             </Row>
                         </Card>
                     </Col>
-                </Row>
-            </div>
+                </Row >
+            </div >
         </div >
     );
 }

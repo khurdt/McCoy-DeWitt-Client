@@ -1,5 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import { isJwtExpired } from 'jwt-check-expiration';
 import axios from 'axios';
 import './App.css';
@@ -15,6 +15,7 @@ import Footer from '../footer-component/footer';
 import Contact from '../contact-component/contact';
 import FrontPage from '../frontPage-component/frontPage';
 import Project from '../projectView-component/project';
+import { services } from '../servicesAPI';
 const Profile = lazy(() => import("../profile-component/profile"));
 
 
@@ -164,7 +165,8 @@ function App() {
                     secondaryColor={secondaryColor}
                     createProjectButton={createProjectButton}
                     setCreateProjectButton={setCreateProjectButton}
-                    navigate={navigate} />
+                    navigate={navigate}
+                  />
                   :
                   ((!noProjects && projects.length > 0) && userData.firstName) ?
                     <Profile
@@ -179,22 +181,26 @@ function App() {
                       secondaryColor={secondaryColor}
                       createProjectButton={createProjectButton}
                       setCreateProjectButton={setCreateProjectButton}
-                      navigate={navigate} />
+                      navigate={navigate}
+                    />
                     :
                     <Loading primaryColor={primaryColor} />
               }
             />
-            {/* <Route
-              path="project/:id"
+            <Route
+              path="project"
               element={
                 <Project
                   onBackClick={() => navigate(-1)}
                   setSnackBarInfo={setSnackBarInfo}
                   snackBarInfo={snackBarInfo}
                   primaryColor={primaryColor}
-                  secondaryColor={secondaryColor} />
+                  secondaryColor={secondaryColor}
+                // selectedProject={projects.filter(project => project._id === useParams.id)}
+                // selectedService={services.filter(service => service.title === useParams.service)}
+                />
               }
-            /> */}
+            />
           </Routes>
         </Suspense>
         <Footer
