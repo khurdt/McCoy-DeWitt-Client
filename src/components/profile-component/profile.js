@@ -402,7 +402,7 @@ export default function Profile(props) {
                                     return (
                                         <Card key={index} className='m-3' style={{ width: '18rem', margin: '0', padding: '0' }}>
                                             <div style={{ position: 'relative' }}>
-                                                <Card.Img style={{ minHeight: '190px' }} as={Image} publicId={(service) ? service.image : 'custom'} />
+                                                <Card.Img style={{ height: '190px' }} as={Image} publicId={(service) ? service.image : 'custom'} />
                                                 <div className='service-title'>{project.service}</div>
                                             </div>
                                             <Card.Body>

@@ -4,8 +4,9 @@ import { Image } from 'cloudinary-react'
 import './project.css';
 import { useParams, useLocation } from "react-router-dom"
 import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign } from 'react-feather';
+import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
+import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 
 export default function Project(props) {
   const location = useLocation();
@@ -168,8 +169,8 @@ export default function Project(props) {
               <>
                 <Col className='m-2 notEditingProjectSecondaryInfo'>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '17px' }}>
-                      <MapPin style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                    <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
+                      <MapPin style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px', fontWeight: 'bold' }} />
                       Location:
                     </Card.Title>
                   </label>
@@ -177,7 +178,7 @@ export default function Project(props) {
                     {project.location}
                   </Card.Title>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '17px' }}>
+                    <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
                       <User style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
                       Users Involved:
                     </Card.Title>
@@ -195,14 +196,14 @@ export default function Project(props) {
                   {(usingInsuranceClaim === true) ?
                     <>
                       <label>
-                        <Card.Title id='location' style={{ fontSize: '17px' }}>
+                        <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
                           <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
                           Insurance Claim:
                         </Card.Title>
                       </label>
                       <ul>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
                             Claim Number:
                           </Card.Title>
                         </li>
@@ -210,7 +211,7 @@ export default function Project(props) {
                           {project.insuranceClaim.claimNumber}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
                             Date of Damage Done To Property:
                           </Card.Title>
                         </li>
@@ -218,7 +219,7 @@ export default function Project(props) {
                           {formattedDateOfDamage}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
                             Date of Inspection Of Damaged Property:
                           </Card.Title>
                         </li>
@@ -232,14 +233,23 @@ export default function Project(props) {
                       <label>
                         <Card.Title id='location' style={{ fontSize: '17px' }}>
                           <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
-                          Payment Type:
+                          Insurance Claim:
                         </Card.Title>
                       </label>
                       <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                        cash
+                        None
                       </Card.Title>
                     </>
                   }
+                  <label>
+                    <Card.Title id='location' style={{ fontSize: '17px' }}>
+                      <Folder style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                      Pictures and Documents:
+                    </Card.Title>
+                  </label>
+                  <div>
+                    {/* <CloudinaryUploadWidget /> */}
+                  </div>
                 </Col>
               </>
             }
