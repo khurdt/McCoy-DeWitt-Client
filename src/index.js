@@ -13,7 +13,7 @@ const CLOUDINARY_ID = `${process.env.REACT_APP_CLOUD_ID}`;
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <CloudinaryContext cloudName={CLOUDINARY_ID}>
+      <CloudinaryContext cloudName='dcrbfhcxx'>
         <App />
       </CloudinaryContext>
     </HashRouter>
