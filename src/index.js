@@ -9,10 +9,11 @@ import { CloudinaryContext } from 'cloudinary-react';
 //'process.env.REACT_APP_CLOUD_ID'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const CLOUDINARY_ID = `${process.env.REACT_APP_CLOUD_ID}`;
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <CloudinaryContext cloudName={process.env.REACT_APP_CLOUD_ID}>
+      <CloudinaryContext cloudName={CLOUDINARY_ID}>
         <App />
       </CloudinaryContext>
     </HashRouter>
