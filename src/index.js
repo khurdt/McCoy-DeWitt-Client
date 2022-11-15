@@ -6,14 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { CloudinaryContext } from 'cloudinary-react';
-//'process.env.REACT_APP_CLOUD_ID'
+//'process.env.REACT_APP_CLOUD_NAME'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const CLOUDINARY_ID = `${process.env.REACT_APP_CLOUD_ID}`;
+const cloudName = `${process.env.REACT_APP_CLOUD_NAME}`;
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <CloudinaryContext cloudName='dcrbfhcxx'>
+      <CloudinaryContext cloudName={cloudName}>
         <App />
       </CloudinaryContext>
     </HashRouter>

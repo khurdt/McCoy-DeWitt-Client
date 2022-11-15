@@ -25,7 +25,7 @@ jobs:
         CI=false
         npm run build
       env:
-        REACT_APP_CLOUD_ID: ${{ secrets.REACT_APP_CLOUD_ID }}
+        REACT_APP_CLOUD_NAME: ${{ secrets.REACT_APP_CLOUD_NAME }}
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3

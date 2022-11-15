@@ -5,7 +5,7 @@ import { FolderPlus } from "react-feather";
 
 class CloudinaryUploadWidget extends Component {
     componentDidMount() {
-        const cloudName = process.env.REACT_APP_CLOUD_ID; // replace with your own cloud name
+        const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
 
         // Remove the comments from the code below to add
