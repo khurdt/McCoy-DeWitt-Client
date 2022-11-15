@@ -203,7 +203,7 @@ export default function Project(props) {
                       </label>
                       <ul>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
                             Claim Number:
                           </Card.Title>
                         </li>
@@ -211,7 +211,7 @@ export default function Project(props) {
                           {project.insuranceClaim.claimNumber}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
                             Date of Damage Done To Property:
                           </Card.Title>
                         </li>
@@ -219,7 +219,7 @@ export default function Project(props) {
                           {formattedDateOfDamage}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px', fontWeight: '600' }}>
+                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
                             Date of Inspection Of Damaged Property:
                           </Card.Title>
                         </li>
@@ -232,7 +232,7 @@ export default function Project(props) {
                     <>
                       <label>
                         <Card.Title id='location' style={{ fontSize: '17px' }}>
-                          <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                          <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px', fontWeight: '700' }} />
                           Insurance Claim:
                         </Card.Title>
                       </label>
