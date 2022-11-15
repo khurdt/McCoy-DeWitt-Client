@@ -91,9 +91,6 @@
     --bs-gutter-x: 0rem;
 }
 
-label {
-    font-weight: 900;
-}
 
 @keyframes fadeDown {
     0% {
