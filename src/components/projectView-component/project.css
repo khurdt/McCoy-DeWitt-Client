@@ -91,6 +91,14 @@
     --bs-gutter-x: 0rem;
 }
 
+.icons {
+    width: 17px;
+    height: 17px;
+    color: grey;
+    margin-right: 10px;
+    margin-bottom: 3px;
+}
+
 
 @keyframes fadeDown {
     0% {

@@ -4,7 +4,7 @@ import { Image } from 'cloudinary-react'
 import './project.css';
 import { useParams, useLocation } from "react-router-dom"
 import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder } from 'react-feather';
+import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 
@@ -17,6 +17,8 @@ export default function Project(props) {
   const [formattedDateOfDamage, setFormmattedDateOfDamage] = useState('');
   const [formattedDateOfInspection, setFormmattedDateOfInspection] = useState('');
   const [usingInsuranceClaim, setUsingInsuranceClaim] = useState(false);
+  const [deleteDocumentsAndPictures, setDeleteDocumentsAndPictures] = useState(false);
+  const [cloudinaryWidget, setCloudinaryWidget] = useState(false);
 
   useEffect(() => {
     if (!project.insuranceClaim) {
@@ -107,8 +109,13 @@ export default function Project(props) {
             </>
             :
             <div style={{ marginRight: '45px' }}>
-              <Card.Title className='project-overview' style={{ fontSize: '25px' }}>Overview: {project.description}</Card.Title>
-              <Card.Title className='status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Title>
+              <Card.Title className='project-overview' style={{ fontSize: '21px', padding: '10px' }}>Overview:
+                <div style={{ fontSize: '15px', marginLeft: '30px', paddingTop: '5px' }}>{project.description}</div>
+              </Card.Title>
+              <div style={{ width: 'fit-content', padding: '10px' }}>
+                <Card.Title className='status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Title>
+                <Card.Title style={{ fontSize: '15px', fontWeight: '200', marginLeft: '30px' }}>{project.status.description}</Card.Title>
+              </div>
             </div>
           }
         </Card>
@@ -169,8 +176,8 @@ export default function Project(props) {
               <>
                 <Col className='m-2 notEditingProjectSecondaryInfo'>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
-                      <MapPin style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px', fontWeight: 'bold' }} />
+                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                      <MapPin className="icons" />
                       Location:
                     </Card.Title>
                   </label>
@@ -178,8 +185,8 @@ export default function Project(props) {
                     {project.location}
                   </Card.Title>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
-                      <User style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                      <User className="icons" />
                       Users Involved:
                     </Card.Title>
                   </label>
@@ -196,34 +203,34 @@ export default function Project(props) {
                   {(usingInsuranceClaim === true) ?
                     <>
                       <label>
-                        <Card.Title id='location' style={{ fontSize: '17px', fontWeight: '700' }}>
-                          <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                        <Card.Title id='location' style={{ fontSize: '20px' }}>
+                          <DollarSign className="icons" />
                           Insurance Claim:
                         </Card.Title>
                       </label>
                       <ul>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
                             Claim Number:
                           </Card.Title>
                         </li>
-                        <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
                           {project.insuranceClaim.claimNumber}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
                             Date of Damage Done To Property:
                           </Card.Title>
                         </li>
-                        <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
                           {formattedDateOfDamage}
                         </Card.Title>
                         <li>
-                          <Card.Title style={{ fontSize: '17px', marginLeft: '20px' }}>
+                          <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
                             Date of Inspection Of Damaged Property:
                           </Card.Title>
                         </li>
-                        <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
                           {formattedDateOfInspection}
                         </Card.Title>
                       </ul>
@@ -231,8 +238,8 @@ export default function Project(props) {
                     :
                     <>
                       <label>
-                        <Card.Title id='location' style={{ fontSize: '17px' }}>
-                          <DollarSign style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px', fontWeight: '700' }} />
+                        <Card.Title id='location' style={{ fontSize: '20px' }}>
+                          <DollarSign className="icons" />
                           Insurance Claim:
                         </Card.Title>
                       </label>
@@ -241,15 +248,54 @@ export default function Project(props) {
                       </Card.Title>
                     </>
                   }
-                  <label>
-                    <Card.Title id='location' style={{ fontSize: '17px' }}>
-                      <Folder style={{ width: '17px', height: '17px', color: 'grey', marginRight: '10px' }} />
+                  <label style={{ display: 'flex' }}>
+                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                      <Folder className="icons" />
                       Pictures and Documents:
                     </Card.Title>
+                    {(cloudinaryWidget) ?
+                      <div style={{ display: 'flex' }}>
+                        <Button onClick={() => { setCloudinaryWidget(false); }} variant="dark" style={{ margin: '10px' }}>
+                          <div style={{ marginTop: '2px', display: 'flex' }}>
+                            <Check style={{ color: 'green' }} />
+                            <div>Finished</div>
+                          </div>
+                        </Button>
+                        <CloudinaryUploadWidget />
+                      </div>
+                      :
+                      (!deleteDocumentsAndPictures) ?
+                        <Dropdown style={{ marginLeft: '10px' }}>
+                          <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => { setCloudinaryWidget(true); console.log(cloudinaryWidget); }} style={{ margin: 'auto', display: 'flex' }}>
+                              <FolderPlus
+                                width={20}
+                                height={20}
+                                style={{ color: 'green', marginBottom: '3px', marginRight: '5px' }} />
+                              <div>
+                                Add Pictures or Documents
+                              </div>
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => { setDeleteDocumentsAndPictures(true); }} style={{ display: 'flex', margin: 'auto' }}>
+                              <div>
+                                <FolderMinus
+                                  width={20}
+                                  height={20}
+                                  style={{ color: 'red', marginBottom: '3px', marginRight: '5px' }} />
+                              </div>
+                              <div>
+                                Remove Pictures or Documents
+                              </div>
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                        :
+                        <>
+                          <Check onClick={() => { setDeleteDocumentsAndPictures(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '10px' }} />
+                        </>
+                    }
                   </label>
-                  <div>
-                    {/* <CloudinaryUploadWidget /> */}
-                  </div>
                 </Col>
               </>
             }

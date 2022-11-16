@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Cloudinary as CoreCloudinary, Util } from "cloudinary-core";
 import { FolderPlus } from "react-feather";
+import { Button } from "react-bootstrap";
 
 
 class CloudinaryUploadWidget extends Component {
     componentDidMount() {
+        this.myWidget();
+    }
+    myWidget() {
         const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
 
@@ -40,20 +44,15 @@ class CloudinaryUploadWidget extends Component {
                 }
             }
         );
-        document.getElementById("upload_widget").addEventListener(
-            "click",
-            function () {
-                myWidget.open();
-            },
-            false
-        );
+        myWidget.open();
     }
 
     render() {
         return (
-            <button id="upload_widget" className="cloudinary-button">
-                <FolderPlus className="mb-1" />
-            </button>
+            <Button onClick={() => this.myWidget()} variant="dark" style={{ display: 'flex', margin: '10px' }}>
+                <FolderPlus style={{ color: 'green', cursor: 'pointer', marginRight: '5px' }} />
+                <div style={{ marginTop: '3px' }}>Add More</div>
+            </Button>
         );
     }
 }
