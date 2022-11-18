@@ -36,6 +36,7 @@ export default function Project(props) {
       setFormmattedDateOfInspection(new Date(project.insuranceClaim.dateOfInspection).toString().slice(0, 15));
       setUsingInsuranceClaim(true);
     }
+    getProject();
   }, [project, service, location])
 
   const updateFiles = (fileName) => {
@@ -52,15 +53,14 @@ export default function Project(props) {
         console.log(response);
         setSnackBarInfo({
           message: 'Files Updated',
-          loading: true,
+          loading: false,
           show: 'true'
         });
-        getProject();
-
+        setProject(response.data);
       }).catch((error) => {
         setSnackBarInfo({
           message: 'Failed to Update',
-          loading: true,
+          loading: false,
           show: 'true'
         });
         console.log(error);
@@ -68,8 +68,10 @@ export default function Project(props) {
   }
 
   const getProject = () => {
+    const projectID = project._id;
+    console.log(projectID);
     const token = localStorage.getItem('token');
-    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${project._id}`,
+    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${projectID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }).then((response) => {
@@ -318,11 +320,15 @@ export default function Project(props) {
                       </>
                     }
                   </label>
-                  {project.files.map((file) => {
-                    return (
-                      <Image publicId={file.fileName} style={{ width: '100px', height: '100px' }} />
-                    )
-                  })}
+                  <Row className='justify-content-center'>
+                    {project.files.map((file) => {
+                      return (
+                        <div>
+                          <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover' }} />
+                        </div>
+                      )
+                    })}
+                  </Row>
                 </Col>
               </>
             }
