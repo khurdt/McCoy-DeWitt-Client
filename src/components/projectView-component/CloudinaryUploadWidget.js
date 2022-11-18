@@ -10,10 +10,10 @@ class CloudinaryUploadWidget extends Component {
     //     this.myWidget();
     // }
     myWidget() {
-        const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
+        const cloudName = 'dcrbfhcxx'; // replace with your own cloud name
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
-        const file_id = nextId();
-        this.props.updateFiles(file_id);
+        // const file_id = nextId();
+        // this.props.updateFiles(file_id);
 
         // Remove the comments from the code below to add
         // additional functionality.
@@ -24,10 +24,9 @@ class CloudinaryUploadWidget extends Component {
 
         let myWidget = window.cloudinary.createUploadWidget(
             {
-                prepareUploadParams: function(cb, params)
-                {
-                    cb({public_id: file_id})
-                },
+                // prepareUploadParams: function (cb, params) {
+                //     cb({ public_id: file_id })
+                // },
                 cloudName: cloudName,
                 uploadPreset: uploadPreset,
                 // cropping: true, //add a cropping step
@@ -45,6 +44,7 @@ class CloudinaryUploadWidget extends Component {
             (error, result) => {
                 if (!error && result && result.event === "success") {
                     console.log("Done! Here is the image info: ", result.info);
+                    this.props.updateFiles(result.info.public_id);
                     console.log(result);
                     document
                         .getElementById("uploadedimage")

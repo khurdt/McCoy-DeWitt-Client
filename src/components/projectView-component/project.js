@@ -44,16 +44,16 @@ export default function Project(props) {
       message: 'Updating Files',
       loading: true,
       show: 'true'
-  });
+    });
     axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
       {
         headers: { Authorization: `Bearer ${token}` },
       }).then((response) => {
         console.log(response);
-            setSnackBarInfo({
-            message: 'Files Updated',
-            loading: true,
-            show: 'true'
+        setSnackBarInfo({
+          message: 'Files Updated',
+          loading: true,
+          show: 'true'
         });
         getProject();
 
@@ -62,7 +62,7 @@ export default function Project(props) {
           message: 'Failed to Update',
           loading: true,
           show: 'true'
-      });
+        });
         console.log(error);
       })
   }
@@ -320,7 +320,7 @@ export default function Project(props) {
                   </label>
                   {project.files.map((file) => {
                     return (
-                      <Card.Title>{file.fileName}</Card.Title>
+                      <Image publicId={file.fileName} style={{ width: '100px', height: '100px' }} />
                     )
                   })}
                 </Col>
