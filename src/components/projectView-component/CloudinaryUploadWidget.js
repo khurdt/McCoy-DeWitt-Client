@@ -1,14 +1,15 @@
 import React, { Component, useRef } from "react";
 import { Cloudinary as CoreCloudinary, Util } from "cloudinary-core";
 import { FolderPlus } from "react-feather";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger } from "react-bootstrap";
 
 
 class CloudinaryUploadWidget extends Component {
-    componentDidMount() {
-        this.myWidget();
-    }
+    // componentDidMount() {
+    //     this.myWidget();
+    // }
     myWidget() {
+        const username = localStorage.getItem('user');
         const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
 
@@ -27,7 +28,7 @@ class CloudinaryUploadWidget extends Component {
                 showAdvancedOptions: true,  //add advanced options (public_id and tag)
                 sources: ["local", "url"], // restrict the upload sources to URL and local files
                 // multiple: false,  //restrict upload to a single file
-                // folder: "user_images", //upload files to the specified folder
+                folder: username, //upload files to the specified folder
                 // tags: ["users", "profile"], //add the given tags to the uploaded files
                 // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
                 // clientAllowedFormats: ["images"], //restrict uploading to image files only
@@ -38,6 +39,7 @@ class CloudinaryUploadWidget extends Component {
             (error, result) => {
                 if (!error && result && result.event === "success") {
                     console.log("Done! Here is the image info: ", result.info);
+                    console.log(result);
                     document
                         .getElementById("uploadedimage")
                         .setAttribute("src", result.info.secure_url);
@@ -49,10 +51,13 @@ class CloudinaryUploadWidget extends Component {
 
     render() {
         return (
-            <Button onClick={() => this.myWidget()} variant="dark" style={{ display: 'flex', margin: '10px' }}>
-                <FolderPlus style={{ color: 'green', cursor: 'pointer', marginRight: '5px' }} />
-                <div style={{ marginTop: '3px' }}>Add More</div>
-            </Button>
+            <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={this.props.renderTooltip('Add Files')}
+            >
+                <FolderPlus onClick={() => this.myWidget()} style={{ color: 'green', cursor: 'pointer', marginLeft: '20px' }} />
+            </OverlayTrigger>
         );
     }
 }

@@ -10,14 +10,14 @@ import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 
 export default function Project(props) {
   const location = useLocation();
-  const { primaryColor } = props;
+  const { primaryColor, setSnackBarInfo } = props;
   const [project, setProject] = useState(location.state.selectedProject);
   const [service, setService] = useState(location.state.selectedService);
   const [editing, setEditing] = useState(false);
   const [formattedDateOfDamage, setFormmattedDateOfDamage] = useState('');
   const [formattedDateOfInspection, setFormmattedDateOfInspection] = useState('');
   const [usingInsuranceClaim, setUsingInsuranceClaim] = useState(false);
-  const [deleteDocumentsAndPictures, setDeleteDocumentsAndPictures] = useState(false);
+  const [deleteFiles, setDeleteFiles] = useState(false);
   const [cloudinaryWidget, setCloudinaryWidget] = useState(false);
 
   useEffect(() => {
@@ -37,6 +37,54 @@ export default function Project(props) {
       setUsingInsuranceClaim(true);
     }
   }, [project, service, location])
+
+  const updateFiles = (fileName) => {
+    const token = localStorage.getItem('token');
+    setSnackBarInfo({
+      message: 'Updating Files',
+      loading: true,
+      show: 'true'
+  });
+    axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((response) => {
+        console.log(response);
+            setSnackBarInfo({
+            message: 'Files Updated',
+            loading: true,
+            show: 'true'
+        });
+        getProject();
+
+      }).catch((error) => {
+        setSnackBarInfo({
+          message: 'Failed to Update',
+          loading: true,
+          show: 'true'
+      });
+        console.log(error);
+      })
+  }
+
+  const getProject = () => {
+    const token = localStorage.getItem('token');
+    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${project._id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((response) => {
+        console.log(response);
+        setProject(response.data);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+
+  const renderTooltip = (message) => (
+    <Tooltip id="button-tooltip">
+      {message}
+    </Tooltip>
+  );
 
   return (
     <>
@@ -251,51 +299,30 @@ export default function Project(props) {
                   <label style={{ display: 'flex' }}>
                     <Card.Title id='location' style={{ fontSize: '20px' }}>
                       <Folder className="icons" />
-                      Pictures and Documents:
+                      Files:
                     </Card.Title>
-                    {(cloudinaryWidget) ?
-                      <div style={{ display: 'flex' }}>
-                        <Button onClick={() => { setCloudinaryWidget(false); }} variant="dark" style={{ margin: '10px' }}>
-                          <div style={{ marginTop: '2px', display: 'flex' }}>
-                            <Check style={{ color: 'green' }} />
-                            <div>Finished</div>
-                          </div>
-                        </Button>
-                        <CloudinaryUploadWidget />
+                    {(!deleteFiles) ?
+                      <div style={{ display: 'flex', paddingTop: '1px' }}>
+                        <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} />
+                        <OverlayTrigger
+                          placement="right"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderTooltip('Delete Files')}
+                        >
+                          <FolderMinus onClick={() => setDeleteFiles(true)} style={{ color: 'red', cursor: 'pointer', marginLeft: '80px' }} />
+                        </OverlayTrigger>
                       </div>
                       :
-                      (!deleteDocumentsAndPictures) ?
-                        <Dropdown style={{ marginLeft: '10px' }}>
-                          <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
-                          <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => { setCloudinaryWidget(true); console.log(cloudinaryWidget); }} style={{ margin: 'auto', display: 'flex' }}>
-                              <FolderPlus
-                                width={20}
-                                height={20}
-                                style={{ color: 'green', marginBottom: '3px', marginRight: '5px' }} />
-                              <div>
-                                Add Pictures or Documents
-                              </div>
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => { setDeleteDocumentsAndPictures(true); }} style={{ display: 'flex', margin: 'auto' }}>
-                              <div>
-                                <FolderMinus
-                                  width={20}
-                                  height={20}
-                                  style={{ color: 'red', marginBottom: '3px', marginRight: '5px' }} />
-                              </div>
-                              <div>
-                                Remove Pictures or Documents
-                              </div>
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                        :
-                        <>
-                          <Check onClick={() => { setDeleteDocumentsAndPictures(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '10px' }} />
-                        </>
+                      <>
+                        <Check onClick={() => { setDeleteFiles(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '17px', marginTop: '3px' }} />
+                      </>
                     }
                   </label>
+                  {project.files.map((file) => {
+                    return (
+                      <Card.Title>{file.fileName}</Card.Title>
+                    )
+                  })}
                 </Col>
               </>
             }

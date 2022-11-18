@@ -7,7 +7,7 @@ export default function Snackbar(props) {
 
   useEffect(() => {
     if (show === undefined) { show = 'initial' }
-    if (show === 'true' && !timeoutOn) {
+    if (show === 'true' && !timeoutOn && loading === false) {
       setTimeoutOn(true);
       setTimeout(() => {
         setTimeoutOn(false);

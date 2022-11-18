@@ -196,8 +196,6 @@ function App() {
                   snackBarInfo={snackBarInfo}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
-                // selectedProject={projects.filter(project => project._id === useParams.id)}
-                // selectedService={services.filter(service => service.title === useParams.service)}
                 />
               }
             />
