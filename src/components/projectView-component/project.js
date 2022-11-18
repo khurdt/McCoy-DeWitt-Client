@@ -303,7 +303,7 @@ export default function Project(props) {
                     </Card.Title>
                     {(!deleteFiles) ?
                       <div style={{ display: 'flex', paddingTop: '1px' }}>
-                        <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} />
+                        <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} project={project} />
                         <OverlayTrigger
                           placement="right"
                           delay={{ show: 250, hide: 400 }}
