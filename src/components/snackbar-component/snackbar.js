@@ -7,7 +7,7 @@ export default function Snackbar(props) {
 
   useEffect(() => {
     if (show === undefined) { show = 'initial' }
-    if (show === 'true' && !timeoutOn && loading === false) {
+    if (show === 'true' && !timeoutOn) {
       setTimeoutOn(true);
       setTimeout(() => {
         setTimeoutOn(false);
@@ -16,7 +16,7 @@ export default function Snackbar(props) {
           loading: false,
           show: 'false'
         })
-      }, 5000);
+      }, 7000);
     }
   }, [show]);
 

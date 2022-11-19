@@ -44,14 +44,14 @@ export default function Footer(props) {
       <hr className='m-auto' style={{ color: primaryColor, maxWidth: (windowSmall ? (window.innerWidth - 30) : '1000px'), borderWidth: '2px' }} />
       <Row className='mt-3'>
         <div className='bottom-side'>
-          <Link to='/' onClick={() => { setPageActive('home'); window.scrollTo(0, 0); }} style={homeTab}>
+          <Link to='/' onClick={() => { window.scrollTo(0, 0); setPageActive('home'); }} style={homeTab}>
             <Home className="m-2 footer-icon" width={25} height={25} />
           </Link>
-          <Link to='contact' onClick={() => { setPageActive('contact'); window.scrollTo(0, 0); }} style={contactTab}>
+          <Link to='contact' onClick={() => { window.scrollTo(0, 0); setPageActive('contact'); }} style={contactTab}>
             <Mail className="m-2 footer-icon" width={25} height={25} />
           </Link>
           {user &&
-            <Link to='profile' onClick={() => { setPageActive('user'); window.scrollTo(0, 0); }} style={userTab}>
+            <Link to='profile' onClick={() => { window.scrollTo(0, 0); setPageActive('user'); }} style={userTab}>
               <User className="m-2 footer-icon" width={25} height={25} />
             </Link>
           }

@@ -66,6 +66,7 @@ export default function CreateProject(props) {
       service: serviceType,
       description: description,
       location: location,
+      insuranceClaim: insuranceClaim,
       users: users,
       status: status
     }

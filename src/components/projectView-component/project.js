@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Image } from 'cloudinary-react'
+import { Image } from 'cloudinary-react';
 import './project.css';
-import { useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom";
 import axios from 'axios';
 import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
@@ -20,6 +20,8 @@ export default function Project(props) {
   const [deleteFiles, setDeleteFiles] = useState(false);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    getProject();
     if (!project.insuranceClaim) {
       setProject({
         ...project,
@@ -31,11 +33,11 @@ export default function Project(props) {
         }
       })
     } else if (project.insuranceClaim.using) {
-      setFormmattedDateOfDamage(new Date(project.insuranceClaim.dateOfDamage).toString().slice(0, 15));
-      setFormmattedDateOfInspection(new Date(project.insuranceClaim.dateOfInspection).toString().slice(0, 15));
       setUsingInsuranceClaim(true);
+      setFormmattedDateOfDamage((project.insuranceClaim.dateOfDamage !== '') ? new Date(project.insuranceClaim.dateOfDamage).toString().slice(0, 15) : 'none');
+      setFormmattedDateOfInspection((project.insuranceClaim.dateOfInspection !== '') ? new Date(project.insuranceClaim.dateOfInspection).toString().slice(0, 15) : 'none');
     }
-  }, [project, service, location])
+  }, [])
 
   const updateFiles = (fileName) => {
     const token = localStorage.getItem('token');
@@ -50,11 +52,11 @@ export default function Project(props) {
       }).then((response) => {
         console.log(response);
         setSnackBarInfo({
-          message: 'Files Updated',
+          message: 'Update Successful',
           loading: false,
           show: 'true'
         });
-        setProject(response.data);
+        getProject();
       }).catch((error) => {
         setSnackBarInfo({
           message: 'Failed to Update',
@@ -82,7 +84,7 @@ export default function Project(props) {
           loading: false,
           show: 'true'
         });
-        setProject(response.data);
+        getProject();
       }).catch((error) => {
         setSnackBarInfo({
           message: 'Failed to Update',
@@ -330,7 +332,7 @@ export default function Project(props) {
                       Files:
                     </Card.Title>
                     {(!deleteFiles) ?
-                      <div style={{ display: 'flex', paddingTop: '1px' }}>
+                      <div style={{ display: 'flex', paddingTop: '2px' }}>
                         <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} project={project} />
                         <OverlayTrigger
                           placement="right"
@@ -346,23 +348,23 @@ export default function Project(props) {
                       </>
                     }
                   </label>
-                  <Row className='justify-content-center'>
-                    {project.files.map((file) => {
-                      return (
-                        <Col style={{display: 'flex', flexDirection: 'column', margin: 'auto'}}>
-                          <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
-                          {(deleteFiles) &&
-                            <Button variant='danger' style={{width: '200px', margin: 'auto'}} onClick={() => { removeFiles(file.name) }}>delete</Button>
-                          }
-                        </Col>
-                      )
-                    })}
-                  </Row>
                 </Col>
               </>
             }
           </Row>
         </Card>
+        <Row className='justify-content-center'>
+          {project.files.map((file) => {
+            return (
+              <Col style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
+                <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
+                {(deleteFiles) &&
+                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { removeFiles(file.name) }}>delete</Button>
+                }
+              </Col>
+            )
+          })}
+        </Row>
       </div>
     </>
   )

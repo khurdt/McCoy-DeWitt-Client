@@ -10,6 +10,7 @@ class CloudinaryUploadWidget extends Component {
     // }
     myWidget() {
         const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
+        // const cloudName = '';
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
         const file_id = uuid();
         // this.props.updateFiles(file_id);
