@@ -1,7 +1,6 @@
-import React, { Component, useRef } from "react";
-import { Cloudinary as CoreCloudinary, Util } from "cloudinary-core";
+import React, { Component } from "react";
 import { FolderPlus } from "react-feather";
-import { Button, OverlayTrigger } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
 import uuid from 'react-uuid';
 
 
@@ -10,7 +9,7 @@ class CloudinaryUploadWidget extends Component {
     //     this.myWidget();
     // }
     myWidget() {
-        const cloudName = 'dcrbfhcxx'; // replace with your own cloud name
+        const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
         const file_id = uuid();
         // this.props.updateFiles(file_id);

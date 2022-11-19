@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import './project.css';
-import { useParams, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import axios from 'axios';
 import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
@@ -18,7 +18,6 @@ export default function Project(props) {
   const [formattedDateOfInspection, setFormmattedDateOfInspection] = useState('');
   const [usingInsuranceClaim, setUsingInsuranceClaim] = useState(false);
   const [deleteFiles, setDeleteFiles] = useState(false);
-  const [cloudinaryWidget, setCloudinaryWidget] = useState(false);
 
   useEffect(() => {
     if (!project.insuranceClaim) {
@@ -36,7 +35,6 @@ export default function Project(props) {
       setFormmattedDateOfInspection(new Date(project.insuranceClaim.dateOfInspection).toString().slice(0, 15));
       setUsingInsuranceClaim(true);
     }
-    getProject();
   }, [project, service, location])
 
   const updateFiles = (fileName) => {
@@ -47,6 +45,34 @@ export default function Project(props) {
       show: 'true'
     });
     axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((response) => {
+        console.log(response);
+        setSnackBarInfo({
+          message: 'Files Updated',
+          loading: false,
+          show: 'true'
+        });
+        setProject(response.data);
+      }).catch((error) => {
+        setSnackBarInfo({
+          message: 'Failed to Update',
+          loading: false,
+          show: 'true'
+        });
+        console.log(error);
+      })
+  }
+  const removeFiles = (fileName) => {
+    const token = localStorage.getItem('token');
+
+    setSnackBarInfo({
+      message: 'Updating Files',
+      loading: true,
+      show: 'true'
+    });
+    axios.delete(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }).then((response) => {
@@ -323,9 +349,12 @@ export default function Project(props) {
                   <Row className='justify-content-center'>
                     {project.files.map((file) => {
                       return (
-                        <div>
-                          <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover' }} />
-                        </div>
+                        <Col style={{display: 'flex', flexDirection: 'column', margin: 'auto'}}>
+                          <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
+                          {(deleteFiles) &&
+                            <Button variant='danger' style={{width: '200px', margin: 'auto'}} onClick={() => { removeFiles(file.name) }}>delete</Button>
+                          }
+                        </Col>
                       )
                     })}
                   </Row>
