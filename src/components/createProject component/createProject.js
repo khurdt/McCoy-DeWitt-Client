@@ -145,7 +145,7 @@ export default function CreateProject(props) {
           console.log(error);
           setSnackBarInfo({
             show: 'true',
-            message: 'Incorrect Project ID',
+            message: 'Failed to Add Project',
             loading: false
           });
         });
