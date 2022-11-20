@@ -4,7 +4,7 @@ import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus } from 'react-feather';
+import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus, Key } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 
@@ -41,12 +41,13 @@ export default function Project(props) {
 
   const updateFiles = (fileName) => {
     const token = localStorage.getItem('token');
+    const axiosCall = (deleteFiles) ? axios.delete : axios.post;
     setSnackBarInfo({
       message: 'Updating Files',
       loading: true,
       show: 'true'
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
+    axiosCall(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
       {
         headers: { Authorization: `Bearer ${token}` },
       }).then((response) => {
@@ -66,34 +67,69 @@ export default function Project(props) {
         console.log(error);
       })
   }
-  const removeFiles = (fileName) => {
-    const token = localStorage.getItem('token');
 
+  const updateProject = () => {
+    const token = localStorage.getItem('token');
+    // const isReq = validate();
+    // if (isReq) {
     setSnackBarInfo({
-      message: 'Updating Files',
-      loading: true,
-      show: 'true'
+      show: 'true',
+      message: 'Updating Project',
+      loading: true
     });
-    axios.delete(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`,
+    axios.put(`https://polar-tor-24509.herokuapp.com/project/${project._id}`, project,
       {
         headers: { Authorization: `Bearer ${token}` },
-      }).then((response) => {
-        console.log(response);
-        setSnackBarInfo({
-          message: 'Files Updated',
-          loading: false,
-          show: 'true'
-        });
-        getProject();
-      }).catch((error) => {
-        setSnackBarInfo({
-          message: 'Failed to Update',
-          loading: false,
-          show: 'true'
-        });
-        console.log(error);
       })
-  }
+      .then((response) => {
+        setEditing(false);
+        getProject();
+        setSnackBarInfo({
+          show: 'true',
+          message: 'Update Successful',
+          loading: false
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+        setSnackBarInfo({
+          show: 'true',
+          message: 'Update Failed',
+          loading: false
+        });
+
+      });
+    // }
+  };
+
+  // const removeFiles = (fileName) => {
+  //   const token = localStorage.getItem('token');
+
+  //   setSnackBarInfo({
+  //     message: 'Updating Files',
+  //     loading: true,
+  //     show: 'true'
+  //   });
+  //   axios.delete(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`,
+  //     {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     }).then((response) => {
+  //       console.log(response);
+  //       setSnackBarInfo({
+  //         message: 'Files Updated',
+  //         loading: false,
+  //         show: 'true'
+  //       });
+  //       getProject();
+  //     }).catch((error) => {
+  //       setSnackBarInfo({
+  //         message: 'Failed to Update',
+  //         loading: false,
+  //         show: 'true'
+  //       });
+  //       console.log(error);
+  //     })
+  // }
 
   const getProject = () => {
     const projectID = project._id;
@@ -254,16 +290,25 @@ export default function Project(props) {
               <>
                 <Col className='m-2 notEditingProjectSecondaryInfo'>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                    <Card.Title style={{ fontSize: '20px' }}>
+                      <Key className="icons" />
+                      Project Key:
+                    </Card.Title>
+                  </label>
+                  <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                    {project._id}
+                  </Card.Title>
+                  <label>
+                    <Card.Title style={{ fontSize: '20px' }}>
                       <MapPin className="icons" />
                       Location:
                     </Card.Title>
                   </label>
-                  <Card.Title id='location' style={{ fontSize: '17px', marginLeft: '50px' }}>
+                  <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
                     {project.location}
                   </Card.Title>
                   <label>
-                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                    <Card.Title style={{ fontSize: '20px' }}>
                       <User className="icons" />
                       Users Involved:
                     </Card.Title>
@@ -281,7 +326,7 @@ export default function Project(props) {
                   {(usingInsuranceClaim === true) ?
                     <>
                       <label>
-                        <Card.Title id='location' style={{ fontSize: '20px' }}>
+                        <Card.Title style={{ fontSize: '20px' }}>
                           <DollarSign className="icons" />
                           Insurance Claim:
                         </Card.Title>
@@ -316,7 +361,7 @@ export default function Project(props) {
                     :
                     <>
                       <label>
-                        <Card.Title id='location' style={{ fontSize: '20px' }}>
+                        <Card.Title style={{ fontSize: '20px' }}>
                           <DollarSign className="icons" />
                           Insurance Claim:
                         </Card.Title>
@@ -327,7 +372,7 @@ export default function Project(props) {
                     </>
                   }
                   <label style={{ display: 'flex' }}>
-                    <Card.Title id='location' style={{ fontSize: '20px' }}>
+                    <Card.Title style={{ fontSize: '20px' }}>
                       <Folder className="icons" />
                       Files:
                     </Card.Title>
@@ -359,7 +404,7 @@ export default function Project(props) {
               <Col style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
                 <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
                 {(deleteFiles) &&
-                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { removeFiles(file.name) }}>delete</Button>
+                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { updateFiles(file.name) }}>delete</Button>
                 }
               </Col>
             )
