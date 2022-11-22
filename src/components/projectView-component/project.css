@@ -49,25 +49,34 @@
     text-align: left;
 }
 
-.editButton {
+.projectEditButton {
     position: absolute;
-    top: 0;
-    right: 10%;
+    top: 10%;
+    right: 9%;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 997;
 }
 
-.cancelButton {
+.projectCancelButton {
     position: absolute;
     top: 40%;
-    right: 10%;
+    right: 9%;
     color: red;
     cursor: pointer;
 }
 
-.projectSecondaryInfo {
-    border: none;
-    width: 90%;
+.secondaryInfo-item {
+    border: 1px solid grey;
+    border-radius: 10px;
+    padding: 10px;
+    width: 360px;
+    margin: 5px;
+    background-color: rgba(83, 83, 83, 0.2);
+}
+
+.claimNumber {
+    margin-left: 50px;
+    margin-right: 10px;
 }
 
 .notEditingProjectSecondaryInfo {
@@ -94,7 +103,9 @@
 .icons {
     color: grey;
     margin-right: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    width: 20px;
+    height: 20px
 }
 
 

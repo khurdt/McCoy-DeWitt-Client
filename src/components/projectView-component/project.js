@@ -4,41 +4,44 @@ import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus, Key } from 'react-feather';
+import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus, Key, Copy, Eye, EyeOff, Edit, Edit2, Edit3 } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 
 export default function Project(props) {
   const location = useLocation();
-  const { primaryColor, setSnackBarInfo } = props;
+  const { primaryColor, setSnackBarInfo, secondaryColor } = props;
   const [project, setProject] = useState(location.state.selectedProject);
   const [service, setService] = useState(location.state.selectedService);
   const [editing, setEditing] = useState(false);
-  const [formattedDateOfDamage, setFormmattedDateOfDamage] = useState('');
-  const [formattedDateOfInspection, setFormmattedDateOfInspection] = useState('');
-  const [usingInsuranceClaim, setUsingInsuranceClaim] = useState(false);
   const [deleteFiles, setDeleteFiles] = useState(false);
+  const [seeClaimNumber, setSeeClaimNumber] = useState(false);
+  const [currentOption, setCurrentOption] = useState({});
   const [errors, setErrors] = useState({});
+
+  const formattedDateOfDamage = () => {
+    let date = (project.insuranceClaim.dateOfDamage !== '') ? project.insuranceClaim.dateOfDamage.slice(0, 10) : '';
+    return date;
+  }
+  const formattedDateOfInspection = () => {
+    let date = (project.insuranceClaim.dateOfInspection !== '') ? project.insuranceClaim.dateOfInspection.slice(0, 10) : '';
+    return date;
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
     getProject();
-    if (!project.insuranceClaim) {
-      setProject({
-        ...project,
-        insuranceClaim: {
-          using: false,
-          claimNumber: '',
-          dateOfDamage: '',
-          dateOfInspection: ''
-        }
-      })
-    } else if (project.insuranceClaim.using) {
-      setUsingInsuranceClaim(true);
-      setFormmattedDateOfDamage((project.insuranceClaim.dateOfDamage !== '') ? new Date(project.insuranceClaim.dateOfDamage).toString().slice(0, 15) : 'none');
-      setFormmattedDateOfInspection((project.insuranceClaim.dateOfInspection !== '') ? new Date(project.insuranceClaim.dateOfInspection).toString().slice(0, 15) : 'none');
+  }, []);
+
+  const handleChoice = (event) => {
+    if (currentOption) {
+      currentOption.backgroundColor = '';
+      currentOption.color = 'black';
     }
-  }, [])
+    setCurrentOption(event.target.style);
+    event.target.style.backgroundColor = primaryColor;
+    event.target.style.color = 'black';
+  }
 
   const updateFiles = (fileName) => {
     const token = localStorage.getItem('token');
@@ -70,57 +73,64 @@ export default function Project(props) {
 
   const validate = () => {
     let { description, location } = project;
-    let isReq = true;
+    // let { claimNumber, dateOfDamage, dateOfInspection } = project.insuranceClaim;
+    let isValid = true;
     let newErrors = {};
-    if (!description) {
+    if (!description || description === '' || description === ' ') {
       newErrors.description = '*required';
-      isReq = false;
+      isValid = false;
     }
     if (!location) {
       newErrors.location = '*required';
-      isReq = false;
+      isValid = false;
     }
     setErrors(newErrors);
-    return isReq;
+    return isValid;
   }
 
   const updateProject = () => {
     const token = localStorage.getItem('token');
-    // const isReq = validate();
-    // if (isReq) {
-    setSnackBarInfo({
-      show: 'true',
-      message: 'Updating Project',
-      loading: true
-    });
-    axios.put(`https://polar-tor-24509.herokuapp.com/project/${project._id}`, project,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setEditing(false);
-        getProject();
-        setSnackBarInfo({
-          show: 'true',
-          message: 'Update Successful',
-          loading: false
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-        setSnackBarInfo({
-          show: 'true',
-          message: 'Update Failed',
-          loading: false
-        });
-
+    let updateProjectData = {
+      description: project.description,
+      location: project.location,
+      insuranceClaim: project.insuranceClaim,
+      status: project.status,
+      users: project.users
+    }
+    let isValid = validate();
+    if (isValid) {
+      setSnackBarInfo({
+        show: 'true',
+        message: 'Updating Project',
+        loading: true
       });
-    // }
+      axios.put(`https://polar-tor-24509.herokuapp.com/projects/${project._id}`, updateProjectData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setEditing(false);
+          getProject();
+          setSnackBarInfo({
+            show: 'true',
+            message: 'Update Successful',
+            loading: false
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+          setSnackBarInfo({
+            show: 'true',
+            message: 'Update Failed',
+            loading: false
+          });
+
+        });
+    }
   };
 
   const removeFiles = (fileName) => {
     const token = localStorage.getItem('token');
-
     setSnackBarInfo({
       message: 'Updating Files',
       loading: true,
@@ -148,29 +158,48 @@ export default function Project(props) {
   }
 
   const getProject = () => {
-    const projectID = project._id;
-    console.log(projectID);
     const token = localStorage.getItem('token');
-    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${projectID}`,
+    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${project._id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }).then((response) => {
-        console.log(response);
         setProject(response.data);
+        setEditing(false);
       }).catch((error) => {
         console.log(error);
       })
   }
 
-  function getExtension(fileName) {
-    return fileName.split('.').pop()
-  }
+  // class toolTip {
+  //   constructor(message) {
+  //     this.message = message;
+  //     this.copied = false;
+  //   }
+
+  //   renderTooltip() {
+  //     return (
+  //       <Tooltip id="button-tooltip">
+  //         {this.message}
+  //       </Tooltip>
+  //     );
+  //   }
+
+  //   copyText(text) {
+  //     navigator.clipboard.writeText(text);
+  //     console.log(navigator.clipboard);
+  //   }
+  // }
+
 
   const renderTooltip = (message) => (
     <Tooltip id="button-tooltip">
       {message}
     </Tooltip>
   );
+
+  const copyText = (text) => {
+    navigator.clipboard.writeText(text);
+  }
 
   return (
     <>
@@ -186,19 +215,13 @@ export default function Project(props) {
       <div className='mt-4 mb-5'>
         <Card className='projectIntro projectIntro ml-auto'>
           {!editing ?
-            <div className='editButton'>
-              <Dropdown>
-                <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '30px', height: '30px' }} id="dropdown-basic" />
-
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => setEditing(true)}>Edit Project</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+            <div className='projectEditButton'>
+              <Edit as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
             </div>
             :
             <>
-              <Check onClick={() => setEditing(false)} className='editButton' style={{ color: 'green' }} />
-              <X className='cancelButton' onClick={() => { setEditing(false); }} />
+              <Check onClick={() => updateProject()} className='projectEditButton' style={{ color: 'green' }} />
+              <X className='projectCancelButton' onClick={() => { getProject(); }} />
             </>
           }
           <div style={{ marginRight: '45px' }}>
@@ -213,11 +236,13 @@ export default function Project(props) {
                         value={project.description}
                         onChange={(e) => {
                           setProject({
-                            ...project, description: e.target.value
+                            ...project,
+                            description: e.target.value
                           });
+                          (errors.description) && validate();
                         }}
                       />
-                      {(errors.project.description) && <FormAlert message={errors.project.description} type={'error'} profile={true} />}
+                      {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />}
                     </div>
                   </Form.Group>
                 </Form>
@@ -231,193 +256,276 @@ export default function Project(props) {
             </div>
           </div>
         </Card>
-        <Card className='projectSecondaryInfo' style={{ border: 'none', marginLeft: '10%' }}>
+        {/* SECONDARY INFORMATION FOR PROJECT */}
+        <Card style={(window.innerWidth < 500) ? { border: 'none' } : { border: 'none', marginLeft: '10%' }}>
           <Row className='justify-content-md-center mt-3'>
             <Col className='m-2 notEditingProjectSecondaryInfo'>
-              <label>
-                <Card.Title style={{ fontSize: '20px' }}>
-                  <Key className="icons" />
-                  Project Key:
-                </Card.Title>
-              </label>
-              <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                {project._id}
-              </Card.Title>
-              <label>
-                <Card.Title style={{ fontSize: '20px' }}>
-                  <MapPin className="icons" />
-                  Location:
-                </Card.Title>
-              </label>
-              {editing ?
-                <Form style={{ width: 'auto', maxWidth: '350px' }}>
-                  <Form.Group className='m-1'>
-                    <div style={{ position: 'relative' }}>
-                      <Form.Control
-                        type='text'
-                        placeholder='Overview'
-                        value={project.location}
-                        onChange={(e) => {
-                          setProject({
-                            ...project, location: e.target.value
-                          });
-                        }}
-                      />
-                      {(errors.project.location) && <FormAlert message={errors.project.location} type={'error'} profile={true} />}
-                    </div>
-                  </Form.Group>
-                </Form>
-                :
-                <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                  {project.location}
-                </Card.Title>
-              }
-              <label>
-                <Card.Title style={{ fontSize: '20px' }}>
-                  <User className="icons" />
-                  Users Involved:
-                </Card.Title>
-              </label>
-              <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                {project.users.map((a, e, i) => {
-                  return (
-                    (a === 'khurdt') ?
-                      <Card.Title><Badge className='p-2' bg='secondary'></Badge></Card.Title>
-                      :
-                      <Card.Title><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
-                  )
-                })}
-              </Card.Title>
-              {(usingInsuranceClaim === true) ?
-                <>
-                  <label>
-                    <Card.Title style={{ fontSize: '20px' }}>
-                      <DollarSign className="icons" />
-                      Insurance Claim:
-                    </Card.Title>
-                  </label>
-                  <ul>
-                    <li>
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
-                        Claim Number:
-                      </Card.Title>
-                    </li>
-                    {editing ?
-                      <Form style={{ width: 'auto', maxWidth: '350px' }}>
-                        <Form.Group className='m-1'>
-                          <div style={{ position: 'relative' }}>
-                            <Form.Control
-                              type='text'
-                              placeholder='Overview'
-                              value={project.insuranceClaim.claimNumber}
-                              onChange={(e) => {
-                                setProject({
-                                  ...project, insuranceClaim: { claimNumber: e.target.value }
-                                });
-                              }}
-                            />
-                            {(errors.project.insuranceClaim.claimNumber) && <FormAlert message={errors.project.insuranceClaim.claimNumber} type={'error'} profile={true} />}
-                          </div>
-                        </Form.Group>
-                      </Form>
-                      :
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
-                        {project.insuranceClaim.claimNumber}
-                      </Card.Title>
-                    }
-                    <li>
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
-                        Date of Damage Done To Property:
-                      </Card.Title>
-                    </li>
-                    {editing ?
-                      <Form style={{ width: 'auto', maxWidth: '350px' }}>
-                        <Form.Group className='m-1'>
-                          <div style={{ position: 'relative' }}>
-                            <Form.Control
-                              type='date'
-                              placeholder='Overview'
-                              value={project.insuranceClaim.dateOfDamage}
-                              onChange={(e) => {
-                                setProject({
-                                  ...project, insuranceClaim: { dateOfDamage: e.target.value }
-                                });
-                              }}
-                            />
-                            {(errors.project.insuranceClaim.dateOfDamage) && <FormAlert message={errors.project.insuranceClaim.dateOfDamage} type={'error'} profile={true} />}
-                          </div>
-                        </Form.Group>
-                      </Form>
-                      :
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
-                        {formattedDateOfDamage}
-                      </Card.Title>
-                    }
-                    <li>
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
-                        Date of Inspection Of Damaged Property:
-                      </Card.Title>
-                    </li>
-                    {editing ?
-                      <Form style={{ width: 'auto', maxWidth: '350px' }}>
-                        <Form.Group className='m-1'>
-                          <div style={{ position: 'relative' }}>
-                            <Form.Control
-                              type='text'
-                              placeholder='Overview'
-                              value={project.insuranceClaim.dateOfInspection}
-                              onChange={(e) => {
-                                setProject({
-                                  ...project, insuranceClaim: { dateOfInspection: e.target.value }
-                                });
-                              }}
-                            />
-                            {(errors.project.insuranceClaim.dateOfInspection) && <FormAlert message={errors.project.insuranceClaim.dateOfInspection} type={'error'} profile={true} />}
-                          </div>
-                        </Form.Group>
-                      </Form>
-                      :
-                      <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
-                        {formattedDateOfInspection}
-                      </Card.Title>
-                    }
-                  </ul>
-                </>
-                :
-                <>
-                  <label>
-                    <Card.Title style={{ fontSize: '20px' }}>
-                      <DollarSign className="icons" />
-                      Insurance Claim:
-                    </Card.Title>
-                  </label>
-                  <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                    None
+              <div className="secondaryInfo-item">
+                <label>
+                  <Card.Title style={{ fontSize: '20px' }}>
+                    <Key className="icons" />
+                    Project Key:
                   </Card.Title>
-                </>
-              }
-              <label style={{ display: 'flex' }}>
-                <Card.Title style={{ fontSize: '20px' }}>
-                  <Folder className="icons" />
-                  Files:
+                </label>
+                <Card.Title style={{ fontSize: '17px', marginLeft: '50px', WebkitTextSecurity: 'disc' }}>
+                  {project._id}
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={(navigator.clipboard.read === project._id) ? renderTooltip('Copy') : renderTooltip('Copied')}
+                  >
+                    <Copy
+                      style={{ marginLeft: '10px', marginBottom: '5px', width: '16px', height: '16px', cursor: 'pointer' }}
+                      onClick={() => { copyText(project._id); }}
+                    />
+                  </OverlayTrigger>
                 </Card.Title>
-                {(!deleteFiles) ?
-                  <div style={{ display: 'flex', paddingTop: '2px' }}>
-                    <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} project={project} />
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip('Delete Files')}
-                    >
-                      <FolderMinus onClick={() => setDeleteFiles(true)} style={{ color: 'red', cursor: 'pointer', marginLeft: '80px' }} />
-                    </OverlayTrigger>
-                  </div>
+              </div>
+              <div className="secondaryInfo-item">
+                <label>
+                  <Card.Title style={{ fontSize: '20px' }}>
+                    <MapPin className="icons" />
+                    Location:
+                  </Card.Title>
+                </label>
+                {editing ?
+                  <Form style={{ width: 'auto', maxWidth: '350px' }}>
+                    <Form.Group className='m-1'>
+                      <div style={{ position: 'relative' }}>
+                        <Form.Control
+                          type='text'
+                          placeholder='Overview'
+                          value={project.location}
+                          onChange={(e) => {
+                            setProject({
+                              ...project, location: e.target.value
+                            });
+                          }}
+                        />
+                        {/* {(errors.project.location) && <FormAlert message={errors.project.location} type={'error'} profile={true} />} */}
+                      </div>
+                    </Form.Group>
+                  </Form>
+                  :
+                  <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                    {project.location}
+                  </Card.Title>
+                }
+              </div>
+              <div className="secondaryInfo-item">
+                <label>
+                  <Card.Title style={{ fontSize: '20px' }}>
+                    <User className="icons" />
+                    Users Involved:
+                  </Card.Title>
+                </label>
+                <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                  {project.users.map((a, e, i) => {
+                    return (
+                      (a === 'khurdt') ?
+                        <Card.Title><Badge className='p-2' bg='secondary'></Badge></Card.Title>
+                        :
+                        <Card.Title><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
+                    )
+                  })}
+                </Card.Title>
+              </div>
+              <div className="secondaryInfo-item">
+                {(project.insuranceClaim.using === true) ?
+                  <>
+                    <label style={{ display: 'flex' }}>
+                      <Card.Title style={{ fontSize: '20px' }}>
+                        <DollarSign className="icons" />
+                        Insurance Claim:
+                      </Card.Title>
+                    </label>
+                    {editing &&
+                      <div style={{ display: 'flex', margin: '5px' }}>
+                        <div style={{ fontSize: '15px', margin: 'auto', textAlign: 'center' }}>Still using?</div>
+                        <Button
+                          variant="light"
+                          onClick={(e) => {
+                            handleChoice(e);
+                            setProject({
+                              ...project, insuranceClaim: { ...project.insuranceClaim, using: true }
+                            });
+                          }}
+                          style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px', marginRight: '2px' }}>Yes</Button>
+                        <Button
+                          variant="light"
+                          onClick={(e) => {
+                            handleChoice(e);
+                            setProject({
+                              ...project, insuranceClaim: { ...project.insuranceClaim, using: false }
+                            });
+                          }}
+                          style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px' }}>No</Button>
+                      </div>
+                    }
+                    <ul>
+                      <li>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
+                          Claim Number:
+                        </Card.Title>
+                      </li>
+                      <div>
+                        {editing ?
+                          <Form style={{ width: 'auto', maxWidth: '350px' }}>
+                            <Form.Group className='m-1'>
+                              <div style={{ position: 'relative' }}>
+                                <Form.Control
+                                  type='text'
+                                  placeholder='Claim Number'
+                                  value={project.insuranceClaim.claimNumber}
+                                  style={(seeClaimNumber) ? { WebkitTextSecurity: 'none' } : { WebkitTextSecurity: 'disc' }}
+                                  onChange={(e) => {
+                                    setProject({
+                                      ...project, insuranceClaim: { ...project.insuranceClaim, claimNumber: e.target.value }
+                                    });
+                                  }}
+                                />
+                                <div style={{ position: 'absolute', top: '10px', right: '20px' }}>
+                                  {(seeClaimNumber) ?
+                                    <Eye className="icons" style={{ cursor: 'pointer' }} onClick={() => setSeeClaimNumber(false)} />
+                                    :
+                                    <EyeOff className="icons" style={{ cursor: 'pointer' }} onClick={() => setSeeClaimNumber(true)} />
+                                  }
+                                </div>
+                                {/* {(errors.project.insuranceClaim.claimNumber) && <FormAlert message={errors.project.insuranceClaim.claimNumber} type={'error'} profile={true} />} */}
+                              </div>
+                            </Form.Group>
+                          </Form>
+                          :
+                          <div style={{ display: 'flex' }}>
+                            <Card.Title className='claimNumber' style={(seeClaimNumber) ? { WebkitTextSecurity: 'none', fontSize: '16px' } : { WebkitTextSecurity: 'disc' }}>
+                              {project.insuranceClaim.claimNumber}
+                            </Card.Title>
+                            {(seeClaimNumber) ?
+                              <Eye className="icons" style={{ cursor: 'pointer' }} onClick={() => setSeeClaimNumber(false)} />
+                              :
+                              <EyeOff className="icons" style={{ cursor: 'pointer' }} onClick={() => setSeeClaimNumber(true)} />
+                            }
+                          </div>
+                        }
+                      </div>
+                      <li>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
+                          Date of damage done:
+                        </Card.Title>
+                      </li>
+                      {editing ?
+                        <Form style={{ width: 'auto', maxWidth: '350px' }}>
+                          <Form.Group className='m-1'>
+                            <div style={{ position: 'relative' }}>
+                              <Form.Control
+                                type='date'
+                                value={formattedDateOfDamage()}
+                                onChange={(e) => {
+                                  setProject({
+                                    ...project, insuranceClaim: { ...project.insuranceClaim, dateOfDamage: e.target.value }
+                                  });
+                                }}
+                              />
+                              {/* {(errors.project.insuranceClaim.dateOfDamage) && <FormAlert message={errors.project.insuranceClaim.dateOfDamage} type={'error'} profile={true} />} */}
+                            </div>
+                          </Form.Group>
+                        </Form>
+                        :
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
+                          {formattedDateOfDamage()}
+                        </Card.Title>
+                      }
+                      <li>
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
+                          Date of inspection:
+                        </Card.Title>
+                      </li>
+                      {editing ?
+                        <Form style={{ width: 'auto', maxWidth: '350px' }}>
+                          <Form.Group className='m-1'>
+                            <div style={{ position: 'relative' }}>
+                              <Form.Control
+                                type='date'
+                                value={formattedDateOfInspection()}
+                                onChange={(e) => {
+                                  setProject({
+                                    ...project, insuranceClaim: { ...project.insuranceClaim, dateOfInspection: e.target.value }
+                                  });
+                                }}
+                              />
+                              {/* {(errors.project.insuranceClaim.dateOfInspection) && <FormAlert message={errors.project.insuranceClaim.dateOfInspection} type={'error'} profile={true} />} */}
+                            </div>
+                          </Form.Group>
+                        </Form>
+                        :
+                        <Card.Title style={{ fontSize: '16px', marginLeft: '50px' }}>
+                          {formattedDateOfInspection()}
+                        </Card.Title>
+                      }
+                    </ul>
+                  </>
                   :
                   <>
-                    <Check onClick={() => { setDeleteFiles(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '17px', marginTop: '3px' }} />
+                    <label>
+                      <Card.Title style={{ fontSize: '20px' }}>
+                        <DollarSign className="icons" />
+                        Insurance Claim:
+                      </Card.Title>
+                    </label>
+                    {editing ?
+                      <div style={{ display: 'flex', margin: '5px' }}>
+                        <div style={{ fontSize: '15px', margin: 'auto', textAlign: 'center' }}>Still using?</div>
+                        <Button
+                          variant="light"
+                          onClick={(e) => {
+                            handleChoice(e);
+                            setProject({
+                              ...project, insuranceClaim: { ...project.insuranceClaim, using: true }
+                            });
+                          }}
+                          style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px', marginRight: '2px' }}>Yes</Button>
+                        <Button
+                          variant="light"
+                          onClick={(e) => {
+                            handleChoice(e);
+                            setProject({
+                              ...project, insuranceClaim: { ...project.insuranceClaim, using: false }
+                            });
+                          }}
+                          style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px' }}>No</Button>
+                      </div>
+                      :
+                      <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                        None
+                      </Card.Title>
+                    }
                   </>
                 }
-              </label>
+              </div>
+              <div style={{ margin: '10px' }}>
+                <label style={{ display: 'flex' }}>
+                  <Card.Title style={{ fontSize: '20px' }}>
+                    <Folder className="icons" />
+                    Files:
+                  </Card.Title>
+                  {(!deleteFiles) ?
+                    <div style={{ display: 'flex', paddingTop: '2px' }}>
+                      <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} project={project} />
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip('Delete Files')}
+                      >
+                        <FolderMinus onClick={() => setDeleteFiles(true)} style={{ color: 'red', cursor: 'pointer', marginLeft: '80px' }} />
+                      </OverlayTrigger>
+                    </div>
+                    :
+                    <>
+                      <Check onClick={() => { setDeleteFiles(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '17px', marginTop: '3px' }} />
+                    </>
+                  }
+                </label>
+              </div>
             </Col>
           </Row>
         </Card>

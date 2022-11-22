@@ -3,7 +3,7 @@ import './profile.css';
 import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
 import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
+import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
@@ -264,17 +264,13 @@ export default function Profile(props) {
                         </>
                     }
                     {!editing ?
-                        <Dropdown className='editButton'>
-                            <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '30px', height: '30px' }} id="dropdown-basic" />
-
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setEditing(true)}>Edit Profile</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <div className='profileEditButton'>
+                            <Edit onClick={() => setEditing(true)} as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                        </div>
                         :
                         <>
-                            <Check onClick={() => updateUser()} className='editButton' style={{ color: 'green' }} />
-                            <X className='cancelButton' onClick={() => { setEditing(false); getUserData() }} />
+                            <Check onClick={() => updateUser()} className='profileEditButton' style={{ color: 'green' }} />
+                            <X className='profileCancelButton' onClick={() => { setEditing(false); getUserData() }} />
                         </>
                     }
                 </Card>

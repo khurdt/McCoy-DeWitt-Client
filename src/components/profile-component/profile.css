@@ -53,15 +53,15 @@
     position: relative;
 }
 
-.editButton {
+.profileEditButton {
     position: absolute;
     top: 0;
     right: 10%;
     cursor: pointer;
-    z-index: -1;
+    z-index: 997;
 }
 
-.cancelButton {
+.profileCancelButton {
     position: absolute;
     top: 40%;
     right: 10%;

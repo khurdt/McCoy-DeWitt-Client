@@ -31,69 +31,68 @@ export default function Login(props) {
         let { firstName, lastName, email, phone, username, password, company } = form;
 
         const newErrors = {};
-        let isReq = true;
+        let isValid = true;
         if (notRegistered === true) {
             if (!firstName) {
                 newErrors.firstName = 'required'
-                isReq = false;
+                isValid = false;
             }
             if (!lastName) {
                 newErrors.lastName = 'required'
-                isReq = false;
+                isValid = false;
             }
             if (!email) {
                 newErrors.email = 'required'
-                isReq = false;
+                isValid = false;
             } else if (email.indexOf('@') === -1) {
                 newErrors.email = 'invalid'
-                isReq = false;
+                isValid = false;
             }
             if (phone !== undefined) {
                 const phoneNumberLength = form.phone.replace(/[^\d]/g, '').length
                 if (phoneNumberLength > 0 && phoneNumberLength < 10) {
                     newErrors.phone = '*invalid'
-                    isReq = false;
+                    isValid = false;
                 }
             }
             if (!username) {
                 newErrors.username = 'required';
-                isReq = false;
+                isValid = false;
             } else if (username.length < 2) {
                 newErrors.username = 'must be longer';
-                isReq = false;
+                isValid = false;
             }
             if (!password) {
                 newErrors.password = 'required';
-                isReq = false;
+                isValid = false;
             } else if (password.length < 6) {
                 newErrors.password = 'must be longer';
-                isReq = false;
+                isValid = false;
             }
         } else {
             if (!username) {
                 newErrors.username = 'required';
-                isReq = false;
+                isValid = false;
             } else if (username.length < 2) {
                 newErrors.username = 'must be longer';
-                isReq = false;
+                isValid = false;
             }
             if (!password) {
                 newErrors.password = 'required';
-                isReq = false;
+                isValid = false;
             } else if (password.length < 6) {
                 newErrors.password = 'must be longer';
-                isReq = false;
+                isValid = false;
             }
         }
         setErrors(newErrors);
-        return isReq;
+        return isValid;
     }
 
     const login = () => {
         const { username, password } = form;
-        const isReq = validate();
-        console.log(isReq);
-        if (isReq) {
+        const isValidated = validate();
+        if (isValidated) {
             setSnackBarInfo({
                 show: 'true',
                 message: 'Logging In',
