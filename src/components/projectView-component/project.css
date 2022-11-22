@@ -51,7 +51,7 @@
 
 .projectEditButton {
     position: absolute;
-    top: 10%;
+    top: 45%;
     right: 9%;
     cursor: pointer;
     z-index: 997;
@@ -59,7 +59,7 @@
 
 .projectCancelButton {
     position: absolute;
-    top: 40%;
+    top: 75%;
     right: 9%;
     color: red;
     cursor: pointer;
@@ -69,22 +69,20 @@
     border: 1px solid grey;
     border-radius: 10px;
     padding: 10px;
-    width: 360px;
-    margin: 5px;
-    background-color: rgba(83, 83, 83, 0.2);
+    min-width: 300px !important;
+    max-width: 300px !important;
+    min-height: 100px !important;
+    margin: 20px;
+    background-color: rgb(223, 223, 223);
+}
+
+.secondaryInfo-label {
+    margin-left: 10px
 }
 
 .claimNumber {
     margin-left: 50px;
     margin-right: 10px;
-}
-
-.notEditingProjectSecondaryInfo {
-    display: block;
-    width: fit-content;
-    max-width: 65%;
-    justify-content: space-between;
-    align-content: center;
 }
 
 .formProjectSecondaryInfo {
