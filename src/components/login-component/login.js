@@ -5,12 +5,14 @@ import { ArrowLeft, ArrowRight, LogIn, Send, UserPlus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import './login.css';
 import Snackbar from '../snackbar-component/snackbar';
+import CustomButton from '../button-component/customButton';
 
 export default function Login(props) {
     const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor, navigate, createProjectButton } = props;
     const [pageNumber, setPageNumber] = useState(0);
     const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
+    const [currentChoice, setCurrentChoice] = useState({});
     const formRef = useRef(null);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -249,10 +251,10 @@ export default function Login(props) {
                                                         </FloatingLabel >
                                                     </Form.Group>
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                                        <Button style={{ width: '100px', margin: 'auto', backgroundColor: secondaryColor }} onClick={() => setPageNumber(1)}>
-                                                            Next
-                                                            <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px', color: primaryColor }} />
-                                                        </Button>
+                                                        <CustomButton primaryColor={primaryColor}
+                                                            onClickFunction={function () { setPageNumber(1) }}
+                                                            currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                            text={'Next'} arrowRight={true} />
                                                     </div>
                                                 </Form>
                                             </>
@@ -299,15 +301,14 @@ export default function Login(props) {
                                                             </FloatingLabel >
                                                         </Form.Group>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                            <Button style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(0)} >
-                                                                <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px', color: 'red' }} />
-                                                                Back
-                                                            </Button>
-                                                            <Button style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(2)}>
-                                                                Next
-                                                                <ArrowRight style={{ width: '20px', height: '20px', paddingLeft: '5px', color: primaryColor }} />
-                                                            </Button>
-
+                                                            <CustomButton primaryColor={primaryColor}
+                                                                onClickFunction={function () { setPageNumber(0) }}
+                                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                                text={'Back'} arrowLeft={true} />
+                                                            <CustomButton primaryColor={primaryColor}
+                                                                onClickFunction={function () { setPageNumber(2) }}
+                                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                                text={'Next'} arrowRight={true} />
                                                         </div>
                                                     </Form>
                                                 </>
@@ -381,23 +382,21 @@ export default function Login(props) {
                                 <Row className='justify-content-md-center'>
                                     {(notRegistered && pageNumber === 2) &&
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Button style={{ backgroundColor: secondaryColor }} onClick={() => setPageNumber(1)} >
-                                                <ArrowLeft style={{ width: '20px', height: '20px', paddingRight: '5px', color: 'red' }} />
-                                                Back
-                                            </Button>
-                                            <Button onClick={register} style={{ textAlign: 'center', backgroundColor: secondaryColor }}>
-                                                Register <UserPlus
-                                                    style={{ width: '20px', height: '20px', color: primaryColor }}
-                                                    alt='send icon'
-                                                /></Button>
+                                            <CustomButton primaryColor={primaryColor}
+                                                onClickFunction={function () { setPageNumber(1) }}
+                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                text={'Back'} arrowLeft={true} />
+                                            <CustomButton primaryColor={primaryColor}
+                                                onClickFunction={function () { register() }}
+                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                text={'Register'} register={true} />
                                         </div>
                                     }
                                     {!notRegistered &&
-                                        <Button onClick={login} style={{ width: '300px', textAlign: 'center', backgroundColor: secondaryColor }}>
-                                            Sign In <LogIn
-                                                style={{ width: '20px', height: '20px', color: primaryColor }}
-                                                alt='send icon'
-                                            /></Button>
+                                        <CustomButton primaryColor={primaryColor}
+                                            onClickFunction={function () { login() }}
+                                            currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                            text={'Sign In'} login={true} />
                                     }
                                 </Row>
                             </Row>
@@ -406,13 +405,13 @@ export default function Login(props) {
                 </Modal.Body >
                 <Modal.Footer>
                     {notRegistered ?
-                        <Button style={{ marginRight: 'auto', backgroundColor: secondaryColor }} onClick={() => setNotRegistered(false)}>
-                            Sign In
-                        </Button>
+                        <CustomButton primaryColor={primaryColor}
+                            onClickFunction={function () { setNotRegistered(false) }}
+                            text={'Sign In'} login={true} submitButton={true} />
                         :
-                        <Button style={{ marginRight: 'auto', backgroundColor: secondaryColor }} onClick={() => setNotRegistered(true)}>
-                            Register
-                        </Button>
+                        <CustomButton primaryColor={primaryColor}
+                            onClickFunction={function () { setNotRegistered(true) }}
+                            text={'Register'} register={true} submitButton={true} />
                     }
                     <Button variant="secondary" onClick={handleClose}>
                         Close

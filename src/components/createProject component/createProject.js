@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './createProject.css';
 import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
-import { FloatingLabel, Row, Card, Button, Form } from 'react-bootstrap';
+import { FloatingLabel, Row, Card, Form } from 'react-bootstrap';
+import CustomButton from '../button-component/customButton';
 import axios from 'axios';
 import FormAlert from '../formAlert-component/formAlert';
 
 export default function CreateProject(props) {
   const { setShowCreateProject, primaryColor, setSnackBarInfo, getProjects } = props;
-  const [currentOption, setCurrentOption] = useState({});
   const [custom, setCustom] = useState(false);
+  const [currentChoice, setCurrentChoice] = useState({});
   const [addExistiingProject, setAddExistingProject] = useState(false);
   const [page, setPage] = useState(0);
   const [errors, setErrors] = useState({});
@@ -26,16 +27,6 @@ export default function CreateProject(props) {
     dateOfDamage: '',
     dateOfInspection: ''
   });
-
-  const handleChoice = (event) => {
-    if (currentOption) {
-      currentOption.backgroundColor = '';
-      currentOption.color = 'black';
-    }
-    setCurrentOption(event.target.style);
-    event.target.style.backgroundColor = primaryColor;
-    event.target.style.color = 'black';
-  }
 
   const validate = () => {
     let isReq = true;
@@ -188,16 +179,10 @@ export default function CreateProject(props) {
                     </Card.Title>
                     <Row className='m-auto justify-content-center' style={{ width: '70%' }}>
                       <div style={{ width: '200px', margin: '10px' }}>
-                        <Button
-                          variant="light"
-                          onClick={(e) => { setPage(page + 1); }}
-                          style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Create Project</Button>
+                        <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
                       </div>
                       <div style={{ width: '200px', margin: '10px' }}>
-                        <Button
-                          variant="light"
-                          onClick={(e) => { setAddExistingProject(true); }}
-                          style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Add Existing Project</Button>
+                        <CustomButton primaryColor={primaryColor} onClickFunction={function () { setAddExistingProject(true) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Existing Project'} />
                       </div>
                     </Row>
                   </>
@@ -243,18 +228,12 @@ export default function CreateProject(props) {
                     {services.map((s, i) => {
                       return (
                         <div key={s._id} style={{ width: '200px', margin: '10px' }}>
-                          <Button
-                            variant="light"
-                            onClick={(e) => { handleChoice(e); setServiceType(s.title); }}
-                            style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>{s.title}</Button>
+                          <CustomButton primaryColor={primaryColor} onClickFunction={function () { setServiceType(s.title) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={s.title} />
                         </div>
                       )
                     })}
                     <div style={{ width: '200px', margin: '10px' }}>
-                      <Button
-                        variant="light"
-                        onClick={(e) => { handleChoice(e); setCustom(true); }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Custom</Button>
+                      <CustomButton primaryColor={primaryColor} onClickFunction={function () { setCustom(true) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Custom'} />
                     </div>
                   </Row>
                   :
@@ -341,16 +320,10 @@ export default function CreateProject(props) {
                   </Card.Title>
                   <Row className='m-auto justify-content-center' style={{ width: '70%' }}>
                     <div style={{ width: '200px', margin: '10px' }}>
-                      <Button
-                        variant="light"
-                        onClick={(e) => { setPage(page + 1); setInsuranceClaim({ ...insuranceClaim, using: false }); }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>No</Button>
+                      <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1); setInsuranceClaim({ ...insuranceClaim, using: false }) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'No'} />
                     </div>
                     <div style={{ width: '200px', margin: '10px' }}>
-                      <Button
-                        variant="light"
-                        onClick={(e) => { setInsuranceClaim({ ...insuranceClaim, using: true }); }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '200px' }}>Yes</Button>
+                      <CustomButton primaryColor={primaryColor} onClickFunction={function () { setInsuranceClaim({ ...insuranceClaim, using: true }) }} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Yes'} />
                     </div>
                   </Row>
                 </>
@@ -394,10 +367,7 @@ export default function CreateProject(props) {
                       </Form.Group>
                     </Form>
                     <div>
-                      <Button
-                        style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '100px', marginTop: '30px' }}
-                        onClick={() => { setPage(page + 1); }}
-                      >OK</Button>
+                      <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'OK'} />
                     </div>
                   </Row>
                 </>
@@ -414,22 +384,13 @@ export default function CreateProject(props) {
           <Row className='justify-content-end' style={{ width: '100%' }}>
             <div style={{ width: '200px', marginTop: '30px', marginLeft: 'auto', marginRight: 'auto' }}>
               {addExistiingProject ?
-                <Button
-                  style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '200px' }}
-                  onClick={(e) => { (e.detail === 1) && addProject(); }}
-                >Add Project</Button>
+                <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && addProject() }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Project'} />
                 :
                 (page === 5) ?
-                  <Button
-                    style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '200px' }}
-                    onClick={(e) => { (e.detail === 1) && createProject(); console.log(e.detail); }}
-                  >Create Project</Button>
+                  <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && createProject() }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
                   :
                   (page !== 0 && page !== 4) &&
-                  <Button
-                    style={{ color: 'black', backgroundColor: primaryColor, borderColor: primaryColor, width: '100px' }}
-                    onClick={() => { setPage(page + 1); }}
-                  >OK</Button>
+                  <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'OK'} />
               }
             </div>
           </Row>

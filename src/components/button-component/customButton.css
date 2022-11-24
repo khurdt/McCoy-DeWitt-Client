@@ -1,0 +1,15 @@
+.customSubmitButton:hover {
+  opacity: 0.7;
+  transition: ease-in-out 0.4s;
+}
+
+.customButton {
+  width: 200px;
+  color: black;
+}
+
+.smallCustomButton {
+  width: 70px;
+  height: 40px;
+  color: black;
+}

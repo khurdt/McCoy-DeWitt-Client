@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus, Key, Copy, Eye, EyeOff, Edit, Edit2, Edit3, Camera } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
+import CustomButton from "../button-component/customButton";
 
 export default function Project(props) {
   const location = useLocation();
@@ -16,7 +17,7 @@ export default function Project(props) {
   const [editing, setEditing] = useState(false);
   const [deleteFiles, setDeleteFiles] = useState(false);
   const [seeClaimNumber, setSeeClaimNumber] = useState(false);
-  const [currentOption, setCurrentOption] = useState({});
+  const [currentChoice, setCurrentChoice] = useState({});
   const [errors, setErrors] = useState({});
 
   const formattedDateOfDamage = () => {
@@ -32,16 +33,6 @@ export default function Project(props) {
     window.scrollTo(0, 0);
     getProject();
   }, []);
-
-  const handleChoice = (event) => {
-    if (currentOption) {
-      currentOption.backgroundColor = '';
-      currentOption.color = 'black';
-    }
-    setCurrentOption(event.target.style);
-    event.target.style.backgroundColor = primaryColor;
-    event.target.style.color = 'black';
-  }
 
   const updateFiles = (fileName) => {
     const token = localStorage.getItem('token');
@@ -237,7 +228,7 @@ export default function Project(props) {
         </Card>
         {/* SECONDARY INFORMATION FOR PROJECT */}
         <Card style={(window.innerWidth < 500) ? { border: 'none' } : { border: 'none' }}>
-          <Row className='justify-content-center m-auto align-items-center' style={{ maxWidth: '1200px' }}>
+          <Row className='justify-content-center m-auto align-items-center' style={{ maxWidth: '1000px' }}>
             {/* PROJECT KEY ----------------------------------------------------------------------------------------------------------- */}
             <Col className="secondaryInfo-item">
               <label className='secondaryInfo-label'>
@@ -306,9 +297,11 @@ export default function Project(props) {
                     (a === 'khurdt') ?
                       <div></div>
                       :
-                      <Col>
-                        <Card.Title><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
-                      </Col>
+                      <>
+                        <Col className="m-1">
+                          <Card.Title><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
+                        </Col>
+                      </>
                   )
                 })}
               </Row>
@@ -316,37 +309,37 @@ export default function Project(props) {
 
             {/* INSURANCE CLAIM ------------------------------------------------------------------------------------------------------------*/}
             <div className="secondaryInfo-item">
+              <label className='secondaryInfo-label' style={{ display: 'flex' }}>
+                <Card.Title style={{ fontSize: '20px' }}>
+                  <DollarSign className="icons" />
+                  Insurance Claim:
+                </Card.Title>
+              </label>
+              {editing &&
+                <div style={{ display: 'flex', margin: '5px' }}>
+                  <div style={{ fontSize: '15px', margin: 'auto', textAlign: 'center' }}>Still using?</div>
+                  <CustomButton
+                    primaryColor={primaryColor}
+                    onClickFunction={function () {
+                      setProject({
+                        ...project, insuranceClaim: { ...project.insuranceClaim, using: true }
+                      });
+                    }}
+                    currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                    text={'Yes'} small={true} />
+                  <CustomButton
+                    primaryColor={primaryColor}
+                    onClickFunction={function () {
+                      setProject({
+                        ...project, insuranceClaim: { ...project.insuranceClaim, using: false }
+                      });
+                    }}
+                    currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                    text={'No'} small={true} />
+                </div>
+              }
               {(project.insuranceClaim.using === true) ?
                 <>
-                  <label className='secondaryInfo-label' style={{ display: 'flex' }}>
-                    <Card.Title style={{ fontSize: '20px' }}>
-                      <DollarSign className="icons" />
-                      Insurance Claim:
-                    </Card.Title>
-                  </label>
-                  {editing &&
-                    <div style={{ display: 'flex', margin: '5px' }}>
-                      <div style={{ fontSize: '15px', margin: 'auto', textAlign: 'center' }}>Still using?</div>
-                      <Button
-                        variant="light"
-                        onClick={(e) => {
-                          handleChoice(e);
-                          setProject({
-                            ...project, insuranceClaim: { ...project.insuranceClaim, using: true }
-                          });
-                        }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px', marginRight: '2px' }}>Yes</Button>
-                      <Button
-                        variant="light"
-                        onClick={(e) => {
-                          handleChoice(e);
-                          setProject({
-                            ...project, insuranceClaim: { ...project.insuranceClaim, using: false }
-                          });
-                        }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px' }}>No</Button>
-                    </div>
-                  }
                   <ul>
                     <li>
                       <Card.Title style={{ fontSize: '16px', marginLeft: '20px' }}>
@@ -450,41 +443,9 @@ export default function Project(props) {
                   </ul>
                 </>
                 :
-                <>
-                  <label className='secondaryInfo-label'>
-                    <Card.Title style={{ fontSize: '20px' }}>
-                      <DollarSign className="icons" />
-                      Insurance Claim:
-                    </Card.Title>
-                  </label>
-                  {editing ?
-                    <div style={{ display: 'flex', margin: '5px' }}>
-                      <div style={{ fontSize: '15px', margin: 'auto', textAlign: 'center' }}>Still using?</div>
-                      <Button
-                        variant="light"
-                        onClick={(e) => {
-                          handleChoice(e);
-                          setProject({
-                            ...project, insuranceClaim: { ...project.insuranceClaim, using: true }
-                          });
-                        }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px', marginRight: '2px' }}>Yes</Button>
-                      <Button
-                        variant="light"
-                        onClick={(e) => {
-                          handleChoice(e);
-                          setProject({
-                            ...project, insuranceClaim: { ...project.insuranceClaim, using: false }
-                          });
-                        }}
-                        style={{ color: 'black', borderColor: primaryColor, width: '100px', fontSize: '15px' }}>No</Button>
-                    </div>
-                    :
-                    <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
-                      None
-                    </Card.Title>
-                  }
-                </>
+                <Card.Title style={{ fontSize: '17px', marginLeft: '50px' }}>
+                  None
+                </Card.Title>
               }
             </div>
             <div style={{ margin: '10px' }}>
@@ -499,7 +460,7 @@ export default function Project(props) {
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip('Delete Files')}
+                      overlay={renderTooltip('Delete Images')}
                     >
                       <FolderMinus onClick={() => setDeleteFiles(true)} style={{ color: 'red', cursor: 'pointer', marginLeft: '80px' }} />
                     </OverlayTrigger>

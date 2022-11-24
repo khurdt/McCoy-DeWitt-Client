@@ -7,6 +7,7 @@ import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } 
 import FormAlert from '../formAlert-component/formAlert';
 import { services } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
+import CustomButton from '../button-component/customButton';
 
 
 export default function Profile(props) {
@@ -411,15 +412,13 @@ export default function Profile(props) {
                                                         {deleteProject ?
                                                             <Button variant='danger' onClick={() => { removeProject(project._id); getProjects(); }}>remove</Button>
                                                             :
-                                                            <Button
-                                                                className='customButton'
-                                                                style={{ backgroundColor: secondaryColor }}
-                                                                onClick={() => {
+                                                            <CustomButton primaryColor={primaryColor}
+                                                                onClickFunction={function () {
                                                                     navigate('project', {
                                                                         state: { selectedProject: project, selectedService: service }
                                                                     });
                                                                 }}
-                                                            >See Project</Button>
+                                                                text={'See Project'} login={true} submitButton={true} />
                                                         }
 
                                                     </Row>

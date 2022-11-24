@@ -60,7 +60,7 @@ class CloudinaryUploadWidget extends Component {
             <OverlayTrigger
                 placement="right"
                 delay={{ show: 250, hide: 400 }}
-                overlay={this.props.renderTooltip('Add Files')}
+                overlay={this.props.renderTooltip('Add Images')}
             >
                 <FolderPlus onClick={() => this.myWidget()} style={{ color: 'green', cursor: 'pointer', marginLeft: '20px' }} />
             </OverlayTrigger>
