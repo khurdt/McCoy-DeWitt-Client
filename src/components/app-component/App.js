@@ -251,6 +251,8 @@ function App() {
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
                     navigate={navigate}
+                    setSnackBarInfo={setSnackBarInfo}
+                    getAllProjects={getAllProjects}
                   />
                   :
                   <Loading primaryColor={primaryColor} />

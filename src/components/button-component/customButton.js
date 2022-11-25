@@ -32,7 +32,7 @@ export default function CustomButton(props) {
     <>
       {submitButton ?
         <Button
-          className='customSubmitButton customButton'
+          className='customSubmitButton'
           variant='light'
           onClick={(e) => { onClickFunction(e); }}
           style={{ backgroundColor: primaryColor, borderColor: primaryColor }}>{text}</Button>

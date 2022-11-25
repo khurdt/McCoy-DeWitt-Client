@@ -1,10 +1,7 @@
 .client-badge {
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  transform: translateY(70px);
-  width: 150px;
-  height: 150px;
+  margin: 5px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   text-align: center;
   display: flex;
