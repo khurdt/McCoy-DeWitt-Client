@@ -6,12 +6,11 @@ import Logo from '../../images/logo3.png';
 import { Home, Mail, User } from 'react-feather';
 
 export default function Footer(props) {
-  const { primaryColor, secondaryColor, pageActive, setPageActive } = props;
+  const { primaryColor, secondaryColor, pageActive, setPageActive, admin, user } = props;
   const windowSmall = (window.innerWidth < 1000);
-  const user = localStorage.getItem('user');
 
   useEffect(() => {
-    (window.location.href.includes('user')) ? setPageActive('user') :
+    ((window.location.href.includes('user') || window.location.href.includes('admin'))) ? setPageActive('user') :
       (window.location.href.includes('contact')) ? setPageActive('contact') :
         (window.location.href.includes('project')) ? setPageActive('user') : setPageActive('home');
   }, []);
@@ -51,7 +50,7 @@ export default function Footer(props) {
             <Mail className="m-2 footer-icon" width={25} height={25} />
           </Link>
           {user &&
-            <Link to='profile' onClick={() => { window.scrollTo(0, 0); setPageActive('user'); }} style={userTab}>
+            <Link to={(user === admin) ? 'admin' : 'profile'} onClick={() => { window.scrollTo(0, 0); setPageActive('user'); }} style={userTab}>
               <User className="m-2 footer-icon" width={25} height={25} />
             </Link>
           }

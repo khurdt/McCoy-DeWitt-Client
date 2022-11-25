@@ -10,19 +10,23 @@ import Navigation from '../navbar-component/navbar';
 import Loading from '../loading-component/loading';
 import Footer from '../footer-component/footer';
 
-// const Contact = lazy(() => import("../contact-component/contact"));
-// const FrontPage = lazy(() => import("../frontPage-component/frontPage"));
+// const Contact = lazy(() => import('../contact-component/contact'));
+// const FrontPage = lazy(() => import('../frontPage-component/frontPage'));
 import Contact from '../contact-component/contact';
 import FrontPage from '../frontPage-component/frontPage';
-import Project from '../projectView-component/project';
-import { services } from '../servicesAPI';
-const Profile = lazy(() => import("../profile-component/profile"));
+// import Project from '../projectView-component/project';
+const Project = lazy(() => import('../projectView-component/project'));
+// import AdminView from '../adminView-component/adminView';
+// import Profile from '../profile-component/profile';
+const Profile = lazy(() => import('../profile-component/profile'));
+const AdminView = lazy(() => import('../adminView-component/adminView'));
 
 
 function App() {
   let navigate = useNavigate();
   // primary color options #22d1da #2ab400 #ef2922
   // secondary color options #262626
+  const admin = 'khurdt';
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
@@ -38,6 +42,9 @@ function App() {
   const [noProjects, setNoProjects] = useState(false);
   const [createProjectButton, setCreateProjectButton] = useState(false);
 
+  const [adminClients, setAdminClients] = useState([]);
+  const [adminProjects, setAdminProjects] = useState([]);
+
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
     if ((accessToken) && !(isJwtExpired(accessToken))) {
@@ -45,7 +52,6 @@ function App() {
       getProjects();
     } else {
       localStorage.clear();
-      // window.open('/', '_self');
     }
   }, [])
 
@@ -53,8 +59,40 @@ function App() {
   const onLoggedIn = (authData) => {
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.username);
-    getUserData();
-    getProjects();
+    if (authData.user.username === admin) {
+      getAllProjects();
+      getAllUsers();
+      getUserData();
+      navigate('admin');
+    } else {
+      getUserData();
+      getProjects();
+      navigate('profile');
+    }
+  }
+
+  const getAllProjects = () => {
+    let token = localStorage.getItem('token');
+    axios.get('https://polar-tor-24509.herokuapp.com/projects', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((response) => {
+      let allProjects = response.data;
+      setAdminProjects(allProjects);
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
+
+  const getAllUsers = () => {
+    let token = localStorage.getItem('token');
+    axios.get('https://polar-tor-24509.herokuapp.com/users', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((response) => {
+      let allUsers = response.data;
+      setAdminClients(allUsers);
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 
   const getUserData = () => {
@@ -66,6 +104,7 @@ function App() {
       .then((response) => {
         let userData = response.data;
         setUserData(userData);
+        if (userData.username === admin) { getAllProjects(); getAllUsers(); }
       })
       .catch(function (error) {
         console.log(error);
@@ -93,7 +132,7 @@ function App() {
 
   return (
     <>
-      <div className="App">
+      <div className='App'>
         <Navigation
           pageActive={pageActive}
           setPageActive={setPageActive}
@@ -103,7 +142,9 @@ function App() {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           setPrimaryColor={setPrimaryColor}
-          setSecondaryColor={setSecondaryColor} />
+          setSecondaryColor={setSecondaryColor}
+          admin={admin}
+          user={userData.username} />
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
@@ -113,8 +154,8 @@ function App() {
           setShowNavBar={setShowNavBar}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
-          navigate={navigate}
-          createProjectButton={createProjectButton} />
+          createProjectButton={createProjectButton}
+          admin={admin} />
         {((showLogin === false)) &&
           <Snackbar
             snackBarInfo={snackBarInfo}
@@ -128,7 +169,7 @@ function App() {
           <Routes>
             <Route
               exact
-              path="/"
+              path='/'
               element={
                 <FrontPage setPageActive={setPageActive}
                   primaryColor={primaryColor}
@@ -139,7 +180,7 @@ function App() {
               }
             />
             <Route
-              path="contact"
+              path='contact'
               element={
                 <Contact
                   onBackClick={() => navigate(-1)}
@@ -150,7 +191,7 @@ function App() {
               }
             />
             <Route
-              path="profile"
+              path='profile'
               element={
                 (noProjects && userData.firstName) ?
                   <Profile
@@ -188,7 +229,7 @@ function App() {
               }
             />
             <Route
-              path="project"
+              path='project'
               element={
                 <Project
                   onBackClick={() => navigate(-1)}
@@ -196,7 +237,23 @@ function App() {
                   snackBarInfo={snackBarInfo}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
+                  admin={admin}
                 />
+              }
+            />
+            <Route
+              path='admin'
+              element={
+                ((adminProjects.length > 0) && adminClients.length > 0) ?
+                  <AdminView
+                    adminClients={adminClients}
+                    adminProjects={adminProjects}
+                    primaryColor={primaryColor}
+                    secondaryColor={secondaryColor}
+                    navigate={navigate}
+                  />
+                  :
+                  <Loading primaryColor={primaryColor} />
               }
             />
           </Routes>
@@ -205,7 +262,9 @@ function App() {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           pageActive={pageActive}
-          setPageActive={setPageActive} />
+          setPageActive={setPageActive}
+          admin={admin}
+          user={userData.username} />
       </div>
     </>
   );

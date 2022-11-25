@@ -8,9 +8,20 @@ import Snackbar from '../snackbar-component/snackbar';
 import CustomButton from '../button-component/customButton';
 
 export default function Login(props) {
-    const { showLogin, setShowLogin, setSnackBarInfo, snackBarInfo, onLoggedIn, setShowNavBar, primaryColor, secondaryColor, navigate, createProjectButton } = props;
+    const {
+        showLogin,
+        setShowLogin,
+        setSnackBarInfo,
+        snackBarInfo,
+        onLoggedIn,
+        setShowNavBar,
+        primaryColor,
+        secondaryColor,
+        navigate,
+        createProjectButton,
+        admin } = props;
+
     const [pageNumber, setPageNumber] = useState(0);
-    const handleClose = () => setShowLogin(false);
     const [notRegistered, setNotRegistered] = useState(false);
     const [currentChoice, setCurrentChoice] = useState({});
     const formRef = useRef(null);
@@ -28,6 +39,8 @@ export default function Login(props) {
             })
         }
     }
+
+    const handleClose = () => setShowLogin(false);
 
     const validate = () => {
         let { firstName, lastName, email, phone, username, password, company } = form;
@@ -114,7 +127,6 @@ export default function Login(props) {
                     });
                     setShowLogin(false);
                     setShowNavBar(false);
-                    navigate('profile');
                 })
                 .catch(function (error) {
                     console.log(error);

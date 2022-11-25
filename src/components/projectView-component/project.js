@@ -11,7 +11,7 @@ import CustomButton from "../button-component/customButton";
 
 export default function Project(props) {
   const location = useLocation();
-  const { primaryColor, setSnackBarInfo, secondaryColor } = props;
+  const { primaryColor, setSnackBarInfo, secondaryColor, admin } = props;
   const [project, setProject] = useState(location.state.selectedProject);
   const [service, setService] = useState(location.state.selectedService);
   const [editing, setEditing] = useState(false);
@@ -294,7 +294,7 @@ export default function Project(props) {
               <Row className="justify-content-center align-items-center" style={{ fontSize: '17px', marginLeft: '50px' }}>
                 {project.users.map((a, e, i) => {
                   return (
-                    (a === 'khurdt') ?
+                    (a === admin) ?
                       <div></div>
                       :
                       <>

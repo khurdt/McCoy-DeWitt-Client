@@ -6,10 +6,19 @@ import Logo from '../../images/logo3.png';
 import { Offcanvas, Button, Nav, Container, Navbar, NavDropdown } from 'react-bootstrap';
 
 export default function Navigation(props) {
-  const { pageActive, setPageActive, setShowLogin, showNavBar, setShowNavBar, primaryColor, secondaryColor, setPrimaryColor, setSecondaryColor } = props;
+  const { pageActive,
+    setPageActive,
+    setShowLogin,
+    showNavBar,
+    setShowNavBar,
+    primaryColor,
+    secondaryColor,
+    setPrimaryColor,
+    setSecondaryColor,
+    admin,
+    user } = props;
   // const [navOpen, setNavOpen] = useState('hidden');
   const isAuth = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
 
   const handleClose = () => setShowNavBar(false);
   const handleShow = () => setShowNavBar(true);
@@ -17,7 +26,7 @@ export default function Navigation(props) {
   const windowSmall = (window.innerWidth < 700);
 
   useEffect(() => {
-    (window.location.href.includes('user')) ? setPageActive('user') :
+    ((window.location.href.includes('user') || window.location.href.includes('admin'))) ? setPageActive('user') :
       (window.location.href.includes('contact')) ? setPageActive('contact') :
         (window.location.href.includes('project')) ? setPageActive('user') : setPageActive('home');
   }, []);
@@ -96,7 +105,7 @@ export default function Navigation(props) {
                 <>
                   <Nav className='ml-auto'>
                     <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                      <NavDropdown.Item as={Link} to='profile' onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={onLoggedOut}>
                         <LogOut
@@ -150,7 +159,7 @@ export default function Navigation(props) {
                   <Container>
                     <Nav.Link style={{ color: secondaryColor }}>
                       <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to='profile' onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }}>
                           <LogOut

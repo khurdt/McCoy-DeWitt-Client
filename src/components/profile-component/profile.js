@@ -102,7 +102,7 @@ export default function Profile(props) {
         const username = localStorage.getItem('user');
         const token = localStorage.getItem('token');
         setSnackBarInfo({
-            message: 'Adding Project',
+            message: 'Removing Project',
             loading: true,
             show: 'true'
         });
