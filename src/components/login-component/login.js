@@ -14,7 +14,8 @@ export default function Login(props) {
         setShowNavBar,
         primaryColor,
         secondaryColor,
-        createProjectButton } = props;
+        createProjectButton,
+        setSnackBarInfo } = props;
 
     const [pageNumber, setPageNumber] = useState(0);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -37,7 +38,8 @@ export default function Login(props) {
 
     const handleClose = () => setShowLogin(false);
 
-    const handleLogin = () => login(form, validate, setShowLogin, setShowNavBar, onLoggedIn);
+    const handleLogin = () => login(form, validate, setShowLogin, setShowNavBar, onLoggedIn, setSnackBarInfo);
+    const handleRegister = () => register(errors, setPageNumber, form, validate, handleLogin, setShowLogin, setSnackBarInfo);
 
     const validate = () => {
         let { firstName, lastName, email, phone, username, password, company } = form;
@@ -312,14 +314,14 @@ export default function Login(props) {
                                                 currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                                 text={'Back'} arrowLeft={true} />
                                             <CustomButton primaryColor={primaryColor}
-                                                onClickFunction={function () { register(errors, setPageNumber, form, validate, handleLogin, setShowLogin) }}
+                                                onClickFunction={function () { handleRegister(); }}
                                                 currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                                 text={'Register'} register={true} />
                                         </div>
                                     }
                                     {!notRegistered &&
                                         <CustomButton primaryColor={primaryColor}
-                                            onClickFunction={function () { login(form, validate, setShowLogin, setShowNavBar, onLoggedIn) }}
+                                            onClickFunction={function () { handleLogin() }}
                                             currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                             text={'Sign In'} login={true} />
                                     }

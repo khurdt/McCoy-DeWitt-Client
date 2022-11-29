@@ -11,7 +11,7 @@ import { updateProject, getProject, removeFiles, updateFiles } from "../services
 
 export default function Project(props) {
   const location = useLocation();
-  const { primaryColor, secondaryColor, admin } = props;
+  const { primaryColor, secondaryColor, admin, setSnackBarInfo } = props;
   const [project, setProject] = useState(location.state.selectedProject);
   const [service, setService] = useState(location.state.selectedService);
   const [editing, setEditing] = useState(false);
@@ -28,12 +28,15 @@ export default function Project(props) {
     status: project.status,
     users: project.users
   }
+
+  const bootstrapColors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark']
+
   const formattedDateOfDamage = () => {
-    let date = (project.insuranceClaim.dateOfDamage !== '') ? project.insuranceClaim.dateOfDamage.slice(0, 10) : '';
+    let date = (project.insuranceClaim.dateOfDamage !== null) ? project.insuranceClaim.dateOfDamage.slice(0, 10) : 'none';
     return date;
   }
   const formattedDateOfInspection = () => {
-    let date = (project.insuranceClaim.dateOfInspection !== '') ? project.insuranceClaim.dateOfInspection.slice(0, 10) : '';
+    let date = (project.insuranceClaim.dateOfInspection !== null) ? project.insuranceClaim.dateOfInspection.slice(0, 10) : 'none';
     return date;
   }
 
@@ -58,6 +61,11 @@ export default function Project(props) {
     setErrors(newErrors);
     return isValid;
   }
+
+  const handleUpdate = () => { updateProject(validate, updateProjectData, setProject, setEditing, project._id, setSnackBarInfo) }
+  const handleGetProject = () => { getProject(setProject, setEditing, project._id); }
+  const handleRemoveFiles = (file) => { removeFiles(file, setProject, setEditing, project._id, setSnackBarInfo); }
+  const handleUpdateFiles = (file) => { updateFiles(file, setProject, setEditing, project._id, setSnackBarInfo); }
 
   const renderTooltip = (message) => (
     <Tooltip id="button-tooltip">
@@ -89,9 +97,9 @@ export default function Project(props) {
             :
             <>
               <Check
-                onClick={() => updateProject(validate, updateProjectData, setProject, setEditing, project._id)}
+                onClick={() => handleUpdate()}
                 className='projectEditButton' style={{ color: 'green' }} />
-              <X className='projectCancelButton' onClick={() => { getProject(setProject, setEditing, project._id); }} />
+              <X className='projectCancelButton' onClick={() => { handleGetProject() }} />
             </>
           }
           <div style={{ marginRight: '45px' }}>
@@ -121,8 +129,67 @@ export default function Project(props) {
               }
             </Card.Title>
             <div style={{ width: 'fit-content', padding: '10px' }}>
-              <Card.Title className='status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Title>
-              <Card.Title style={{ fontSize: '15px', fontWeight: '200', marginLeft: '30px' }}>{project.status.description}</Card.Title>
+              {editing ?
+                <>
+                  <Form style={{ width: 'auto', maxWidth: '350px' }}>
+                    <Form.Group className='m-1'>
+                      <div style={{ position: 'relative' }}>
+                        <label>Status</label>
+                        <Form.Control
+                          type='text'
+                          placeholder='Current Status'
+                          value={project.status.title}
+                          onChange={(e) => {
+                            setProject({
+                              ...project,
+                              status: { ...project.status, title: e.target.value }
+                            });
+                          }}
+                        />
+                        {/* {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />} */}
+                      </div>
+                    </Form.Group>
+                    <label>Status Description</label>
+                    <Form.Group className='m-1'>
+                      <div style={{ position: 'relative' }}>
+                        <Form.Control
+                          type='text'
+                          placeholder='Description'
+                          value={project.status.description}
+                          onChange={(e) => {
+                            setProject({
+                              ...project,
+                              status: { ...project.status, description: e.target.value }
+                            });
+                          }}
+                        />
+                        {/* {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />} */}
+                      </div>
+                    </Form.Group>
+                  </Form>
+                  <Row className="justify-content-center">
+                    {bootstrapColors.map((color) => {
+                      return (
+                        <Col className='m-2' style={{ cursor: 'pointer' }}>
+                          <Card.Title style={(color === project.status.color) ? { border: '2px solid black', borderRadius: '5px', padding: '5px' } : {}}
+                            onClick={() => { setProject({ ...project, status: { ...project.status, color: color } }) }}>
+                            <Badge bg={color}>
+                              <span >{color}</span>
+                            </Badge>
+                          </Card.Title>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </>
+                :
+                <>
+                  <Card.Title className='status'><span style={{ marginRight: '5px' }}>Status:</span>
+                    <Badge bg={(project.status.color) ? project.status.color : 'primary'} className='p-2'>{project.status.title}</Badge>
+                  </Card.Title>
+                  <Card.Title style={{ fontSize: '15px', fontWeight: '200', marginLeft: '30px' }}>{project.status.description}</Card.Title>
+                </>
+              }
             </div>
           </div>
         </Card>
@@ -356,7 +423,7 @@ export default function Project(props) {
                 </Card.Title>
                 {(!deleteFiles) ?
                   <div style={{ display: 'flex', paddingTop: '2px' }}>
-                    <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} setProject={setProject} setEditing={setEditing} projectId={project._id} />
+                    <CloudinaryUploadWidget renderTooltip={renderTooltip} handleUpdateFiles={handleUpdateFiles} />
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
@@ -380,7 +447,7 @@ export default function Project(props) {
               <Col style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
                 <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
                 {(deleteFiles) &&
-                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { removeFiles(file.name, setProject, setEditing, project._id) }}>delete</Button>
+                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { handleRemoveFiles(file.name) }}>delete</Button>
                 }
               </Col>
             )

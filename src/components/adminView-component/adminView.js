@@ -14,6 +14,7 @@ export default function AdminView(props) {
     primaryColor,
     secondaryColor,
     navigate,
+    setSnackBarInfo
   } = props;
 
   const [deleteProject, setDeleteProject] = useState(false);
@@ -84,7 +85,7 @@ export default function AdminView(props) {
                       <Card.Footer>
                         <Row className='justify-content-center'>
                           {deleteProject ?
-                            <Button variant='danger' onClick={() => { removeAdminProject(project._id); }}>remove</Button>
+                            <Button variant='danger' onClick={() => { removeAdminProject(project._id, setSnackBarInfo); }}>remove</Button>
                             :
                             <CustomButton primaryColor={primaryColor}
                               onClickFunction={function () {

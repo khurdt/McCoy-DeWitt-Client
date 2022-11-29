@@ -7,7 +7,7 @@ import {
   getProjects,
   getUserData,
   getAllUsers,
-  getAllProjects,
+  getAllProjects
 } from '../servicesAPI';
 
 import Login from '../login-component/login';
@@ -43,6 +43,11 @@ function App() {
   const [projects, setProjects] = useState([]);
   const [adminProjects, setAdminProjects] = useState([]);
   const [adminClients, setAdminClients] = useState([]);
+  const [snackBarInfo, setSnackBarInfo] = useState({
+    message: '',
+    loading: false,
+    show: 'initial',
+  })
 
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
@@ -126,6 +131,8 @@ function App() {
           showLogin={showLogin}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
+          snackBarInfo={snackBarInfo}
+          setSnackBarInfo={setSnackBarInfo}
         />
         <Suspense fallback={<Loading primaryColor={primaryColor} />}>
           <Routes>
@@ -148,7 +155,8 @@ function App() {
                 <Contact
                   onBackClick={() => navigate(-1)}
                   primaryColor={primaryColor}
-                  secondaryColor={secondaryColor} />
+                  secondaryColor={secondaryColor}
+                  setSnackBarInfo={setSnackBarInfo} />
               }
             />
             <Route
@@ -164,6 +172,7 @@ function App() {
                     createProjectButton={createProjectButton}
                     setCreateProjectButton={setCreateProjectButton}
                     navigate={navigate}
+                    setSnackBarInfo={setSnackBarInfo}
                   />
                   :
                   ((projects && projects.length > 0) && userData.firstName) ?
@@ -176,6 +185,7 @@ function App() {
                       createProjectButton={createProjectButton}
                       setCreateProjectButton={setCreateProjectButton}
                       navigate={navigate}
+                      setSnackBarInfo={setSnackBarInfo}
 
                     />
                     :
@@ -190,6 +200,7 @@ function App() {
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   admin={admin}
+                  setSnackBarInfo={setSnackBarInfo}
                 />
               }
             />
@@ -203,6 +214,7 @@ function App() {
                     navigate={navigate}
                     adminClients={adminClients}
                     adminProjects={adminProjects}
+                    setSnackBarInfo={setSnackBarInfo}
                   />
                   :
                   <Loading primaryColor={primaryColor} />

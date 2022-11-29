@@ -19,8 +19,7 @@ export default function Profile(props) {
         createProjectButton,
         setCreateProjectButton,
         navigate,
-        setProjects,
-        setNoProjects } = props;
+        setSnackBarInfo } = props;
 
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -113,6 +112,9 @@ export default function Profile(props) {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`
     }
 
+    const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo); }
+    const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setUserData, setSnackBarInfo) }
+
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
 
     return (
@@ -182,7 +184,7 @@ export default function Profile(props) {
                         </div>
                         :
                         <>
-                            <Check onClick={() => updateUser(validate, updatedData, setEditing, setUserData)} className='profileEditButton' style={{ color: 'green' }} />
+                            <Check onClick={() => handleUpdateProfile()} className='profileEditButton' style={{ color: 'green' }} />
                             <X className='profileCancelButton' onClick={() => { setEditing(false); getUserData() }} />
                         </>
                     }
@@ -322,7 +324,7 @@ export default function Profile(props) {
                                                 <Card.Footer>
                                                     <Row className='justify-content-center'>
                                                         {deleteProject ?
-                                                            <Button variant='danger' onClick={() => { removeProject(project._id, setShowCreateProject); getProjects(); }}>remove</Button>
+                                                            <Button variant='danger' onClick={() => { handleRemoveProject(project._id); getProjects(); }}>remove</Button>
                                                             :
                                                             <CustomButton primaryColor={primaryColor}
                                                                 onClickFunction={function () {

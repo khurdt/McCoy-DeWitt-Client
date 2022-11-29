@@ -1,17 +1,5 @@
 import axios from 'axios';
-let setProject;
-let setEditing;
-let projectId;
 const admin = 'khurdt';
-
-export let snackBarInfo = {
-  message: '',
-  loading: false,
-  show: 'initial',
-};
-export const setSnackBarInfo = (a) => {
-  snackBarInfo = a;
-}
 
 export const services = [
   {
@@ -134,7 +122,7 @@ export const getProjects = () => {
 
 // PROJECT PAGE -------------------------------------------------------------------------------------------------------------------------------------------
 
-export const updateProject = (validate, updateProjectData, setProject, setEditing, projectId) => {
+export const updateProject = (validate, updateProjectData, setProject, setEditing, projectId, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   let isValid = validate();
   if (isValid) {
@@ -168,7 +156,7 @@ export const updateProject = (validate, updateProjectData, setProject, setEditin
   }
 };
 
-export const removeFiles = (fileName, setProject, setEditing, projectId) => {
+export const removeFiles = (fileName, setProject, setEditing, projectId, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   setSnackBarInfo({
     message: 'Updating Files',
@@ -209,7 +197,7 @@ export const getProject = (setProject, setEditing, projectId) => {
     })
 }
 
-export const updateFiles = (fileName, setProject, setEditing, projectId) => {
+export const updateFiles = (fileName, setProject, setEditing, projectId, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   setSnackBarInfo({
     message: 'Updating Files',
@@ -239,7 +227,7 @@ export const updateFiles = (fileName, setProject, setEditing, projectId) => {
 
 // CONTACT PAGE ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const sendContactInfo = (event, form, validate, handleReset) => {
+export const sendContactInfo = (event, form, validate, handleReset, setSnackBarInfo) => {
   event.preventDefault()
   const { firstName, lastName, email, phone, message } = form;
   const isReq = validate();
@@ -276,7 +264,7 @@ export const sendContactInfo = (event, form, validate, handleReset) => {
 };
 
 // LOGIN/REGISTER --------------------------------------------------------------------------------------------------------------------------------------------------
-export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn) => {
+export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   const { username, password } = form;
   const isValidated = validate();
@@ -314,7 +302,7 @@ export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn) =
   }
 };
 
-export const register = (errors, setPageNumber, form, validate, handleLogin, setShowLogin) => {
+export const register = (errors, setPageNumber, form, validate, handleLogin, setShowLogin, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   if (errors.firstName || errors.lastName || errors.email) {
     setPageNumber(0);
@@ -362,7 +350,7 @@ export const register = (errors, setPageNumber, form, validate, handleLogin, set
 
 // ADMIN PAGE -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const removeAdminProject = (projectId) => {
+export const removeAdminProject = (projectId, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   setSnackBarInfo({
     message: 'Removing Project',
@@ -390,7 +378,7 @@ export const removeAdminProject = (projectId) => {
 
 // PROFILE PAGE --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const updateUser = (validate, updatedData, setEditing) => {
+export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   const isReq = validate();
@@ -426,7 +414,7 @@ export const updateUser = (validate, updatedData, setEditing) => {
   }
 };
 
-export const removeProject = (projectId, setShowCreateProject) => {
+export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   setSnackBarInfo({
@@ -459,7 +447,7 @@ export const removeProject = (projectId, setShowCreateProject) => {
 }
 
 // CREATE PROJECT PAGE ---------------------------------------------------------------------------------------------------------------------------------------------------------
-export const createProject = (validate, projectData, setShowCreateProject) => {
+export const createProject = (validate, projectData, setShowCreateProject, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   const isReq = validate();
   if (isReq) {
@@ -492,7 +480,7 @@ export const createProject = (validate, projectData, setShowCreateProject) => {
   }
 }
 
-export const addProject = (projectIdValidaton, projectId, setShowCreateProject) => {
+export const addProject = (projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   if (projectIdValidaton()) {

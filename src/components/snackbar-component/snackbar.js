@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react"
 import './snackbar.css';
-import { snackBarInfo, setSnackBarInfo } from "../servicesAPI";
 
 export default function Snackbar(props) {
-  const { showLogin, primaryColor, secondaryColor } = props;
+  const { showLogin, primaryColor, secondaryColor, snackBarInfo, setSnackBarInfo } = props;
   let { show, loading, message } = snackBarInfo;
   const [timeoutOn, setTimeoutOn] = useState(false);
 

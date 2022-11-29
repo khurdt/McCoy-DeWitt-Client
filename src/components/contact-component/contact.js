@@ -9,7 +9,7 @@ import FormAlert from '../formAlert-component/formAlert';
 import { sendContactInfo } from '../servicesAPI';
 
 export default function Contact(props) {
-    const { primaryColor, secondaryColor } = props;
+    const { primaryColor, secondaryColor, setSnackBarInfo } = props;
     const formRef = useRef(null);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -167,7 +167,7 @@ export default function Contact(props) {
                             </Form.Group>
                             <Button
                                 type='submit'
-                                onClick={(event) => sendContactInfo(event, form, validate, handleReset)}
+                                onClick={(event) => sendContactInfo(event, form, validate, handleReset, setSnackBarInfo)}
                                 style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px', backgroundColor: secondaryColor }}>
                                 Send <Send
                                     style={{ width: '20px', height: '20px', color: primaryColor }}
