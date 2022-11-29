@@ -6,8 +6,9 @@ import Logo from '../../images/logo3.png';
 import { Home, Mail, User } from 'react-feather';
 
 export default function Footer(props) {
-  const { primaryColor, secondaryColor, pageActive, setPageActive, admin, user } = props;
+  const { primaryColor, secondaryColor, pageActive, setPageActive, admin } = props;
   const windowSmall = (window.innerWidth < 1000);
+  const user = localStorage.getItem('user');
 
   useEffect(() => {
     ((window.location.href.includes('user') || window.location.href.includes('admin'))) ? setPageActive('user') :

@@ -4,12 +4,12 @@ import React, { useState, useRef } from 'react';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Container, Row, Button, Card } from 'react-bootstrap';
-import axios from 'axios';
 import { Send } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
+import { sendContactInfo } from '../servicesAPI';
 
 export default function Contact(props) {
-    const { setSnackBarInfo, snackbarBarInfo, primaryColor, secondaryColor } = props;
+    const { primaryColor, secondaryColor } = props;
     const formRef = useRef(null);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
@@ -71,42 +71,6 @@ export default function Contact(props) {
         setErrors(newErrors);
         return isReq;
     }
-
-    const sendContactInfo = (event) => {
-        event.preventDefault()
-        const { firstName, lastName, email, phone, message } = form;
-        const isReq = validate();
-        if (isReq) {
-            setSnackBarInfo({
-                message: 'Sending Email',
-                loading: true,
-                show: 'true'
-            });
-            axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
-                name: (firstName + ' ' + lastName),
-                email: email,
-                phone: phone,
-                message: message,
-            })
-                .then((response) => {
-                    console.log(response);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: 'Email Sent! Thank You',
-                        loading: false,
-                    });
-                    handleReset();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: (error.message) ? error.message : 'Failed to Send Email, Please Try Another Time',
-                        loading: false
-                    });
-                });
-        }
-    };
 
     const formatPhoneNumber = (value) => {
         if (!value) return value;
@@ -203,7 +167,7 @@ export default function Contact(props) {
                             </Form.Group>
                             <Button
                                 type='submit'
-                                onClick={sendContactInfo}
+                                onClick={(event) => sendContactInfo(event, form, validate, handleReset)}
                                 style={{ width: '300px', position: 'absolute', left: '50%', marginLeft: '-150px', backgroundColor: secondaryColor }}>
                                 Send <Send
                                     style={{ width: '20px', height: '20px', color: primaryColor }}

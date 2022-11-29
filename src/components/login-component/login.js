@@ -1,25 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { Container, Row, Button, Modal, Form, FloatingLabel, Col } from 'react-bootstrap';
 import axios from 'axios';
-import { ArrowLeft, ArrowRight, LogIn, Send, UserPlus } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import './login.css';
-import Snackbar from '../snackbar-component/snackbar';
 import CustomButton from '../button-component/customButton';
+import { register, login } from '../servicesAPI';
 
 export default function Login(props) {
     const {
         showLogin,
         setShowLogin,
-        setSnackBarInfo,
-        snackBarInfo,
         onLoggedIn,
         setShowNavBar,
         primaryColor,
         secondaryColor,
-        navigate,
-        createProjectButton,
-        admin } = props;
+        createProjectButton } = props;
 
     const [pageNumber, setPageNumber] = useState(0);
     const [notRegistered, setNotRegistered] = useState(false);
@@ -41,6 +36,8 @@ export default function Login(props) {
     }
 
     const handleClose = () => setShowLogin(false);
+
+    const handleLogin = () => login(form, validate, setShowLogin, setShowNavBar, onLoggedIn);
 
     const validate = () => {
         let { firstName, lastName, email, phone, username, password, company } = form;
@@ -104,87 +101,6 @@ export default function Login(props) {
         return isValid;
     }
 
-    const login = () => {
-        const { username, password } = form;
-        const isValidated = validate();
-        if (isValidated) {
-            setSnackBarInfo({
-                show: 'true',
-                message: 'Logging In',
-                loading: true
-            });
-            axios.post(`https://polar-tor-24509.herokuapp.com/login`, {
-                username: username,
-                password: password
-            })
-                .then((response) => {
-                    const data = response.data;
-                    onLoggedIn(data);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: 'Successfully Logged In',
-                        loading: false
-                    });
-                    setShowLogin(false);
-                    setShowNavBar(false);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: (error.message.includes('400')) ? 'incorrect credentials' : 'Failed to Login',
-                        loading: false
-                    });
-                });
-        }
-    };
-
-    const register = () => {
-        if (errors.firstName || errors.lastName || errors.email) {
-            setPageNumber(0);
-        } else if (errors.address || errors.phone || errors.company) {
-            setPageNumber(1);
-        } else if (errors.username || errors.password) {
-            setPageNumber(2);
-        }
-        const { firstName, lastName, email, phone, username, password, company } = form;
-        const isReq = validate();
-        console.log(isReq);
-        if (isReq) {
-            setSnackBarInfo({
-                show: 'true',
-                message: 'Registering Account',
-                loading: true
-            });
-            axios.post(`https://polar-tor-24509.herokuapp.com/users`, {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phone: phone,
-                username: username,
-                password: password,
-                company: company
-            })
-                .then((response) => {
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: 'Successfully Registered, Logging in',
-                        loading: false
-                    });
-                    login();
-                    setShowLogin(false);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: (error.message) ? error.message : 'Failed to Register, Please Try Another Time',
-                        loading: false
-                    });
-                });
-        }
-    };
-
     const formatPhoneNumber = (value) => {
         if (!value) return value;
         const phoneNumber = value.replace(/[^\d]/g, '');
@@ -198,9 +114,6 @@ export default function Login(props) {
 
     return (
         <>
-            {(showLogin && snackBarInfo.show !== 'initial') &&
-                <Snackbar snackBarInfo={snackBarInfo} setSnackBarInfo={setSnackBarInfo} primaryColor={primaryColor} secondaryColor={secondaryColor} />
-            }
             <Modal show={showLogin} onHide={handleClose} className='details-modal .modal-content'>
                 <Modal.Header closeButton>
                     {notRegistered ?
@@ -399,14 +312,14 @@ export default function Login(props) {
                                                 currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                                 text={'Back'} arrowLeft={true} />
                                             <CustomButton primaryColor={primaryColor}
-                                                onClickFunction={function () { register() }}
+                                                onClickFunction={function () { register(errors, setPageNumber, form, validate, handleLogin, setShowLogin) }}
                                                 currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                                 text={'Register'} register={true} />
                                         </div>
                                     }
                                     {!notRegistered &&
                                         <CustomButton primaryColor={primaryColor}
-                                            onClickFunction={function () { login() }}
+                                            onClickFunction={function () { login(form, validate, setShowLogin, setShowNavBar, onLoggedIn) }}
                                             currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
                                             text={'Sign In'} login={true} />
                                     }

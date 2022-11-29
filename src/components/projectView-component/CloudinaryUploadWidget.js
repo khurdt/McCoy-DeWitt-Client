@@ -44,7 +44,7 @@ class CloudinaryUploadWidget extends Component {
             (error, result) => {
                 if (!error && result && result.event === "success") {
                     console.log("Done! Here is the image info: ", result.info);
-                    this.props.updateFiles(result.info.public_id);
+                    this.props.updateFiles(result.info.public_id, this.props.setProject, this.props.setEditing, this.props.projectId);
                     console.log(result);
                     document
                         .getElementById("uploadedimage")

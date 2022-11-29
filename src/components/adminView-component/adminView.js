@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { services } from "../servicesAPI";
+import React, { useEffect, useState } from "react";
+import { getAllUsers, services, setAdminProjects } from "../servicesAPI";
 import { Image } from "cloudinary-react";
-import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import axios from 'axios';
+import { Row, Col, Button, Card, Badge } from 'react-bootstrap';
 import { InView } from 'react-intersection-observer';
 import './adminView.css';
 import CustomButton from '../button-component/customButton';
+import { removeAdminProject } from "../servicesAPI";
 
 export default function AdminView(props) {
   const {
@@ -14,40 +14,14 @@ export default function AdminView(props) {
     primaryColor,
     secondaryColor,
     navigate,
-    setSnackBarInfo,
-    getAllProjects
   } = props;
 
   const [deleteProject, setDeleteProject] = useState(false);
   const [projectsInView, setProjectsInView] = useState(true);
   const [currentChoice, setCurrentChoice] = useState({});
 
-  const removeProject = (project) => {
-    console.log(project._id);
-    const token = localStorage.getItem('token');
-    setSnackBarInfo({
-      message: 'Removing Project',
-      loading: true,
-      show: 'true'
-    });
-    axios.delete(`https://polar-tor-24509.herokuapp.com/projects/${project._id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      setSnackBarInfo({
-        show: 'true',
-        message: 'Project Removed!',
-        loading: false,
-      });
-      getAllProjects();
-    }).catch((error) => {
-      console.log(error);
-      setSnackBarInfo({
-        show: 'true',
-        message: 'Failed to Remove Project',
-        loading: false
-      });
-    })
-  }
+  // useEffect(() => {
+  // }, [])
 
   return (
     <>
@@ -88,7 +62,7 @@ export default function AdminView(props) {
       {(projectsInView) ?
         <Row className='m-auto' style={{ justifyContent: 'center' }}>
           {adminProjects.length === 0 && (
-            <div style={{ height: '50vh' }} className='text-center'>You Don't Have Any Projects</div>
+            <div style={{ height: '80vh' }} className='text-center'>You Don't Have Any Projects</div>
           )}
           {adminProjects.length > 0 && adminProjects.map((project, index) => {
             let service = services.find((s) => project.service.toLowerCase().includes(s.image));
@@ -110,7 +84,7 @@ export default function AdminView(props) {
                       <Card.Footer>
                         <Row className='justify-content-center'>
                           {deleteProject ?
-                            <Button variant='danger' onClick={() => { removeProject(project); }}>remove</Button>
+                            <Button variant='danger' onClick={() => { removeAdminProject(project._id); }}>remove</Button>
                             :
                             <CustomButton primaryColor={primaryColor}
                               onClickFunction={function () {
@@ -140,22 +114,25 @@ export default function AdminView(props) {
                   <div style={{ backgroundColor: client.color }} className='client-badge'>
                     {userInitials}
                   </div>
-                  <Card.Text className='m-auto' style={{ fontSize: '20px' }}>
+                  <Card.Text className='m-auto text-center' style={{ fontSize: '20px' }}>
                     {client.firstName} {client.lastName}
                   </Card.Text>
                 </div>
                 <Card.Body>
-                  <Card.Text>Username: <Badge bg='secondary' className='p-2'>{client.username}</Badge></Card.Text>
-                  <Card.Text >
-                    Company: {client.company}
+                  <Card.Text><span>Username: </span><Badge bg='secondary' className='p-2'>{client.username}</Badge></Card.Text>
+                  <Card.Text>
+                    <span style={{ color: secondaryColor }}>Company: </span>{client.company}
                   </Card.Text>
-                  <Card.Text >
-                    Phone: {client.phone}
-                  </Card.Text>
-                  <Card.Text >
-                    Address: {client.address}
+                  <Card.Text>
+                    <span style={{ color: secondaryColor }}>Address: </span>{client.address}
                   </Card.Text>
                   <Card.Footer>
+                    <Card.Text>
+                      <span style={{ color: secondaryColor }}>Email: </span>{client.email}
+                    </Card.Text>
+                    <Card.Text >
+                      <span style={{ color: secondaryColor }}>Phone: </span>{client.phone}
+                    </Card.Text>
                   </Card.Footer>
                 </Card.Body>
               </Card>

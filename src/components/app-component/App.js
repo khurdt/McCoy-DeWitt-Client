@@ -1,8 +1,14 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { isJwtExpired } from 'jwt-check-expiration';
-import axios from 'axios';
 import './App.css';
+
+import {
+  getProjects,
+  getUserData,
+  getAllUsers,
+  getAllProjects,
+} from '../servicesAPI';
 
 import Login from '../login-component/login';
 import Snackbar from '../snackbar-component/snackbar';
@@ -32,102 +38,65 @@ function App() {
   const [pageActive, setPageActive] = useState('');
   const [showNavBar, setShowNavBar] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [snackBarInfo, setSnackBarInfo] = useState({
-    message: '',
-    loading: false,
-    show: 'initial',
-  });
+  const [createProjectButton, setCreateProjectButton] = useState(false);
   const [userData, setUserData] = useState({});
   const [projects, setProjects] = useState([]);
-  const [noProjects, setNoProjects] = useState(false);
-  const [createProjectButton, setCreateProjectButton] = useState(false);
-
-  const [adminClients, setAdminClients] = useState([]);
   const [adminProjects, setAdminProjects] = useState([]);
+  const [adminClients, setAdminClients] = useState([]);
 
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
+    const username = localStorage.getItem('user');
     if ((accessToken) && !(isJwtExpired(accessToken))) {
-      getUserData();
-      getProjects();
+      getClientInfo(username);
     } else {
       localStorage.clear();
     }
-  }, [])
+  }, []);
+
+  const getClientInfo = (username) => {
+    getUserData(getAdminInfo).then(data => {
+      setUserData(data, getAdminInfo);
+      console.log(data);
+    }).catch(error => {
+      console.log(error)
+    });
+
+    getProjects(username).then(data => {
+      setProjects(data);
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  const getAdminInfo = () => {
+    getAllProjects().then(data => {
+      setAdminProjects(data);
+      console.log(data);
+    }).catch(error => {
+      console.log(error)
+    });
+
+    getAllUsers().then(data => {
+      setAdminClients(data);
+    }).catch(error => {
+      console.log(error);
+    });
+  }
 
   //When a user successfully logs in, this function updates the 'user' property from null to particular user
-  const onLoggedIn = (authData) => {
-    localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.username);
-    if (authData.user.username === admin) {
-      getAllProjects();
-      getAllUsers();
-      getUserData();
+  const onLoggedIn = (token, username) => {
+    if (username === admin) {
+      getUserData(getAdminInfo).then(data => {
+        setUserData(data);
+      }).catch(error => {
+        console.log(error)
+      });
       navigate('admin');
     } else {
-      getUserData();
-      getProjects();
+      getClientInfo();
       navigate('profile');
     }
-  }
-
-  const getAllProjects = () => {
-    let token = localStorage.getItem('token');
-    axios.get('https://polar-tor-24509.herokuapp.com/projects', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      let allProjects = response.data;
-      setAdminProjects(allProjects);
-    }).catch(function (error) {
-      console.log(error);
-    })
-  }
-
-  const getAllUsers = () => {
-    let token = localStorage.getItem('token');
-    axios.get('https://polar-tor-24509.herokuapp.com/users', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      let allUsers = response.data;
-      setAdminClients(allUsers);
-    }).catch((error) => {
-      console.log(error);
-    })
-  }
-
-  const getUserData = () => {
-    let token = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
-    axios.get(`https://polar-tor-24509.herokuapp.com/users/${username}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then((response) => {
-        let userData = response.data;
-        setUserData(userData);
-        if (userData.username === admin) { getAllProjects(); getAllUsers(); }
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-  }
-
-  const getProjects = () => {
-    let token = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
-    axios.get(`https://polar-tor-24509.herokuapp.com/projects/${username}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then((response) => {
-        let incomingProjects = response.data;
-        if (incomingProjects.length > 0) {
-          setProjects(incomingProjects);
-        } else {
-          setNoProjects(true);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
   }
 
   return (
@@ -143,35 +112,29 @@ function App() {
           secondaryColor={secondaryColor}
           setPrimaryColor={setPrimaryColor}
           setSecondaryColor={setSecondaryColor}
-          admin={admin}
-          user={userData.username} />
+          admin={admin} />
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
-          setSnackBarInfo={setSnackBarInfo}
-          snackBarInfo={snackBarInfo}
           onLoggedIn={onLoggedIn}
           setShowNavBar={setShowNavBar}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           createProjectButton={createProjectButton}
           admin={admin} />
-        {((showLogin === false)) &&
-          <Snackbar
-            snackBarInfo={snackBarInfo}
-            setSnackBarInfo={setSnackBarInfo}
-            showLogin={showLogin}
-            primaryColor={primaryColor}
-            secondaryColor={secondaryColor}
-          />
-        }
+        <Snackbar
+          showLogin={showLogin}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+        />
         <Suspense fallback={<Loading primaryColor={primaryColor} />}>
           <Routes>
             <Route
               exact
               path='/'
               element={
-                <FrontPage setPageActive={setPageActive}
+                <FrontPage
+                  setPageActive={setPageActive}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   setCreateProjectButton={setCreateProjectButton}
@@ -184,8 +147,6 @@ function App() {
               element={
                 <Contact
                   onBackClick={() => navigate(-1)}
-                  setSnackBarInfo={setSnackBarInfo}
-                  snackBarInfo={snackBarInfo}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor} />
               }
@@ -193,13 +154,9 @@ function App() {
             <Route
               path='profile'
               element={
-                (noProjects && userData.firstName) ?
+                (projects && userData.firstName) ?
                   <Profile
                     onBackClick={() => navigate(-1)}
-                    setSnackBarInfo={setSnackBarInfo}
-                    snackBarInfo={snackBarInfo}
-                    getUserData={getUserData}
-                    getProjects={getProjects}
                     userData={userData}
                     projects={projects}
                     primaryColor={primaryColor}
@@ -209,13 +166,9 @@ function App() {
                     navigate={navigate}
                   />
                   :
-                  ((!noProjects && projects.length > 0) && userData.firstName) ?
+                  ((projects && projects.length > 0) && userData.firstName) ?
                     <Profile
                       onBackClick={() => navigate(-1)}
-                      setSnackBarInfo={setSnackBarInfo}
-                      snackBarInfo={snackBarInfo}
-                      getUserData={getUserData}
-                      getProjects={getProjects}
                       userData={userData}
                       projects={projects}
                       primaryColor={primaryColor}
@@ -223,6 +176,7 @@ function App() {
                       createProjectButton={createProjectButton}
                       setCreateProjectButton={setCreateProjectButton}
                       navigate={navigate}
+
                     />
                     :
                     <Loading primaryColor={primaryColor} />
@@ -233,8 +187,6 @@ function App() {
               element={
                 <Project
                   onBackClick={() => navigate(-1)}
-                  setSnackBarInfo={setSnackBarInfo}
-                  snackBarInfo={snackBarInfo}
                   primaryColor={primaryColor}
                   secondaryColor={secondaryColor}
                   admin={admin}
@@ -246,13 +198,11 @@ function App() {
               element={
                 ((adminProjects.length > 0) && adminClients.length > 0) ?
                   <AdminView
-                    adminClients={adminClients}
-                    adminProjects={adminProjects}
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
                     navigate={navigate}
-                    setSnackBarInfo={setSnackBarInfo}
-                    getAllProjects={getAllProjects}
+                    adminClients={adminClients}
+                    adminProjects={adminProjects}
                   />
                   :
                   <Loading primaryColor={primaryColor} />
@@ -265,8 +215,7 @@ function App() {
           secondaryColor={secondaryColor}
           pageActive={pageActive}
           setPageActive={setPageActive}
-          admin={admin}
-          user={userData.username} />
+          admin={admin} />
       </div>
     </>
   );

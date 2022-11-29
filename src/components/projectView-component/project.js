@@ -3,23 +3,31 @@ import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip 
 import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
-import axios from 'axios';
-import { Check, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X, DollarSign, FilePlus, Folder, FolderPlus, FolderMinus, Key, Copy, Eye, EyeOff, Edit, Edit2, Edit3, Camera } from 'react-feather';
+import { Check, MapPin, MoreVertical, User, X, DollarSign, FolderMinus, Key, Copy, Eye, EyeOff, Edit, Camera } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import CustomButton from "../button-component/customButton";
+import { updateProject, getProject, removeFiles, updateFiles } from "../servicesAPI";
 
 export default function Project(props) {
   const location = useLocation();
-  const { primaryColor, setSnackBarInfo, secondaryColor, admin } = props;
+  const { primaryColor, secondaryColor, admin } = props;
   const [project, setProject] = useState(location.state.selectedProject);
   const [service, setService] = useState(location.state.selectedService);
   const [editing, setEditing] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [deleteFiles, setDeleteFiles] = useState(false);
   const [seeClaimNumber, setSeeClaimNumber] = useState(false);
   const [currentChoice, setCurrentChoice] = useState({});
   const [errors, setErrors] = useState({});
 
+  let updateProjectData = {
+    description: project.description,
+    location: project.location,
+    insuranceClaim: project.insuranceClaim,
+    status: project.status,
+    users: project.users
+  }
   const formattedDateOfDamage = () => {
     let date = (project.insuranceClaim.dateOfDamage !== '') ? project.insuranceClaim.dateOfDamage.slice(0, 10) : '';
     return date;
@@ -31,36 +39,8 @@ export default function Project(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    getProject();
+    getProject(setProject, setEditing, project._id);
   }, []);
-
-  const updateFiles = (fileName) => {
-    const token = localStorage.getItem('token');
-    setSnackBarInfo({
-      message: 'Updating Files',
-      loading: true,
-      show: 'true'
-    });
-    axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`, { jwt: 'token' },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then((response) => {
-        console.log(response);
-        setSnackBarInfo({
-          message: 'Update Successful',
-          loading: false,
-          show: 'true'
-        });
-        getProject();
-      }).catch((error) => {
-        setSnackBarInfo({
-          message: 'Failed to Update',
-          loading: false,
-          show: 'true'
-        });
-        console.log(error);
-      })
-  }
 
   const validate = () => {
     let { description, location } = project;
@@ -77,88 +57,6 @@ export default function Project(props) {
     }
     setErrors(newErrors);
     return isValid;
-  }
-
-  const updateProject = () => {
-    const token = localStorage.getItem('token');
-    let updateProjectData = {
-      description: project.description,
-      location: project.location,
-      insuranceClaim: project.insuranceClaim,
-      status: project.status,
-      users: project.users
-    }
-    let isValid = validate();
-    if (isValid) {
-      setSnackBarInfo({
-        show: 'true',
-        message: 'Updating Project',
-        loading: true
-      });
-      axios.put(`https://polar-tor-24509.herokuapp.com/projects/${project._id}`, updateProjectData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setEditing(false);
-          getProject();
-          setSnackBarInfo({
-            show: 'true',
-            message: 'Update Successful',
-            loading: false
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-          setSnackBarInfo({
-            show: 'true',
-            message: 'Update Failed',
-            loading: false
-          });
-
-        });
-    }
-  };
-
-  const removeFiles = (fileName) => {
-    const token = localStorage.getItem('token');
-    setSnackBarInfo({
-      message: 'Updating Files',
-      loading: true,
-      show: 'true'
-    });
-    axios.delete(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${project._id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then((response) => {
-        console.log(response);
-        setSnackBarInfo({
-          message: 'Files Updated',
-          loading: false,
-          show: 'true'
-        });
-        getProject();
-      }).catch((error) => {
-        setSnackBarInfo({
-          message: 'Failed to Update',
-          loading: false,
-          show: 'true'
-        });
-        console.log(error);
-      })
-  }
-
-  const getProject = () => {
-    const token = localStorage.getItem('token');
-    axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${project._id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then((response) => {
-        setProject(response.data);
-        setEditing(false);
-      }).catch((error) => {
-        console.log(error);
-      })
   }
 
   const renderTooltip = (message) => (
@@ -190,8 +88,10 @@ export default function Project(props) {
             </div>
             :
             <>
-              <Check onClick={() => updateProject()} className='projectEditButton' style={{ color: 'green' }} />
-              <X className='projectCancelButton' onClick={() => { getProject(); }} />
+              <Check
+                onClick={() => updateProject(validate, updateProjectData, setProject, setEditing, project._id)}
+                className='projectEditButton' style={{ color: 'green' }} />
+              <X className='projectCancelButton' onClick={() => { getProject(setProject, setEditing, project._id); }} />
             </>
           }
           <div style={{ marginRight: '45px' }}>
@@ -242,11 +142,11 @@ export default function Project(props) {
                 <OverlayTrigger
                   placement="bottom"
                   delay={{ show: 250, hide: 400 }}
-                  overlay={(navigator.clipboard.read === project._id) ? renderTooltip('Copy') : renderTooltip('Copied')}
+                  overlay={(copied) ? renderTooltip('Copied') : renderTooltip('Copy')}
                 >
                   <Copy
                     style={{ marginLeft: '10px', marginBottom: '5px', width: '16px', height: '16px', cursor: 'pointer' }}
-                    onClick={() => { copyText(project._id); }}
+                    onClick={() => { copyText(project._id); setCopied(true); }}
                   />
                 </OverlayTrigger>
               </Card.Title>
@@ -456,7 +356,7 @@ export default function Project(props) {
                 </Card.Title>
                 {(!deleteFiles) ?
                   <div style={{ display: 'flex', paddingTop: '2px' }}>
-                    <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} project={project} />
+                    <CloudinaryUploadWidget renderTooltip={renderTooltip} updateFiles={updateFiles} setProject={setProject} setEditing={setEditing} projectId={project._id} />
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
@@ -480,7 +380,7 @@ export default function Project(props) {
               <Col style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
                 <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
                 {(deleteFiles) &&
-                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { removeFiles(file.name) }}>delete</Button>
+                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { removeFiles(file.name, setProject, setEditing, project._id) }}>delete</Button>
                 }
               </Col>
             )

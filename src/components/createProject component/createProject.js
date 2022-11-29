@@ -4,11 +4,11 @@ import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
 import { FloatingLabel, Row, Card, Form } from 'react-bootstrap';
 import CustomButton from '../button-component/customButton';
-import axios from 'axios';
 import FormAlert from '../formAlert-component/formAlert';
+import { createProject, addProject } from '../servicesAPI';
 
 export default function CreateProject(props) {
-  const { setShowCreateProject, primaryColor, setSnackBarInfo, getProjects } = props;
+  const { setShowCreateProject, username, primaryColor } = props;
   const [custom, setCustom] = useState(false);
   const [currentChoice, setCurrentChoice] = useState({});
   const [addExistiingProject, setAddExistingProject] = useState(false);
@@ -27,6 +27,15 @@ export default function CreateProject(props) {
     dateOfDamage: '',
     dateOfInspection: ''
   });
+
+  const projectData = {
+    service: serviceType,
+    description: description,
+    location: location,
+    insuranceClaim: insuranceClaim,
+    users: [username],
+    status: { title: 'pending review', description: 'we have not yet reviewed your submitted project, thank you for waiting' },
+  }
 
   const validate = () => {
     let isReq = true;
@@ -48,51 +57,6 @@ export default function CreateProject(props) {
     return isReq;
   }
 
-  const createProject = () => {
-    const user = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    let users = [user];
-    let status = { title: 'pending review', description: 'we have not yet reviewed your submitted project, thank you for waiting' };
-    const projectData = {
-      service: serviceType,
-      description: description,
-      location: location,
-      insuranceClaim: insuranceClaim,
-      users: users,
-      status: status
-    }
-    const isReq = validate();
-    if (isReq) {
-      setSnackBarInfo({
-        message: 'Creating Project',
-        loading: true,
-        show: 'true'
-      });
-      axios.post(`https://polar-tor-24509.herokuapp.com/projects`, projectData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          console.log(response);
-          setSnackBarInfo({
-            show: 'true',
-            message: 'Project Created!',
-            loading: false,
-          });
-          setShowCreateProject(false);
-          getProjects();
-        })
-        .catch(function (error) {
-          console.log(error);
-          setSnackBarInfo({
-            show: 'true',
-            message: (error.message) ? error.message : 'Failed to Create Project',
-            loading: false
-          });
-        });
-    }
-  }
-
   const projectIdValidaton = () => {
     if (!projectId) {
       setErrors({
@@ -108,41 +72,6 @@ export default function CreateProject(props) {
       return true;
     }
   }
-
-  const addProject = () => {
-    const username = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    if (projectIdValidaton()) {
-      setSnackBarInfo({
-        message: 'Adding Project',
-        loading: true,
-        show: 'true'
-      });
-      axios.post(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${projectId}`, { 'jwt': token },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          console.log(response);
-          setSnackBarInfo({
-            show: 'true',
-            message: 'Project Added!',
-            loading: false,
-          });
-          setShowCreateProject(false);
-          getProjects();
-        })
-        .catch(function (error) {
-          console.log(error);
-          setSnackBarInfo({
-            show: 'true',
-            message: 'Failed to Add Project',
-            loading: false
-          });
-        });
-    }
-  }
-
 
   return (
     <div className='createProjectContainer' style={{ position: 'absolute', minHeight: '500px' }}>
@@ -384,10 +313,10 @@ export default function CreateProject(props) {
           <Row className='justify-content-end' style={{ width: '100%' }}>
             <div style={{ width: '200px', marginTop: '30px', marginLeft: 'auto', marginRight: 'auto' }}>
               {addExistiingProject ?
-                <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && addProject() }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Project'} />
+                <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && addProject(projectIdValidaton, projectId, setShowCreateProject) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Project'} />
                 :
                 (page === 5) ?
-                  <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && createProject() }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
+                  <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && createProject(validate, projectData, setShowCreateProject) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
                   :
                   (page !== 0 && page !== 4) &&
                   <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'OK'} />

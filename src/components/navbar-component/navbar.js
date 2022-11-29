@@ -15,10 +15,10 @@ export default function Navigation(props) {
     secondaryColor,
     setPrimaryColor,
     setSecondaryColor,
-    admin,
-    user } = props;
+    admin } = props;
   // const [navOpen, setNavOpen] = useState('hidden');
   const isAuth = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
 
   const handleClose = () => setShowNavBar(false);
   const handleShow = () => setShowNavBar(true);

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import './snackbar.css';
+import { snackBarInfo, setSnackBarInfo } from "../servicesAPI";
+
 export default function Snackbar(props) {
-  const { setSnackBarInfo, snackBarInfo, showLogin, primaryColor, secondaryColor } = props;
+  const { showLogin, primaryColor, secondaryColor } = props;
   let { show, loading, message } = snackBarInfo;
   const [timeoutOn, setTimeoutOn] = useState(false);
 
@@ -18,7 +20,7 @@ export default function Snackbar(props) {
         })
       }, 7000);
     }
-  }, [show]);
+  }, [show, snackBarInfo]);
 
   return (
     <>
@@ -55,4 +57,5 @@ export default function Snackbar(props) {
       </div>
     </>
   );
+
 }

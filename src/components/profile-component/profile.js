@@ -5,7 +5,7 @@ import { Image } from 'cloudinary-react'
 import axios from 'axios';
 import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
-import { services } from '../servicesAPI';
+import { register, services, updateUser, getUserData, getProjects, removeProject } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
 import CustomButton from '../button-component/customButton';
 
@@ -13,14 +13,15 @@ import CustomButton from '../button-component/customButton';
 export default function Profile(props) {
     const { projects,
         userData,
-        getUserData,
-        setSnackBarInfo,
+        setUserData,
         primaryColor,
         secondaryColor,
-        getProjects,
         createProjectButton,
         setCreateProjectButton,
-        navigate } = props;
+        navigate,
+        setProjects,
+        setNoProjects } = props;
+
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -52,102 +53,16 @@ export default function Profile(props) {
         (userData.color) && setMyColor(userData.color);
     }, [projects, userData]);
 
-    const updateUser = () => {
-        const localStorageUsername = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
-        const isReq = validate();
-        const updatedData = {
-            username: username,
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
-            company: company,
-            phone: phone,
-            address: address,
-            color: myColor
-        }
-        if (isReq) {
-            setSnackBarInfo({
-                show: 'true',
-                message: 'Updating Information',
-                loading: true
-            });
-            axios.put(`https://polar-tor-24509.herokuapp.com/users/${localStorageUsername}`, updatedData,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                .then((response) => {
-                    localStorage.setItem('user', username);
-                    setEditing(false);
-                    getUserData();
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: 'Update Successful',
-                        loading: false
-                    });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    setSnackBarInfo({
-                        show: 'true',
-                        message: 'Update Failed',
-                        loading: false
-                    });
-
-                });
-        }
-    };
-
-    const removeProject = (projectID) => {
-        const username = localStorage.getItem('user');
-        const token = localStorage.getItem('token');
-        setSnackBarInfo({
-            message: 'Removing Project',
-            loading: true,
-            show: 'true'
-        });
-        axios.delete(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${projectID}`,
-            {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((response) => {
-                console.log(response);
-                setSnackBarInfo({
-                    show: 'true',
-                    message: 'Project Removed!',
-                    loading: false,
-                });
-                setShowCreateProject(false);
-                getProjects();
-            })
-            .catch(function (error) {
-                console.log(error);
-                setSnackBarInfo({
-                    show: 'true',
-                    message: 'Failed to Remove Project',
-                    loading: false
-                });
-            });
+    const updatedData = {
+        username: username,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        company: company,
+        phone: phone,
+        address: address,
+        color: myColor
     }
-
-    // const onDeleteAccount = () => {
-    //     const username = localStorage.getItem('user');
-    //     const token = localStorage.getItem('token');
-    //     axios.delete(`https://kh-movie-app.herokuapp.com/users/${username}`,
-    //         {
-    //             headers: { Authorization: `Bearer ${token}` },
-    //         })
-    //         .then((response) => {
-    //             console.log(response);
-    //             alert('user unregisterd');
-    //             localStorage.removeItem('user');
-    //             localStorage.removeItem('token');
-    //             window.open('/', '_self');
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
 
     const validate = () => {
         const newErrors = {};
@@ -203,10 +118,7 @@ export default function Profile(props) {
     return (
         <div>
             {showCreateProject &&
-                <CreateProject
-                    setShowCreateProject={setShowCreateProject} getProjects={getProjects}
-                    primaryColor={primaryColor}
-                    setSnackBarInfo={setSnackBarInfo} />
+                <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} />
             }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
@@ -270,7 +182,7 @@ export default function Profile(props) {
                         </div>
                         :
                         <>
-                            <Check onClick={() => updateUser()} className='profileEditButton' style={{ color: 'green' }} />
+                            <Check onClick={() => updateUser(validate, updatedData, setEditing, setUserData)} className='profileEditButton' style={{ color: 'green' }} />
                             <X className='profileCancelButton' onClick={() => { setEditing(false); getUserData() }} />
                         </>
                     }
@@ -410,7 +322,7 @@ export default function Profile(props) {
                                                 <Card.Footer>
                                                     <Row className='justify-content-center'>
                                                         {deleteProject ?
-                                                            <Button variant='danger' onClick={() => { removeProject(project._id); getProjects(); }}>remove</Button>
+                                                            <Button variant='danger' onClick={() => { removeProject(project._id, setShowCreateProject); getProjects(); }}>remove</Button>
                                                             :
                                                             <CustomButton primaryColor={primaryColor}
                                                                 onClickFunction={function () {
