@@ -34,7 +34,6 @@
     width: 90%;
     margin-left: auto;
     border: none;
-    position: relative;
 }
 
 .project-overview {
@@ -49,18 +48,28 @@
     text-align: left;
 }
 
-.projectEditButton {
+.editPosition {
     position: absolute;
-    top: 45%;
-    right: 9%;
+    top: 2%;
+    right: 10%;
+}
+
+@media all and (max-width: 500px) {
+    .editPosition {
+        right: 5%;
+    }
+}
+
+.projectEditButton {
+    margin-left: auto;
+    text-align: center;
     cursor: pointer;
     z-index: 997;
 }
 
 .projectCancelButton {
-    position: absolute;
-    top: 75%;
-    right: 9%;
+    margin: auto;
+    text-align: center;
     color: red;
     cursor: pointer;
 }

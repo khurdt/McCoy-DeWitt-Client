@@ -50,21 +50,30 @@
     width: 70%;
     margin-left: auto;
     border: none;
-    position: relative;
+}
+
+.editPosition {
+    position: absolute;
+    top: 2%;
+    right: 10%;
+}
+
+@media all and (max-width: 500px) {
+    .editPosition {
+        right: 5%;
+    }
 }
 
 .profileEditButton {
-    position: absolute;
-    top: 0;
-    right: 10%;
+    margin-left: auto;
+    text-align: center;
     cursor: pointer;
     z-index: 997;
 }
 
 .profileCancelButton {
-    position: absolute;
-    top: 40%;
-    right: 10%;
+    margin: auto;
+    text-align: center;
     color: red;
     cursor: pointer;
 }

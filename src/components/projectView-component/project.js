@@ -78,7 +78,7 @@ export default function Project(props) {
   }
 
   return (
-    <>
+    <div>
       <div style={{ position: 'relative' }}>
         <div className='project-background'></div>
         <Card className='projectTitleCard projectTitleCard m-auto' style={{ borderColor: primaryColor }}>
@@ -88,20 +88,26 @@ export default function Project(props) {
         </Card>
         <Image publicId={service.image} className='projectImage projectImage' />
       </div>
-      <div className='mt-4 mb-5'>
-        <Card className='projectIntro projectIntro ml-auto'>
+      <div className='mt-4 mb-5' style={{ position: 'relative' }}>
+        <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!editing ?
-            <div className='projectEditButton'>
-              <Edit as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+            <div className="editPosition">
+              <div className='projectEditButton'>
+                <Edit as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+              </div>
             </div>
             :
-            <>
-              <Check
-                onClick={() => handleUpdate()}
-                className='projectEditButton' style={{ color: 'green' }} />
-              <X className='projectCancelButton' onClick={() => { handleGetProject() }} />
-            </>
+            <div className="editPosition">
+              <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => handleUpdate()} className='projectEditButton'>
+                <Check color='white' />
+              </Button>
+              <Button style={{ backgroundColor: 'red', color: 'white', width: '50px' }} onClick={() => { handleGetProject() }} className='projectCancelButton'>
+                <X color="white" />
+              </Button>
+            </div>
           }
+        </div>
+        <Card className='projectIntro projectIntro ml-auto'>
           <div style={{ marginRight: '45px' }}>
             <Card.Title className='project-overview' style={{ fontSize: '21px', padding: '10px' }}>Overview:
               {editing ?
@@ -129,12 +135,12 @@ export default function Project(props) {
               }
             </Card.Title>
             <div style={{ width: 'fit-content', padding: '10px' }}>
-              {editing ?
+              {editing && (admin === (localStorage.getItem('user'))) ?
                 <>
                   <Form style={{ width: 'auto', maxWidth: '350px' }}>
                     <Form.Group className='m-1'>
                       <div style={{ position: 'relative' }}>
-                        <label>Status</label>
+                        <Card.Title>Status</Card.Title>
                         <Form.Control
                           type='text'
                           placeholder='Current Status'
@@ -149,7 +155,7 @@ export default function Project(props) {
                         {/* {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />} */}
                       </div>
                     </Form.Group>
-                    <label>Status Description</label>
+                    <Card.Title>Status Description</Card.Title>
                     <Form.Group className='m-1'>
                       <div style={{ position: 'relative' }}>
                         <Form.Control
@@ -173,7 +179,7 @@ export default function Project(props) {
                         <Col className='m-2' style={{ cursor: 'pointer' }}>
                           <Card.Title style={(color === project.status.color) ? { border: '2px solid black', borderRadius: '5px', padding: '5px' } : {}}
                             onClick={() => { setProject({ ...project, status: { ...project.status, color: color } }) }}>
-                            <Badge bg={color}>
+                            <Badge style={{ width: '100px', height: '35px' }} bg={color}>
                               <span >{color}</span>
                             </Badge>
                           </Card.Title>
@@ -192,9 +198,10 @@ export default function Project(props) {
               }
             </div>
           </div>
-        </Card>
+        </Card >
         {/* SECONDARY INFORMATION FOR PROJECT */}
-        <Card style={(window.innerWidth < 500) ? { border: 'none' } : { border: 'none' }}>
+        < Card style={{ border: 'none' }
+        }>
           <Row className='justify-content-center m-auto align-items-center' style={{ maxWidth: '1000px' }}>
             {/* PROJECT KEY ----------------------------------------------------------------------------------------------------------- */}
             <Col className="secondaryInfo-item">
@@ -440,7 +447,7 @@ export default function Project(props) {
               </label>
             </div>
           </Row>
-        </Card>
+        </Card >
         <Row className='justify-content-center'>
           {project.files.map((file) => {
             return (
@@ -453,7 +460,7 @@ export default function Project(props) {
             )
           })}
         </Row>
-      </div>
-    </>
+      </div >
+    </div >
   )
 }

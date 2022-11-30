@@ -126,7 +126,8 @@ function App() {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           createProjectButton={createProjectButton}
-          admin={admin} />
+          admin={admin}
+          setSnackBarInfo={setSnackBarInfo} />
         <Snackbar
           showLogin={showLogin}
           primaryColor={primaryColor}

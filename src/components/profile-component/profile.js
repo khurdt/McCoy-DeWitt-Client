@@ -113,7 +113,7 @@ export default function Profile(props) {
     }
 
     const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo); }
-    const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setUserData, setSnackBarInfo) }
+    const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setSnackBarInfo) }
 
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
 
@@ -133,10 +133,28 @@ export default function Profile(props) {
                     </div>
                 </div>
             </div>
-            <div className={(showCreateProject) ? 'hideProfile' : 'mt-4 mb-5'}>
+            <div className={(showCreateProject) ? 'hideProfile' : 'mt-4 mb-5'} style={{ position: 'relative' }}>
+                <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
+                    {!editing ?
+                        <div className="editPosition">
+                            <div className='profileEditButton'>
+                                <Edit as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                            </div>
+                        </div>
+                        :
+                        <div className="editPosition">
+                            <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => handleUpdateProfile()} className='profileEditButton'>
+                                <Check color='white' />
+                            </Button>
+                            <Button style={{ backgroundColor: 'red', color: 'white', width: '50px' }} onClick={() => { setEditing(false); getUserData() }} className='profileCancelButton'>
+                                <X color="white" />
+                            </Button>
+                        </div>
+                    }
+                </div>
                 <Card className='profileIntro profileIntro ml-auto'>
                     {editing ?
-                        <>
+                        <div className='mt-5'>
                             <Form style={{ display: 'flex', maxWidth: '200px' }}>
                                 <Form.Group className='m-1'>
                                     <div style={{ position: 'relative' }}>
@@ -171,21 +189,11 @@ export default function Profile(props) {
                                     </div>
                                 </Form.Group>
                             </Form>
-                        </>
+                        </div>
                         :
                         <>
                             <Card.Title className='profile-name'>{firstName} {lastName}</Card.Title>
                             <Card.Title className='company-name'>{company}</Card.Title>
-                        </>
-                    }
-                    {!editing ?
-                        <div className='profileEditButton'>
-                            <Edit onClick={() => setEditing(true)} as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
-                        </div>
-                        :
-                        <>
-                            <Check onClick={() => handleUpdateProfile()} className='profileEditButton' style={{ color: 'green' }} />
-                            <X className='profileCancelButton' onClick={() => { setEditing(false); getUserData() }} />
                         </>
                     }
                 </Card>

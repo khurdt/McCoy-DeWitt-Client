@@ -11,9 +11,9 @@ function Loading(props) {
         <div className="loading-object" style={{ backgroundColor: primaryColor, boxShadow: `0px 0px 10px ${primaryColor}` }}></div>
       </div>
       <div style={{ height: '90vh' }}>
-        <div className="text-center" style={{ marginTop: '100px', color: primaryColor, fontSize: '20px', fontWeight: 'bolder' }}>
+        {/* <div className="text-center" style={{ marginTop: '100px', color: primaryColor, fontSize: '20px', fontWeight: 'bolder' }}>
           Getting Your Data...
-        </div>
+        </div> */}
       </div>
     </>
   );

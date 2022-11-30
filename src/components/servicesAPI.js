@@ -264,8 +264,8 @@ export const sendContactInfo = (event, form, validate, handleReset, setSnackBarI
 };
 
 // LOGIN/REGISTER --------------------------------------------------------------------------------------------------------------------------------------------------
+
 export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn, setSnackBarInfo) => {
-  let token = localStorage.getItem('token');
   const { username, password } = form;
   const isValidated = validate();
   if (isValidated) {
@@ -447,6 +447,7 @@ export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) 
 }
 
 // CREATE PROJECT PAGE ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
 export const createProject = (validate, projectData, setShowCreateProject, setSnackBarInfo) => {
   let token = localStorage.getItem('token');
   const isReq = validate();
