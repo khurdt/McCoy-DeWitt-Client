@@ -187,7 +187,6 @@ function App() {
                       setCreateProjectButton={setCreateProjectButton}
                       navigate={navigate}
                       setSnackBarInfo={setSnackBarInfo}
-
                     />
                     :
                     <Loading primaryColor={primaryColor} />
@@ -216,6 +215,7 @@ function App() {
                     adminClients={adminClients}
                     adminProjects={adminProjects}
                     setSnackBarInfo={setSnackBarInfo}
+                    username={userData.username}
                   />
                   :
                   <Loading primaryColor={primaryColor} />

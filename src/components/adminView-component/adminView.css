@@ -13,3 +13,16 @@
   font-size: 40px;
   font-weight: bold;
 }
+
+.adminEditPosition {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+}
+
+.adminEditButton {
+  margin-left: auto;
+  text-align: center;
+  cursor: pointer;
+  z-index: 997;
+}

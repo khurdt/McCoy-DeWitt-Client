@@ -449,6 +449,7 @@ export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) 
 // CREATE PROJECT PAGE ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 export const createProject = (validate, projectData, setShowCreateProject, setSnackBarInfo) => {
+  let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   const isReq = validate();
   if (isReq) {
@@ -467,8 +468,12 @@ export const createProject = (validate, projectData, setShowCreateProject, setSn
           message: 'Project Created!',
           loading: false,
         });
+        if (username === admin) {
+          getAllProjects();
+        } else {
+          getProjects();
+        }
         setShowCreateProject(false);
-        getProjects();
       })
       .catch(function (error) {
         console.log(error);
@@ -501,8 +506,12 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
           message: 'Project Added!',
           loading: false,
         });
+        if (username === admin) {
+          getAllProjects();
+        } else {
+          getProjects();
+        }
         setShowCreateProject(false);
-        getProjects();
       })
       .catch(function (error) {
         console.log(error);

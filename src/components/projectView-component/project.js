@@ -46,7 +46,7 @@ export default function Project(props) {
   }, []);
 
   const validate = () => {
-    let { description, location } = project;
+    let { description, location, status } = project;
     // let { claimNumber, dateOfDamage, dateOfInspection } = project.insuranceClaim;
     let isValid = true;
     let newErrors = {};
@@ -56,6 +56,14 @@ export default function Project(props) {
     }
     if (!location) {
       newErrors.location = '*required';
+      isValid = false;
+    }
+    if (!status.title) {
+      newErrors.statusTitle = '*required';
+      isValid = false;
+    }
+    if (!status.title) {
+      newErrors.statusDescription = '*required';
       isValid = false;
     }
     setErrors(newErrors);
@@ -152,7 +160,7 @@ export default function Project(props) {
                             });
                           }}
                         />
-                        {/* {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />} */}
+                        {(errors.statusTitle) && <FormAlert message={errors.statusTitle} type={'error'} profile={true} />}
                       </div>
                     </Form.Group>
                     <Card.Title>Status Description</Card.Title>
@@ -169,7 +177,7 @@ export default function Project(props) {
                             });
                           }}
                         />
-                        {/* {(errors.description) && <FormAlert message={errors.description} type={'error'} profile={true} />} */}
+                        {(errors.statusDescription) && <FormAlert message={errors.statusDescription} type={'error'} profile={true} />}
                       </div>
                     </Form.Group>
                   </Form>
@@ -177,9 +185,9 @@ export default function Project(props) {
                     {bootstrapColors.map((color) => {
                       return (
                         <Col className='m-2' style={{ cursor: 'pointer' }}>
-                          <Card.Title style={(color === project.status.color) ? { border: '2px solid black', borderRadius: '5px', padding: '5px' } : {}}
+                          <Card.Title style={(color === project.status.color) ? { border: '2px solid black', borderRadius: '5px', padding: '5px' } : { border: '2px solid white', padding: '5px' }}
                             onClick={() => { setProject({ ...project, status: { ...project.status, color: color } }) }}>
-                            <Badge style={{ width: '100px', height: '35px' }} bg={color}>
+                            <Badge style={{ width: '100px', height: '30px', margin: 'auto' }} bg={color}>
                               <span >{color}</span>
                             </Badge>
                           </Card.Title>

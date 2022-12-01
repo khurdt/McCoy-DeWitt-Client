@@ -73,6 +73,9 @@ export default function CreateProject(props) {
     }
   }
 
+  const handleAddProject = () => { addProject(projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo) }
+  const handleCreateProject = () => { createProject(validate, projectData, setShowCreateProject, setSnackBarInfo) }
+
   return (
     <div className='createProjectContainer' style={{ position: 'absolute', minHeight: '500px' }}>
       <div className='createProjectContent' style={{ position: 'absolute', minHeight: '500px' }}>
@@ -313,13 +316,16 @@ export default function CreateProject(props) {
           <Row className='justify-content-end' style={{ width: '100%' }}>
             <div style={{ width: '200px', marginTop: '30px', marginLeft: 'auto', marginRight: 'auto' }}>
               {addExistiingProject ?
-                <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && addProject(projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Project'} />
+                <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && handleAddProject(); }}
+                  submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Add Project'} />
                 :
                 (page === 5) ?
-                  <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && createProject(validate, projectData, setShowCreateProject, setSnackBarInfo) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
+                  <CustomButton primaryColor={primaryColor} onClickFunction={function (e) { (e.detail === 1) && handleCreateProject(); }}
+                    submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'Create Project'} />
                   :
                   (page !== 0 && page !== 4) &&
-                  <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }} submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'OK'} />
+                  <CustomButton primaryColor={primaryColor} onClickFunction={function () { setPage(page + 1) }}
+                    submitButton={true} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice} text={'OK'} />
               }
             </div>
           </Row>
