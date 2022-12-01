@@ -51,52 +51,35 @@ function App() {
 
   useEffect(() => {
     let accessToken = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
     if ((accessToken) && !(isJwtExpired(accessToken))) {
-      getClientInfo(username);
+      getClientInfo();
     } else {
       localStorage.clear();
     }
   }, []);
 
-  const getClientInfo = (username) => {
-    getUserData(getAdminInfo).then(data => {
-      setUserData(data, getAdminInfo);
-      console.log(data);
-    }).catch(error => {
-      console.log(error)
-    });
+  const getClientInfo = () => {
+    getUserData(setUserData, getAdminInfo);
+    getProjects(setProjects);
+  }
 
-    getProjects(username).then(data => {
-      setProjects(data);
-    }).catch(error => {
-      console.log(error);
-    });
+  const getAdminProjects = () => {
+    getAllProjects(setAdminProjects);
+  }
+
+  const getAdminClients = () => {
+    getAllUsers(setAdminClients);
   }
 
   const getAdminInfo = () => {
-    getAllProjects().then(data => {
-      setAdminProjects(data);
-      console.log(data);
-    }).catch(error => {
-      console.log(error)
-    });
-
-    getAllUsers().then(data => {
-      setAdminClients(data);
-    }).catch(error => {
-      console.log(error);
-    });
+    getAdminProjects();
+    getAdminClients();
   }
 
   //When a user successfully logs in, this function updates the 'user' property from null to particular user
   const onLoggedIn = (token, username) => {
     if (username === admin) {
-      getUserData(getAdminInfo).then(data => {
-        setUserData(data);
-      }).catch(error => {
-        console.log(error)
-      });
+      getUserData(setUserData, getAdminInfo);
       navigate('admin');
     } else {
       getClientInfo();
@@ -147,7 +130,8 @@ function App() {
                   secondaryColor={secondaryColor}
                   setCreateProjectButton={setCreateProjectButton}
                   setShowLogin={setShowLogin}
-                  navigate={navigate} />
+                  navigate={navigate} 
+                  admin={admin}/>
               }
             />
             <Route
@@ -174,6 +158,8 @@ function App() {
                     setCreateProjectButton={setCreateProjectButton}
                     navigate={navigate}
                     setSnackBarInfo={setSnackBarInfo}
+                    setUserData={setUserData}
+                    setProjects={setProjects}
                   />
                   :
                   ((projects && projects.length > 0) && userData.firstName) ?
@@ -187,6 +173,8 @@ function App() {
                       setCreateProjectButton={setCreateProjectButton}
                       navigate={navigate}
                       setSnackBarInfo={setSnackBarInfo}
+                      setUserData={setUserData}
+                      setProjects={setProjects}
                     />
                     :
                     <Loading primaryColor={primaryColor} />
@@ -216,6 +204,9 @@ function App() {
                     adminProjects={adminProjects}
                     setSnackBarInfo={setSnackBarInfo}
                     username={userData.username}
+                    setAdminProjects={setAdminProjects}
+                    setCreateProjectButton={setCreateProjectButton}
+                    createProjectButton={createProjectButton}
                   />
                   :
                   <Loading primaryColor={primaryColor} />

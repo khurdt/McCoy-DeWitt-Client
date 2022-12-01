@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
@@ -94,7 +94,7 @@ export default function Project(props) {
             <Card.Title className='m-auto' style={{ color: 'white' }}>{project.service} Project</Card.Title>
           </div>
         </Card>
-        <Image publicId={service.image} className='projectImage projectImage' />
+        <Image publicId={(service) ? service.image : 'custom'} className='projectImage projectImage' />
       </div>
       <div className='mt-4 mb-5' style={{ position: 'relative' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>

@@ -56,67 +56,59 @@ export const services = [
 
 // APP PAGE ----------------------------------------------------------------------------------------------------------------------------------------------
 
-export const getAllProjects = () => {
+export const getAllProjects = (setAdminProjects) => {
   let token = localStorage.getItem('token');
-  return new Promise((resolve, reject) => {
-    axios.get('https://polar-tor-24509.herokuapp.com/projects', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      console.log(response);
-      let allProjects = response.data;
-      resolve(allProjects);
-    }).catch(function (error) {
-      reject(error);
-    })
-  });
+  axios.get('https://polar-tor-24509.herokuapp.com/projects', {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then((response) => {
+    console.log(response);
+    let allProjects = response.data;
+    setAdminProjects(allProjects);
+  }).catch(function (error) {
+    console.log(error);
+  })
 }
 
-export const getAllUsers = () => {
+export const getAllUsers = (setAdminClients) => {
   let token = localStorage.getItem('token');
-  return new Promise((resolve, reject) => {
-    axios.get('https://polar-tor-24509.herokuapp.com/users', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      console.log(response);
-      let allUsers = response.data;
-      resolve(allUsers);
-    }).catch((error) => {
-      reject(error);
-    })
-  });
+  axios.get('https://polar-tor-24509.herokuapp.com/users', {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then((response) => {
+    console.log(response);
+    let allUsers = response.data;
+    setAdminClients(allUsers);
+  }).catch((error) => {
+    console.log(error);
+  })
 }
 
-export const getUserData = (getAdminInfo) => {
+export const getUserData = (setUserData, getAdminInfo) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
-  return new Promise((resolve, reject) => {
-    axios.get(`https://polar-tor-24509.herokuapp.com/users/${username}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      console.log(response);
-      let userData = response.data;
-      if (userData.username === admin) { getAdminInfo() }
-      resolve(userData);
-    })
-      .catch(function (error) {
-        reject(error);
-      })
-  });
+  axios.get(`https://polar-tor-24509.herokuapp.com/users/${username}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then((response) => {
+    console.log(response);
+    let userData = response.data;
+    if (userData.username === admin) { getAdminInfo() }
+    setUserData(userData);
+  })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
-export const getProjects = () => {
+export const getProjects = (setProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
-  return new Promise((resolve, reject) => {
-    axios.get(`https://polar-tor-24509.herokuapp.com/projects/${username}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      console.log(response);
-      let projects = response.data;
-      resolve(projects);
-    }).catch(function (error) {
-      reject(error);
-    })
+  axios.get(`https://polar-tor-24509.herokuapp.com/projects/${username}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).then((response) => {
+    console.log(response);
+    let projects = response.data;
+    setProjects(projects);
+  }).catch(function (error) {
+    console.log(error);
   })
 }
 
@@ -277,28 +269,26 @@ export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn, s
     axios.post(`https://polar-tor-24509.herokuapp.com/login`, {
       username: username,
       password: password
-    })
-      .then((response) => {
-        const data = response.data;
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', data.user.username);
-        setSnackBarInfo({
-          show: 'true',
-          message: 'Successfully Logged In',
-          loading: false
-        });
-        setShowLogin(false);
-        setShowNavBar(false);
-        onLoggedIn(data.token, data.user.username);
-      })
-      .catch(function (error) {
-        console.log(error);
-        setSnackBarInfo({
-          show: 'true',
-          message: (error.message.includes('400')) ? 'incorrect credentials' : 'Failed to Login',
-          loading: false
-        });
+    }).then((response) => {
+      const data = response.data;
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', data.user.username);
+      setSnackBarInfo({
+        show: 'true',
+        message: 'Successfully Logged In',
+        loading: false
       });
+      setShowLogin(false);
+      setShowNavBar(false);
+      onLoggedIn(data.token, data.user.username);
+    }).catch(function (error) {
+      console.log(error);
+      setSnackBarInfo({
+        show: 'true',
+        message: (error.message.includes('400')) ? 'incorrect credentials' : 'Failed to Login',
+        loading: false
+      });
+    });
   }
 };
 
@@ -350,7 +340,7 @@ export const register = (errors, setPageNumber, form, validate, handleLogin, set
 
 // ADMIN PAGE -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const removeAdminProject = (projectId, setSnackBarInfo) => {
+export const removeAdminProject = (projectId, setSnackBarInfo, setAdminProjects) => {
   let token = localStorage.getItem('token');
   setSnackBarInfo({
     message: 'Removing Project',
@@ -365,7 +355,7 @@ export const removeAdminProject = (projectId, setSnackBarInfo) => {
       message: 'Project Removed!',
       loading: false,
     });
-    getAllProjects();
+    getAllProjects(setAdminProjects);
   }).catch((error) => {
     console.log(error);
     setSnackBarInfo({
@@ -378,7 +368,7 @@ export const removeAdminProject = (projectId, setSnackBarInfo) => {
 
 // PROFILE PAGE --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo) => {
+export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo, setUserData) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   const isReq = validate();
@@ -395,7 +385,7 @@ export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo) =
       .then((response) => {
         localStorage.setItem('user', username);
         setEditing(false);
-        getUserData();
+        getUserData(setUserData);
         setSnackBarInfo({
           show: 'true',
           message: 'Update Successful',
@@ -414,7 +404,7 @@ export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo) =
   }
 };
 
-export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) => {
+export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo, setProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   setSnackBarInfo({
@@ -427,14 +417,13 @@ export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) 
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((response) => {
-      console.log(response);
       setSnackBarInfo({
         show: 'true',
         message: 'Project Removed!',
         loading: false,
       });
       setShowCreateProject(false);
-      getProjects();
+      getProjects(setProjects);
     })
     .catch(function (error) {
       console.log(error);
@@ -448,7 +437,7 @@ export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo) 
 
 // CREATE PROJECT PAGE ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const createProject = (validate, projectData, setShowCreateProject, setSnackBarInfo) => {
+export const createProject = (validate, projectData, setShowCreateProject, setSnackBarInfo, setAdminProjects, setProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   const isReq = validate();
@@ -469,9 +458,9 @@ export const createProject = (validate, projectData, setShowCreateProject, setSn
           loading: false,
         });
         if (username === admin) {
-          getAllProjects();
+          getAllProjects(setAdminProjects);
         } else {
-          getProjects();
+          getProjects(setProjects);
         }
         setShowCreateProject(false);
       })
@@ -486,7 +475,7 @@ export const createProject = (validate, projectData, setShowCreateProject, setSn
   }
 }
 
-export const addProject = (projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo) => {
+export const addProject = (projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo, setAdminProjects, setProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   if (projectIdValidaton()) {
@@ -507,9 +496,9 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
           loading: false,
         });
         if (username === admin) {
-          getAllProjects();
+          getAllProjects(setAdminProjects);
         } else {
-          getProjects();
+          getProjects(setProjects);
         }
         setShowCreateProject(false);
       })

@@ -8,7 +8,14 @@ import FormAlert from '../formAlert-component/formAlert';
 import { createProject, addProject } from '../servicesAPI';
 
 export default function CreateProject(props) {
-  const { setShowCreateProject, username, primaryColor, setSnackBarInfo } = props;
+  const {
+    setShowCreateProject,
+    username,
+    primaryColor,
+    setSnackBarInfo,
+    setAdminProjects,
+    setProjects
+  } = props;
   const [custom, setCustom] = useState(false);
   const [currentChoice, setCurrentChoice] = useState({});
   const [addExistiingProject, setAddExistingProject] = useState(false);
@@ -73,8 +80,8 @@ export default function CreateProject(props) {
     }
   }
 
-  const handleAddProject = () => { addProject(projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo) }
-  const handleCreateProject = () => { createProject(validate, projectData, setShowCreateProject, setSnackBarInfo) }
+  const handleAddProject = () => { addProject(projectIdValidaton, projectId, setShowCreateProject, setSnackBarInfo, setAdminProjects, setProjects) }
+  const handleCreateProject = () => { createProject(validate, projectData, setShowCreateProject, setSnackBarInfo, setAdminProjects, setProjects) }
 
   return (
     <div className='createProjectContainer' style={{ position: 'absolute', minHeight: '500px' }}>

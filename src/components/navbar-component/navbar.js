@@ -16,7 +16,7 @@ export default function Navigation(props) {
     setPrimaryColor,
     setSecondaryColor,
     admin } = props;
-  // const [navOpen, setNavOpen] = useState('hidden');
+
   const isAuth = localStorage.getItem('token');
   const user = localStorage.getItem('user');
 
@@ -114,7 +114,7 @@ export default function Navigation(props) {
                         />
                         Sign Out
                       </NavDropdown.Item>
-                      {user === 'khurdt' &&
+                      {user === admin &&
                         <>
                           <NavDropdown.Divider />
                           <div className='pt-2'>
@@ -169,14 +169,6 @@ export default function Navigation(props) {
                         </NavDropdown.Item>
                       </NavDropdown>
                     </Nav.Link>
-                    {user === 'khurdt' &&
-                      <div style={{ paddingLeft: '20px', paddingTop: '10px' }}>
-                        <div style={{ display: 'flex', color: 'white' }}>Color
-                          <input className='colorInput' type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-                          <input className='colorInput' type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
-                        </div>
-                      </div>
-                    }
                   </Container>
                 </Navbar>
                 :
@@ -215,102 +207,3 @@ export default function Navigation(props) {
   )
 
 }
-
-{/* <header className="page-header">
-<h4 className="page-header__item">
-  <span><img className='logo' src={Logo} /></span>
-  <span className='title'>McCoy DeWitt LLC</span>
-</h4>
-{/* <img className="page-header__item" src="" alt="logo with title name Kevin Hurdt" /> */}
-{/* <nav className="page-header__item navBar">
-  <div className="nav decor">
-    <ul role="menubar" className="navigation-list">
-      <li className="navigation-list__item">
-        <Link style={homeTab} as={Link} to='/' onClick={() => setPageActive('home')}>
-          <Home
-            className='mb-1'
-            style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
-            alt='contact icon'
-          /> Home</Link>
-      </li>
-      <li className="navigation-list__item">
-        <Link style={contactTab} as={Link} to='contact' onClick={() => setPageActive('contact')}>
-          <Mail
-            style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
-            alt='contact icon'
-          /> Contact</Link>
-      </li>
-      {(user && isAuth) ?
-        <>
-          <li className="navigation-list__item">
-            <Nav.Link style={userTab} as={Link} to='profile' onClick={() => { setPageActive('user') }}>
-              <User
-                style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
-                alt='contact icon'
-              />{user}</Nav.Link>
-            <div style={{ marginLeft: '20px' }} onClick={() => { onLoggedOut() }}>
-              <LogOut
-                style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
-                alt='contact icon'
-              />Logout</div>
-          </li>
-        </>
-        :
-        <li className="navigation-list__item">
-          <div onClick={() => { setShowLogin(true) }}>
-            <LogIn
-              style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
-              alt='contact icon'
-            /> Login</div>
-        </li>
-      }
-    </ul>
-  </div>
-</nav> */}
-
-{/* <div className={(navOpen === 'open') ? "menu-drop-down open" : (navOpen === 'close') ? 'menu-drop-down close' : 'menu-drop-down hidden'}>
-<ul className="menu-drop-down-grid">
-  <li className="drop-down-item">
-    <Link style={homeTab} as={Link} to='/' onClick={() => { handleClose(); setPageActive('home') }}>
-      <Home
-        className='mb-1'
-        style={{ width: '20px', height: '20px' }}
-        alt='contact icon'
-      /> Home</Link>
-  </li>
-  <li className="drop-down-item">
-    <Link style={contactTab} as={Link} to='contact' onClick={() => { setNavOpen('close'); setPageActive('contact') }}>
-      <Mail
-        style={{ width: '20px', height: '20px' }}
-        alt='contact icon'
-      /> Contact</Link>
-  </li>
-  {(user && isAuth) ?
-    <>
-      <li className="drop-down-item">
-        <Link style={userTab} as={Link} to='profile' onClick={() => { setNavOpen('close'); setPageActive('user') }}>
-          <User
-            style={{ width: '20px', height: '20px' }}
-            alt='contact icon'
-          />{user}</Link>
-      </li>
-      <li className="drop-down-item">
-        <div onClick={() => { onLoggedOut() }}>
-          <LogOut
-            style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
-            alt='contact icon'
-          />Logout</div>
-      </li>
-    </>
-    :
-    <li className="drop-down-item">
-      <div onClick={() => { setShowLogin(true) }}>
-        <LogIn
-          style={{ width: '20px', height: '20px' }}
-          alt='contact icon'
-        /> Login</div>
-    </li>
-  }
-</ul>
-</div> */}
-

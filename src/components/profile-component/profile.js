@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
-import { Row, Col, Form, Button, Card, Dropdown, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card, Dropdown, Badge } from 'react-bootstrap';
 import { Image } from 'cloudinary-react'
-import axios from 'axios';
 import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
-import { register, services, updateUser, getUserData, getProjects, removeProject } from '../servicesAPI';
+import { services, updateUser, getUserData, getProjects, removeProject } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
 import CustomButton from '../button-component/customButton';
 
@@ -13,13 +12,14 @@ import CustomButton from '../button-component/customButton';
 export default function Profile(props) {
     const { projects,
         userData,
-        setUserData,
         primaryColor,
         secondaryColor,
         createProjectButton,
         setCreateProjectButton,
         navigate,
-        setSnackBarInfo } = props;
+        setSnackBarInfo,
+        setUserData,
+        setProjects } = props;
 
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -112,15 +112,15 @@ export default function Profile(props) {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`
     }
 
-    const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo); }
-    const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setSnackBarInfo) }
+    const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo, setProjects); }
+    const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setSnackBarInfo, setUserData) }
 
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
 
     return (
         <div>
             {showCreateProject &&
-                <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} />
+                <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setProjects={setProjects} />
             }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
@@ -146,7 +146,7 @@ export default function Profile(props) {
                             <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => handleUpdateProfile()} className='profileEditButton'>
                                 <Check color='white' />
                             </Button>
-                            <Button style={{ backgroundColor: 'red', color: 'white', width: '50px' }} onClick={() => { setEditing(false); getUserData() }} className='profileCancelButton'>
+                            <Button style={{ backgroundColor: 'red', color: 'white', width: '50px' }} onClick={() => { setEditing(false); getUserData(setUserData) }} className='profileCancelButton'>
                                 <X color="white" />
                             </Button>
                         </div>
@@ -326,7 +326,7 @@ export default function Profile(props) {
                                             </div>
                                             <Card.Body>
                                                 <Card.Text>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
-                                                <Card.Text className='text-center'>
+                                                <Card.Text className='text-center' style={{ fontSize: '14px' }}>
                                                     {project.description}
                                                 </Card.Text>
                                                 <Card.Footer>
