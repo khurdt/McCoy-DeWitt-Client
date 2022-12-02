@@ -14,7 +14,15 @@
 }
 
 .smallCustomButton {
-  width: 70px;
+  width: 100px;
   height: 40px;
   color: black;
+  font-size: 14px;
+}
+
+.smallSubmitButton {
+  width: 100px;
+  height: 40px;
+  color: black;
+  font-size: 14px;
 }

@@ -20,7 +20,8 @@ export default function AdminView(props) {
     username,
     setAdminProjects,
     setCreateProjectButton,
-    createProjectButton
+    createProjectButton,
+    admin
   } = props;
 
   const [deleteProject, setDeleteProject] = useState(false);
@@ -28,6 +29,7 @@ export default function AdminView(props) {
   const [currentChoice, setCurrentChoice] = useState({});
   const [showCreateProject, setShowCreateProject] = useState(false);
   const [filter, setFilter] = useState('');
+  const windowSmall = (window.innerWidth < 700);
   let filteredClients = adminClients;
   let filteredProjects = adminProjects;
 
@@ -40,11 +42,11 @@ export default function AdminView(props) {
     filteredClients = [...new Set(combinedClients)];
   }
 
-if (filter !== '' && projectsInView) {
+  if (filter !== '' && projectsInView) {
     let serviceProjects = adminProjects.filter(p => p.service.toLowerCase().includes(filter.toLowerCase()));
     let locationProjects = adminProjects.filter(p => p.location.toLowerCase().includes(filter.toLowerCase()));
     let statusProjects = adminProjects.filter(p => p.status.title.toLowerCase().includes(filter.toLowerCase()));
-    let userProjects = adminProjects.filter(p => p.users.includes(filter.toLowerCase()));
+    let userProjects = adminProjects.filter(p => p.users.some((a, e, i) => a.toLowerCase().includes(filter.toLowerCase())));
     let combinedProjects = serviceProjects.concat(locationProjects).concat(statusProjects).concat(userProjects);
     filteredProjects = [...new Set(combinedProjects)];
   }
@@ -54,7 +56,7 @@ if (filter !== '' && projectsInView) {
       setShowCreateProject(true);
       setCreateProjectButton(false);
       window.scrollTo(0, 0);
-  }
+    }
   }, [adminProjects]);
 
   const handleRemoveAdminProject = (projectId) => { removeAdminProject(projectId, setSnackBarInfo, setAdminProjects); }
@@ -64,29 +66,11 @@ if (filter !== '' && projectsInView) {
       {showCreateProject &&
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
       }
-      <Row className='justify-content-center m-auto p-3'>
-        <Col style={{ display: 'flex', justifyContent: 'center' }}>
-          <CustomButton primaryColor={primaryColor}
-            onClickFunction={function () { setProjectsInView(true) }}
-            currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-            text={'Your Projects'} submitButton={projectsInView} />
-        </Col>
-        <Col style={{ display: 'flex', justifyContent: 'center' }}>
-          <CustomButton primaryColor={primaryColor} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-            onClickFunction={function () {
-              setProjectsInView(false);
-            }}
-            text={'Your Clients'} />
-        </Col>
-      </Row>
-      <Row>
-        <SearchBar projectsInView={projectsInView} filter={filter} setFilter={setFilter} primaryColor={primaryColor} />
-      </Row>
-      <div style={{ position: 'relative', minHeight: '80vh' }}>
+      <div style={{ position: 'relative', minHeight: '80vh', paddingTop: '10px' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!deleteProject ?
-            <div className="adminEditPosition">
-              <Dropdown style={{ marginLeft: '10px' }}>
+            <Button className="adminEditPosition" style={{ backgroundColor: secondaryColor }}>
+              <Dropdown>
                 <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '35px', height: '35px' }} id="dropdown-basic" />
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} style={{ display: 'flex', margin: 'auto' }}>
@@ -113,7 +97,7 @@ if (filter !== '' && projectsInView) {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-            </div>
+            </Button>
             :
             <div className="adminEditPosition">
               <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => setDeleteProject(false)} className='projectEditButton'>
@@ -122,6 +106,24 @@ if (filter !== '' && projectsInView) {
             </div>
           }
         </div>
+        <Row className='justify-content-center m-auto p-4'>
+          <Col style={{ display: 'flex', justifyContent: 'center' }}>
+            <CustomButton primaryColor={primaryColor}
+              onClickFunction={function () { setProjectsInView(true) }}
+              currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+              text={'Projects'} submitButton={projectsInView} small={windowSmall} />
+          </Col>
+          <Col style={{ display: 'flex', justifyContent: 'center' }}>
+            <CustomButton primaryColor={primaryColor} currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+              onClickFunction={function () {
+                setProjectsInView(false);
+              }}
+              text={'Clients'} small={windowSmall} />
+          </Col>
+        </Row>
+        <Row>
+          <SearchBar projectsInView={projectsInView} filter={filter} setFilter={setFilter} primaryColor={primaryColor} />
+        </Row>
         <div className={(showCreateProject) ? 'hideProjects' : ''}>
           {(projectsInView) ?
             <Row className='m-auto' style={{ justifyContent: 'center', position: 'relative' }}>
@@ -133,30 +135,43 @@ if (filter !== '' && projectsInView) {
                 return (
                   <InView triggerOnce={true}>
                     {({ inView, ref, entry }) => (
-                      <Card ref={ref} key={index} className='m-3' style={{ width: '18rem', margin: '0', padding: '0' }}>
+                      <Card ref={ref} key={index} className='project-card'>
                         <div style={{ position: 'relative' }}>
                           {inView &&
-                            <Card.Img style={{ height: '190px' }} as={Image} publicId={(service) ? service.image : 'custom'} />
+                            <Card.Img className='project-image' as={Image} publicId={(service) ? service.image : 'custom'} />
                           }
-                          <div className='service-title'>{project.service}</div>
+                          <div className='project-title'>{project.service}</div>
                         </div>
                         <Card.Body>
-                          <Card.Text>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
-                          <Card.Text className='text-center' style={{ fontSize: '14px' }}>
-                            {project.description}
-                          </Card.Text>
+                          <div style={{ minHeight: '120px' }}>
+                            <Card.Text className='project-status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
+                            <Row style={{ display: 'flex' }}>
+                              {!windowSmall && <Col xs={3} sm={3} md={3} ><Card.Text>Users: </Card.Text></Col>}
+                              {project.users.map((a, e, i) => {
+                                return (
+                                  (a === admin) ?
+                                    <></>
+                                    :
+                                    <Col xs={6} sm={6} md={3} style={{ display: 'flex', justifyContent: 'left' }}>
+                                      <Card.Title style={{ fontSize: '14px' }}><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
+                                    </Col>
+                                )
+                              })}
+                            </Row>
+                          </div>
                           <Card.Footer>
                             <Row className='justify-content-center'>
                               {deleteProject ?
                                 <Button variant='danger' onClick={() => { handleRemoveAdminProject(project._id); }}>remove</Button>
                                 :
-                                <CustomButton primaryColor={primaryColor}
-                                  onClickFunction={function () {
+                                <Button className='project-button' style={{ backgroundColor: primaryColor, color: 'black' }}
+                                  onClick={() => {
                                     navigate('project', {
                                       state: { selectedProject: project, selectedService: service }
                                     });
-                                  }}
-                                  text={'See Project'} login={true} submitButton={true} />
+                                  }}>
+                                  See Project
+                                </Button>
                               }
 
                             </Row>

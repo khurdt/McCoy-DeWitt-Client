@@ -130,8 +130,8 @@ function App() {
                   secondaryColor={secondaryColor}
                   setCreateProjectButton={setCreateProjectButton}
                   setShowLogin={setShowLogin}
-                  navigate={navigate} 
-                  admin={admin}/>
+                  navigate={navigate}
+                  admin={admin} />
               }
             />
             <Route
@@ -207,6 +207,7 @@ function App() {
                     setAdminProjects={setAdminProjects}
                     setCreateProjectButton={setCreateProjectButton}
                     createProjectButton={createProjectButton}
+                    admin={admin}
                   />
                   :
                   <Loading primaryColor={primaryColor} />

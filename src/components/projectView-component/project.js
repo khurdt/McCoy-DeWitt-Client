@@ -99,11 +99,11 @@ export default function Project(props) {
       <div className='mt-4 mb-5' style={{ position: 'relative' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!editing ?
-            <div className="editPosition">
+            <Button style={{ backgroundColor: secondaryColor }} className="editPosition">
               <div className='projectEditButton'>
-                <Edit as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                <Edit color='white' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
               </div>
-            </div>
+            </Button>
             :
             <div className="editPosition">
               <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => handleUpdate()} className='projectEditButton'>
@@ -116,6 +116,7 @@ export default function Project(props) {
           }
         </div>
         <Card className='projectIntro projectIntro ml-auto'>
+          {/* OVERVIEW ----------------------------------------------------------------------------------------------------------- */}
           <div style={{ marginRight: '45px' }}>
             <Card.Title className='project-overview' style={{ fontSize: '21px', padding: '10px' }}>Overview:
               {editing ?
@@ -143,6 +144,7 @@ export default function Project(props) {
               }
             </Card.Title>
             <div style={{ width: 'fit-content', padding: '10px' }}>
+              {/* STATUS ----------------------------------------------------------------------------------------------------------- */}
               {editing && (admin === (localStorage.getItem('user'))) ?
                 <>
                   <Form style={{ width: 'auto', maxWidth: '350px' }}>
@@ -233,7 +235,7 @@ export default function Project(props) {
                 </OverlayTrigger>
               </Card.Title>
             </Col>
-            {/* Location ----------------------------------------------------------------------------------------------------------------*/}
+            {/* LOCATION ----------------------------------------------------------------------------------------------------------------*/}
             <Col className="secondaryInfo-item">
               <label className='secondaryInfo-label'>
                 <Card.Title style={{ fontSize: '20px' }}>
