@@ -53,6 +53,9 @@
     top: 2%;
     right: 10%;
     padding: 5px;
+    color: black;
+    border-color: white;
+    background-color: white;
 }
 
 @media all and (max-width: 500px) {

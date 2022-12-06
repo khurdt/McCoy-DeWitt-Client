@@ -136,9 +136,9 @@ export default function Profile(props) {
             <div className={(showCreateProject) ? 'hideProfile' : 'mt-4 mb-5'} style={{ position: 'relative' }}>
                 <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
                     {!editing ?
-                        <Button style={{ backgroundColor: secondaryColor }} className="editPosition">
+                        <Button className="editPosition">
                             <div className='profileEditButton'>
-                                <Edit color='white' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                                <Edit color='black' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
                             </div>
                         </Button>
                         :

@@ -91,7 +91,7 @@ export default function Project(props) {
         <div className='project-background'></div>
         <Card className='projectTitleCard projectTitleCard m-auto' style={{ borderColor: primaryColor }}>
           <div className='projectTitleCard-body'>
-            <Card.Title className='m-auto' style={{ color: 'white' }}>{project.service} Project</Card.Title>
+            <Card.Title className='m-auto text-center' style={{ color: 'white' }}>{project.service} Project</Card.Title>
           </div>
         </Card>
         <Image publicId={(service) ? service.image : 'custom'} className='projectImage projectImage' />
@@ -99,9 +99,9 @@ export default function Project(props) {
       <div className='mt-4 mb-5' style={{ position: 'relative' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!editing ?
-            <Button style={{ backgroundColor: secondaryColor }} className="editPosition">
+            <Button className="editPosition">
               <div className='projectEditButton'>
-                <Edit color='white' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                <Edit color='black' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
               </div>
             </Button>
             :

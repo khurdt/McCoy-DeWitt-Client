@@ -21,6 +21,9 @@
   height: 40px;
   width: 35px;
   padding: 0;
+  color: black;
+  border-color: white;
+  background-color: white;
 }
 
 .adminEditButton {
@@ -70,7 +73,7 @@
 }
 
 @media all and (max-width: 500px) {
-  .project-card {
+  /* .project-card {
     width: 10rem;
     min-height: 200px;
     margin: 5px;
@@ -91,7 +94,7 @@
 
   .project-status {
     font-size: 14px;
-  }
+  } */
 
   .adminEditPosition {
     right: 1%;

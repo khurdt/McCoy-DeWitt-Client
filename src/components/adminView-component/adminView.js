@@ -5,7 +5,7 @@ import { InView } from 'react-intersection-observer';
 import './adminView.css';
 import CustomButton from '../button-component/customButton';
 import { removeAdminProject, services } from "../servicesAPI";
-import { Check, Plus, Minus, MoreVertical } from "react-feather";
+import { Check, Plus, Minus, MoreVertical, MapPin } from "react-feather";
 import CreateProject from "../createProject component/createProject";
 import SearchBar from "../searchBar-component/searchBar";
 
@@ -69,7 +69,7 @@ export default function AdminView(props) {
       <div style={{ position: 'relative', minHeight: '80vh', paddingTop: '10px' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!deleteProject ?
-            <Button className="adminEditPosition" style={{ backgroundColor: secondaryColor }}>
+            <Button className="adminEditPosition">
               <Dropdown>
                 <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '35px', height: '35px' }} id="dropdown-basic" />
                 <Dropdown.Menu>
@@ -145,14 +145,15 @@ export default function AdminView(props) {
                         <Card.Body>
                           <div style={{ minHeight: '120px' }}>
                             <Card.Text className='project-status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
+                            <Card.Text><MapPin width={20} height={20} className='mb-1' /> {project.location}</Card.Text>
                             <Row style={{ display: 'flex' }}>
-                              {!windowSmall && <Col xs={3} sm={3} md={3} ><Card.Text>Users: </Card.Text></Col>}
+                              {/* {!windowSmall && <Col xs={3} sm={3} md={3} ><Card.Text>Users: </Card.Text></Col>} */}
                               {project.users.map((a, e, i) => {
                                 return (
                                   (a === admin) ?
                                     <></>
                                     :
-                                    <Col xs={6} sm={6} md={3} style={{ display: 'flex', justifyContent: 'left' }}>
+                                    <Col xs={3} sm={3} md={3} style={{ display: 'flex', justifyContent: 'left' }}>
                                       <Card.Title style={{ fontSize: '14px' }}><Badge className='p-2' bg='secondary'>{a}</Badge></Card.Title>
                                     </Col>
                                 )
