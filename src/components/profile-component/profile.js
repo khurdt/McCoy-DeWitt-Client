@@ -7,6 +7,7 @@ import FormAlert from '../formAlert-component/formAlert';
 import { services, updateUser, getUserData, getProjects, removeProject } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
 import CustomButton from '../button-component/customButton';
+import Confirmation from '../confirmation-component/confirmation';
 
 
 export default function Profile(props) {
@@ -33,6 +34,11 @@ export default function Profile(props) {
     const [deleteProject, setDeleteProject] = useState(false);
     const [myColor, setMyColor] = useState('');
     const [showCreateProject, setShowCreateProject] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [confirmationInfo, setConfirmationInfo] = useState({
+        title: null,
+        _id: null
+    });
 
     const [errors, setErrors] = useState({});
 
@@ -112,7 +118,7 @@ export default function Profile(props) {
         return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`
     }
 
-    const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo, setProjects); }
+    const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo, setProjects); getProjects(); }
     const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setSnackBarInfo, setUserData) }
 
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
@@ -121,6 +127,9 @@ export default function Profile(props) {
         <div>
             {showCreateProject &&
                 <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setProjects={setProjects} />
+            }
+            {showConfirmation &&
+                <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveProject} primaryColor={primaryColor} />
             }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
@@ -332,7 +341,14 @@ export default function Profile(props) {
                                                 <Card.Footer>
                                                     <Row className='justify-content-center'>
                                                         {deleteProject ?
-                                                            <Button variant='danger' onClick={() => { handleRemoveProject(project._id); getProjects(); }}>remove</Button>
+                                                            <Button variant='danger' onClick={() => {
+                                                                setShowConfirmation(true);
+                                                                setConfirmationInfo({
+                                                                    title: 'Remove this project?',
+                                                                    _id: project._id
+                                                                })
+                                                            }}
+                                                            >remove</Button>
                                                             :
                                                             <CustomButton primaryColor={primaryColor}
                                                                 onClickFunction={function () {

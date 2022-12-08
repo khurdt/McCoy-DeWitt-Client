@@ -5,9 +5,10 @@ import { InView } from 'react-intersection-observer';
 import './adminView.css';
 import CustomButton from '../button-component/customButton';
 import { removeAdminProject, services } from "../servicesAPI";
-import { Check, Plus, Minus, MoreVertical, MapPin } from "react-feather";
+import { Check, Plus, Minus, MoreVertical, MapPin, User } from "react-feather";
 import CreateProject from "../createProject component/createProject";
 import SearchBar from "../searchBar-component/searchBar";
+import Confirmation from "../confirmation-component/confirmation";
 
 export default function AdminView(props) {
   const {
@@ -28,6 +29,11 @@ export default function AdminView(props) {
   const [projectsInView, setProjectsInView] = useState(true);
   const [currentChoice, setCurrentChoice] = useState({});
   const [showCreateProject, setShowCreateProject] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationInfo, setConfirmationInfo] = useState({
+    title: null,
+    _id: null
+  });
   const [filter, setFilter] = useState('');
   const windowSmall = (window.innerWidth < 700);
   let filteredClients = adminClients;
@@ -63,6 +69,9 @@ export default function AdminView(props) {
 
   return (
     <>
+      {showConfirmation &&
+        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveAdminProject} primaryColor={primaryColor} />
+      }
       {showCreateProject &&
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
       }
@@ -147,7 +156,7 @@ export default function AdminView(props) {
                             <Card.Text className='project-status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
                             <Card.Text><MapPin width={20} height={20} className='mb-1' /> {project.location}</Card.Text>
                             <Row style={{ display: 'flex' }}>
-                              {/* {!windowSmall && <Col xs={3} sm={3} md={3} ><Card.Text>Users: </Card.Text></Col>} */}
+                              <Col xs={2} sm={2} md={2} ><User width={20} height={20} /></Col>
                               {project.users.map((a, e, i) => {
                                 return (
                                   (a === admin) ?
@@ -163,7 +172,14 @@ export default function AdminView(props) {
                           <Card.Footer>
                             <Row className='justify-content-center'>
                               {deleteProject ?
-                                <Button variant='danger' onClick={() => { handleRemoveAdminProject(project._id); }}>remove</Button>
+                                <Button variant='danger' onClick={() => {
+                                  setShowConfirmation(true);
+                                  setConfirmationInfo({
+                                    title: 'Remove this project?',
+                                    _id: project._id
+                                  })
+                                }}
+                                >remove</Button>
                                 :
                                 <Button className='project-button' style={{ backgroundColor: primaryColor, color: 'black' }}
                                   onClick={() => {

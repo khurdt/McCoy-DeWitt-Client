@@ -7,6 +7,7 @@ import { Check, MapPin, MoreVertical, User, X, DollarSign, FolderMinus, Key, Cop
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import CustomButton from "../button-component/customButton";
+import Confirmation from '../confirmation-component/confirmation';
 import { updateProject, getProject, removeFiles, updateFiles } from "../servicesAPI";
 
 export default function Project(props) {
@@ -20,6 +21,11 @@ export default function Project(props) {
   const [seeClaimNumber, setSeeClaimNumber] = useState(false);
   const [currentChoice, setCurrentChoice] = useState({});
   const [errors, setErrors] = useState({});
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmationInfo, setConfirmationInfo] = useState({
+    title: null,
+    _id: null
+  });
 
   let updateProjectData = {
     description: project.description,
@@ -87,6 +93,9 @@ export default function Project(props) {
 
   return (
     <div>
+      {showConfirmation &&
+        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveFiles} primaryColor={primaryColor} />
+      }
       <div style={{ position: 'relative' }}>
         <div className='project-background'></div>
         <Card className='projectTitleCard projectTitleCard m-auto' style={{ borderColor: primaryColor }}>
@@ -464,7 +473,13 @@ export default function Project(props) {
               <Col style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
                 <Image publicId={file.name} style={{ width: '200px', height: '200px', objectFit: 'cover', margin: 'auto' }} />
                 {(deleteFiles) &&
-                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => { handleRemoveFiles(file.name) }}>delete</Button>
+                  <Button variant='danger' style={{ width: '200px', margin: 'auto' }} onClick={() => {
+                    setShowConfirmation(true);
+                    setConfirmationInfo({
+                      title: 'Remove this file?',
+                      _id: file.name
+                    })
+                  }}>delete</Button>
                 }
               </Col>
             )
