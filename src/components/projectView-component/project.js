@@ -8,11 +8,12 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
-import { Check, MapPin, MoreVertical, User, X, DollarSign, FolderMinus, Key, Copy, Eye, EyeOff, Edit, Camera } from 'react-feather';
+import { Check, MapPin, MoreVertical, User, X, DollarSign, File, Key, Copy, Eye, EyeOff, Edit } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import CustomButton from "../button-component/customButton";
@@ -30,6 +31,8 @@ export default function Project(props) {
   const [seeClaimNumber, setSeeClaimNumber] = useState(false);
   const [currentChoice, setCurrentChoice] = useState({});
   const [errors, setErrors] = useState({});
+  const [showCloudinaryWidget, setShowCloudinaryWidget] = useState(false);
+  const [add, setAdd] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationInfo, setConfirmationInfo] = useState({
     title: null,
@@ -89,6 +92,17 @@ export default function Project(props) {
   const handleGetProject = () => { getProject(setProject, setEditing, project._id); }
   const handleRemoveFiles = (file) => { removeFiles(file, setProject, setEditing, project._id, setSnackBarInfo); }
   const handleUpdateFiles = (file) => { updateFiles(file, setProject, setEditing, project._id, setSnackBarInfo); }
+
+  const handleWidget = () => {
+    if (showCloudinaryWidget === true) {
+      setShowCloudinaryWidget(false);
+      while (showCloudinaryWidget === false) {
+        handleWidget();
+      }
+    } else {
+      setShowCloudinaryWidget(true);
+    }
+  }
 
   const renderTooltip = (message) => (
     <Tooltip id="button-tooltip">
@@ -453,23 +467,36 @@ export default function Project(props) {
             <div style={{ margin: '10px' }}>
               <label style={{ display: 'flex', justifyContent: 'center', borderBottom: `1px solid ${primaryColor}`, maxWidth: '350px', margin: 'auto' }}>
                 <Card.Title style={{ fontSize: '20px' }}>
-                  <Camera className="icons" />
-                  Images:
+                  <File className="icons" />
+                  Files:
                 </Card.Title>
+                {showCloudinaryWidget &&
+                  <CloudinaryUploadWidget renderTooltip={renderTooltip} handleUpdateFiles={handleUpdateFiles} add={add} setShowCloudinaryWidget={setShowCloudinaryWidget} />
+                }
                 {(!deleteFiles) ?
-                  <div style={{ display: 'flex', paddingTop: '2px' }}>
-                    <CloudinaryUploadWidget renderTooltip={renderTooltip} handleUpdateFiles={handleUpdateFiles} />
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip('Delete Images')}
-                    >
-                      <FolderMinus onClick={() => setDeleteFiles(true)} style={{ color: 'red', cursor: 'pointer', marginLeft: '80px' }} />
-                    </OverlayTrigger>
-                  </div>
+                  <Dropdown style={{ marginLeft: '10px' }}>
+                    <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => { handleWidget(); setAdd('image'); }}>
+                        <div className='text-center'>
+                          Add A Image
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => { handleWidget(); setAdd('document'); }}>
+                        <div className='text-center'>
+                          Add A Document
+                        </div>
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => { setDeleteFiles(true) }}>
+                        <div className='text-center'>
+                          Remove Files
+                        </div>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                   :
                   <>
-                    <Check onClick={() => { setDeleteFiles(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '17px', marginTop: '3px' }} />
+                    <Check onClick={() => { setDeleteFiles(false); }} style={{ color: 'green', cursor: 'pointer', marginLeft: '10px' }} />
                   </>
                 }
               </label>

@@ -5,12 +5,21 @@ import uuid from 'react-uuid';
 
 
 class CloudinaryUploadWidget extends Component {
-    // componentDidMount() {
-    //     this.myWidget();
-    // }
+    constructor() {
+        super();
+        this.state = {
+            widgetOpen: false
+        };
+    }
+    componentDidMount() {
+        if (this.state.widgetOpen === false) {
+            this.setState({ widgetOpen: true });
+            this.myWidget();
+        }
+    }
     myWidget() {
-        // const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
-        const cloudName = 'dcrbfhcxx';
+        const cloudName = process.env.REACT_APP_CLOUD_NAME; // replace with your own cloud name
+        // const cloudName = '';
         const uploadPreset = "xeyoxyah"; // replace with your own upload preset
         const file_id = uuid();
         // this.props.updateFiles(file_id);
@@ -26,6 +35,10 @@ class CloudinaryUploadWidget extends Component {
             {
                 prepareUploadParams: function (cb, params) {
                     cb({ public_id: file_id });
+                    if (this.props.add === 'document') {
+                        cb({ resource_type: 'raw' })
+                        cb({ raw_convert: 'aspose' })
+                    }
                 },
                 cloudName: cloudName,
                 uploadPreset: uploadPreset,
@@ -45,10 +58,7 @@ class CloudinaryUploadWidget extends Component {
                 if (!error && result && result.event === "success") {
                     console.log("Done! Here is the image info: ", result.info);
                     this.props.handleUpdateFiles(result.info.public_id);
-                    console.log(result);
-                    document
-                        .getElementById("uploadedimage")
-                        .setAttribute("src", result.info.secure_url);
+                    document.getElementById("uploadedimage").setAttribute("src", result.info.secure_url);
                 }
             }
         );
@@ -57,13 +67,7 @@ class CloudinaryUploadWidget extends Component {
 
     render() {
         return (
-            <OverlayTrigger
-                placement="right"
-                delay={{ show: 250, hide: 400 }}
-                overlay={this.props.renderTooltip('Add Images')}
-            >
-                <FolderPlus onClick={() => this.myWidget()} style={{ color: 'green', cursor: 'pointer', marginLeft: '20px' }} />
-            </OverlayTrigger>
+            <></>
         );
     }
 }
