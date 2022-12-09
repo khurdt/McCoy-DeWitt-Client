@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FolderPlus } from "react-feather";
-import { OverlayTrigger } from "react-bootstrap";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import uuid from 'react-uuid';
 
 

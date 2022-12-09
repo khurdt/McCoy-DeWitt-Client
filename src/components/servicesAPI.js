@@ -257,7 +257,7 @@ export const sendContactInfo = (event, form, validate, handleReset, setSnackBarI
 
 // LOGIN/REGISTER --------------------------------------------------------------------------------------------------------------------------------------------------
 
-export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn, setSnackBarInfo) => {
+export const login = (form, validate, setShowLogin, onLoggedIn, setSnackBarInfo) => {
   const { username, password } = form;
   const isValidated = validate();
   if (isValidated) {
@@ -279,7 +279,6 @@ export const login = (form, validate, setShowLogin, setShowNavBar, onLoggedIn, s
         loading: false
       });
       setShowLogin(false);
-      setShowNavBar(false);
       onLoggedIn(data.token, data.user.username);
     }).catch(function (error) {
       console.log(error);

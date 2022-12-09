@@ -1,62 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Mail, Home, LogIn, User, LogOut } from 'react-feather';
-import './navbar.css';
+import { Menu, Mail, Home, LogIn, User, ChevronRight } from 'react-feather';
 import Logo from '../../images/logo3.png';
-import { Offcanvas, Button, Nav, Container, Navbar, NavDropdown } from 'react-bootstrap';
+import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import './navbar.css';
 
 export default function Navigation(props) {
   const { pageActive,
     setPageActive,
     setShowLogin,
-    showNavBar,
-    setShowNavBar,
     primaryColor,
     secondaryColor,
     setPrimaryColor,
     setSecondaryColor,
-    admin } = props;
+    admin,
+    navigate } = props;
+
+  const [showNavBar, setShowNavBar] = useState('initial');
 
   const isAuth = localStorage.getItem('token');
   const user = localStorage.getItem('user');
 
-  const handleClose = () => setShowNavBar(false);
-  const handleShow = () => setShowNavBar(true);
+  const handleClose = () => setShowNavBar('false');
+  const handleShow = () => setShowNavBar('true');
 
   const windowSmall = (window.innerWidth < 700);
 
+  const highlightHome = (!(window.location.href.includes('profile' || 'contact' || 'project')) && pageActive === 'home');
+  const highlightUser = (pageActive === 'user' || window.location.href.includes('profile') || window.location.href.includes('project') || window.location.href.includes('admin'));
+  const highlightContact = (pageActive === 'login' || window.location.href.includes('contact'));
   useEffect(() => {
-    ((window.location.href.includes('user') || window.location.href.includes('admin'))) ? setPageActive('user') :
-      (window.location.href.includes('contact')) ? setPageActive('contact') :
-        (window.location.href.includes('project')) ? setPageActive('user') : setPageActive('home');
+    (highlightUser) && setPageActive('user');
+    (highlightContact) && setPageActive('contact');
+    (highlightHome) && setPageActive('home');
   }, []);
 
   const onLoggedOut = () => {
     localStorage.clear();
-    window.open('/', '_self');
+    navigate('/');
   }
 
   let homeTab = {
-    borderBottom: (!(window.location.href.includes('profile' || 'contact' || 'project')) && pageActive === 'home') ? `1px solid  ${primaryColor}` : 'none',
-    color: (windowSmall) && secondaryColor
+    borderBottom: (highlightHome && !windowSmall) ? `1px solid  ${primaryColor}` : 'none',
+    color: (highlightHome && windowSmall) ? `${primaryColor}` : 'white',
   };
   let userTab = {
-    borderBottom: (pageActive === 'user' || window.location.href.includes('profile') || window.location.href.includes('project')) ? `1px solid ${primaryColor}` : 'none',
-    color: (windowSmall) && secondaryColor
+    borderBottom: (highlightUser && !windowSmall) ? `1px solid ${primaryColor}` : 'none',
+    color: (highlightUser && windowSmall) ? `${primaryColor}` : 'white',
+    zIndex: '10000'
   };
   let contactTab = {
-    borderBottom: (pageActive === 'login' || window.location.href.includes('contact')) ? `1px solid  ${primaryColor}` : 'none',
-    color: (windowSmall) && secondaryColor
+    borderBottom: (highlightContact && !windowSmall) ? `1px solid  ${primaryColor}` : 'none',
+    color: (highlightContact && windowSmall) ? `${primaryColor}` : 'white',
   };
 
   const UserIcon = () => {
     return (
       <>
-        <User
-          style={{ width: '20px', height: '20px', paddingBottom: '2px' }}
-          alt='contact icon'
-        />
-        <span>{user}</span>
+        {windowSmall ?
+          <div style={userTab}>
+            <User width={20} height={20} alt='user icon' />
+            <div className='offcanvas-item-title'>{user}</div>
+          </div>
+          :
+          <>
+            <User style={{ width: '20px', height: '20px', paddingBottom: '2px', paddingRight: '3px', cursor: 'pointer' }} />
+            <span>{user}</span>
+          </>
+        }
       </>
     );
   }
@@ -78,11 +92,13 @@ export default function Navigation(props) {
           {windowSmall ?
             <Nav className="ml-auto">
               <Nav.Link>
-                <Menu
-                  color='white'
-                  style={{ width: '30px', height: '30px' }}
-                  onClick={handleShow}
-                  alt='menu icon' />
+                {(showNavBar === 'false' || showNavBar === 'initial') &&
+                  <Menu
+                    color='white'
+                    style={{ width: '30px', height: '30px' }}
+                    onClick={handleShow}
+                    alt='menu icon' />
+                }
               </Nav.Link>
             </Nav>
             :
@@ -104,38 +120,36 @@ export default function Navigation(props) {
               {(user && isAuth) ?
                 <>
                   <Nav className='ml-auto'>
-                    <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                      <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
-                      <NavDropdown.Divider />
-                      <NavDropdown.Item onClick={onLoggedOut}>
-                        <LogOut
-                          style={{ width: '20px', height: '20px', paddingBottom: '2px', paddingRight: '3px', cursor: 'pointer' }}
-                          alt='contact icon'
-                        />
-                        Sign Out
-                      </NavDropdown.Item>
-                      {user === admin &&
-                        <>
-                          <NavDropdown.Divider />
-                          <div className='pt-2'>
-                            <div style={{ display: 'flex', color: 'white', margin: 'auto' }}>Color
-                              <div>
-                                <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-                              </div>
-                              <div>
-                                <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+                    <Nav.Link>
+                      <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
+                        <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={onLoggedOut}>
+                          <div>Sign Out</div>
+                        </NavDropdown.Item>
+                        {user === admin &&
+                          <>
+                            <NavDropdown.Divider />
+                            <div className='pt-2'>
+                              <div style={{ display: 'flex', color: 'white', margin: 'auto' }}>Color
+                                <div>
+                                  <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+                                </div>
+                                <div>
+                                  <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      }
-                    </NavDropdown>
+                          </>
+                        }
+                      </NavDropdown>
+                    </Nav.Link>
                   </Nav>
                 </>
                 :
                 <>
                   <Nav className='ml-auto'>
-                    <Nav.Link onClick={() => { setShowLogin(true) }}>
+                    <Nav.Link onClick={() => { setShowLogin(true); }}>
                       <LogIn
                         style={{ width: '20px', height: '20px', paddingBottom: '2px', paddingRight: '3px', cursor: 'pointer' }}
                         alt='contact icon'
@@ -149,57 +163,49 @@ export default function Navigation(props) {
       </Navbar>
       {windowSmall &&
         <>
-          <Offcanvas style={{ backgroundColor: 'white', color: secondaryColor }} show={showNavBar} onHide={handleClose} responsive="lg">
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title></Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
+          <div className={(showNavBar === 'initial') ? 'off-canvas-container' :
+            (showNavBar === 'true') ? 'off-canvas-container show' :
+              (showNavBar === 'false') && 'off-canvas-container hide'}>
+            <div className='off-canvas-body' style={{ backgroundColor: secondaryColor }}>
+              <Nav>
+                <Nav.Link className='offcanvas_item' style={homeTab} as={Link} to='/' onClick={() => { handleClose(); setPageActive('home') }}>
+                  <Home width={20} height={20} alt='home icon' />
+                  <div className='offcanvas-item-title'>Home</div>
+                </Nav.Link>
+                <Nav.Link className='offcanvas_item' style={contactTab} as={Link} to='contact' onClick={() => { handleClose(); setPageActive('contact') }}>
+                  <Mail width={20} height={20} alt='contact icon' />
+                  <div className='offcanvas-item-title'>Contact</div>
+                </Nav.Link>
+              </Nav>
               {(user && isAuth) ?
-                <Navbar bg='inherit' className='mb-3'>
-                  <Container>
-                    <Nav.Link style={{ color: secondaryColor }}>
-                      <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }}>
-                          <LogOut
-                            style={{ width: '20px', height: '20px', paddingBottom: '2px', cursor: 'pointer' }}
-                            alt='contact icon'
-                          />Sign Out
-                        </NavDropdown.Item>
-                      </NavDropdown>
-                    </Nav.Link>
-                  </Container>
-                </Navbar>
+                <Nav>
+                  <Nav.Link className='offcanvas_item'>
+                    <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
+                      <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }} style={{ display: 'flex' }}>
+                        <div>Sign Out</div>
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav.Link>
+                </Nav>
                 :
                 <>
                   <Nav>
-                    <Nav.Link style={{ color: secondaryColor }} className='offcanvas_item' onClick={() => { setShowLogin(true) }}>
-                      <LogIn
-                        style={{ width: '20px', height: '20px' }}
-                        alt='contact icon'
-                      /> Sign In</Nav.Link>
+                    <Nav.Link style={userTab} className='offcanvas_item' onClick={() => { setShowLogin(true); setShowNavBar('false') }}>
+                      <LogIn width={20} height={20} alt='sign in icon' />
+                      <div className='offcanvas-item-title'>Sign In</div>
+                    </Nav.Link>
                   </Nav>
                 </>
               }
-              <Nav>
-                <Nav.Link className='offcanvas_item' style={homeTab} as={Link} to='/' onClick={() => { handleClose(); setPageActive('home') }}>
-                  Home
-                  <Home
-                    className='mb-1'
-                    style={{ width: '20px', height: '20px', position: 'absolute', top: '12px', right: '5px' }}
-                    alt='contact icon'
-                  /></Nav.Link>
-                <Nav.Link className='offcanvas_item' style={contactTab} as={Link} to='contact' onClick={() => { handleClose(); setPageActive('contact') }}>
-                  Contact
-                  <Mail
-                    className='ml-auto'
-                    style={{ width: '20px', height: '20px', position: 'absolute', top: '12px', right: '5px' }}
-                    alt='contact icon'
-                  /></Nav.Link>
-              </Nav>
-            </Offcanvas.Body>
-          </Offcanvas>
+              <ChevronRight
+                color='white'
+                style={{ width: '30px', height: '30px', marginTop: '20px', marginBottom: '15px' }}
+                onClick={handleClose}
+                alt='exit icon' />
+            </div>
+          </div>
         </>
       }
     </>

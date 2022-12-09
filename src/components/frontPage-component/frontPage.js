@@ -4,7 +4,13 @@ import { Image } from 'cloudinary-react';
 import { services } from '../servicesAPI';
 import { InView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
-import { Button, Container, Row, Card, Col } from 'react-bootstrap';
+
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+
 import { ChevronsRight } from 'react-feather'
 
 export default function FrontPage(props) {
@@ -18,7 +24,7 @@ export default function FrontPage(props) {
     } else if (user === admin) {
       navigate('admin');
       setPageActive('user');
-    }else {
+    } else {
       navigate('profile');
       setPageActive('user');
     }

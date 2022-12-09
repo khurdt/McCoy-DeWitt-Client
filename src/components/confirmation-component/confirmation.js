@@ -18,14 +18,14 @@ export default function Confirmation(props) {
       </Modal.Header>
       <Modal.Body style={{ display: 'flex', margin: 'auto', justifyContent: 'center' }}>
         <Row>
-          <Col className="m-4">
-            <Button style={{ width: '150px', borderColor: primaryColor, }} variant='light' onClick={handleClose}>
+          <Col className="m-3">
+            <Button style={{ width: '120px', borderColor: primaryColor, }} variant='light' onClick={handleClose}>
               <span className="m-3">No</span>
               <Slash width={15} height={15} />
             </Button>
           </Col>
-          <Col className="m-4">
-            <Button style={{ width: '150px' }} variant="danger" onClick={() => { handleRemove(_id); handleClose(); }} >
+          <Col className="m-3">
+            <Button style={{ width: '120px' }} variant="danger" onClick={() => { handleRemove(_id); handleClose(); }} >
               <span className="m-3">Yes</span>
               <Trash width={15} height={15} />
             </Button>

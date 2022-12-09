@@ -1,7 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Container, Row, Button, Modal, Form, FloatingLabel, Col } from 'react-bootstrap';
-import axios from 'axios';
+
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import FormAlert from '../formAlert-component/formAlert';
+import Row from 'react-bootstrap/Row';
 import './login.css';
 import CustomButton from '../button-component/customButton';
 import { register, login } from '../servicesAPI';
@@ -11,7 +16,6 @@ export default function Login(props) {
         showLogin,
         setShowLogin,
         onLoggedIn,
-        setShowNavBar,
         primaryColor,
         secondaryColor,
         createProjectButton,
@@ -38,7 +42,7 @@ export default function Login(props) {
 
     const handleClose = () => setShowLogin(false);
 
-    const handleLogin = () => login(form, validate, setShowLogin, setShowNavBar, onLoggedIn, setSnackBarInfo);
+    const handleLogin = () => login(form, validate, setShowLogin, onLoggedIn, setSnackBarInfo);
     const handleRegister = () => register(errors, setPageNumber, form, validate, handleLogin, setShowLogin, setSnackBarInfo);
 
     const validate = () => {

@@ -1,9 +1,14 @@
 import './contact.css';
 import { Image } from 'cloudinary-react';
 import React, { useState, useRef } from 'react';
+
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { Container, Row, Button, Card } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Card from 'react-bootstrap/Card';
+
 import { Send } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import { sendContactInfo } from '../servicesAPI';

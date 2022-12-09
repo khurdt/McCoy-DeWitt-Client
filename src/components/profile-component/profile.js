@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './profile.css';
-import { Row, Col, Form, Button, Card, Dropdown, Badge } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
 import { Image } from 'cloudinary-react'
 import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';

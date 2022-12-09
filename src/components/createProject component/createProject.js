@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './createProject.css';
 import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
-import { FloatingLabel, Row, Card, Form } from 'react-bootstrap';
+
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import CustomButton from '../button-component/customButton';
 import FormAlert from '../formAlert-component/formAlert';
+
 import { createProject, addProject } from '../servicesAPI';
 
 export default function CreateProject(props) {

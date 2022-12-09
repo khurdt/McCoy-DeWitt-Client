@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Image } from "cloudinary-react";
-import { Row, Col, Button, Card, Badge, Dropdown } from 'react-bootstrap';
+
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
+import Dropdown from 'react-bootstrap/Dropdown';
+
 import { InView } from 'react-intersection-observer';
 import './adminView.css';
 import CustomButton from '../button-component/customButton';
@@ -78,7 +85,7 @@ export default function AdminView(props) {
       <div style={{ position: 'relative', minHeight: '80vh', paddingTop: '10px' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!deleteProject ?
-            <Button className="adminEditPosition">
+            <div className="adminEditPosition">
               <Dropdown>
                 <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '35px', height: '35px' }} id="dropdown-basic" />
                 <Dropdown.Menu>
@@ -106,10 +113,10 @@ export default function AdminView(props) {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-            </Button>
+            </div>
             :
-            <div className="adminEditPosition">
-              <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => setDeleteProject(false)} className='projectEditButton'>
+            <div className="adminEditPosition" style={{ right: '6%' }}>
+              <Button style={{ backgroundColor: 'green', width: '50px' }} onClick={() => setDeleteProject(false)} className='projectEditButton'>
                 <Check color='white' />
               </Button>
             </div>

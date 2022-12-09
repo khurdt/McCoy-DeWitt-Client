@@ -36,7 +36,6 @@ function App() {
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
-  const [showNavBar, setShowNavBar] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [createProjectButton, setCreateProjectButton] = useState(false);
   const [userData, setUserData] = useState({});
@@ -94,18 +93,16 @@ function App() {
           pageActive={pageActive}
           setPageActive={setPageActive}
           setShowLogin={setShowLogin}
-          setShowNavBar={setShowNavBar}
-          showNavBar={showNavBar}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           setPrimaryColor={setPrimaryColor}
           setSecondaryColor={setSecondaryColor}
-          admin={admin} />
+          admin={admin}
+          navigate={navigate} />
         <Login
           showLogin={showLogin}
           setShowLogin={setShowLogin}
           onLoggedIn={onLoggedIn}
-          setShowNavBar={setShowNavBar}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           createProjectButton={createProjectButton}

@@ -12,218 +12,74 @@
   display: none;
 }
 
-.offcanvas_item {
-  position: relative;
-  margin-right: auto;
-  width: 100%;
-  margin-bottom: 10px;
-  font-size: 20px !important;
-}
-
-/* .offcanvas_item.offcanvas_item {
-}
-
-.turnWhite {
-} */
-
 @media all and (max-width: 800px) {
   .hamburger {
     display: block;
   }
 
-  /* .page-header__item:nth-child(1) .title {
-    display: none;
-  }
-
-  .navBar {
-    display: none;
-  }
-
-  .page-header__item:nth-child(1) {
-    padding: 10px;
-    margin-left: 10px;
-
-  } */
-}
-
-/* @keyframes disappear {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
+  .nav-link {
+    padding: 0 !important;
   }
 }
 
-@keyframes appear {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-} */
-
-
-/* div.decor a:before,
-div.decor a:after {
-  position: absolute;
-  left: 0px;
-  width: 100%;
-  height: 1px;
-  background: black;
-  content: "";
-  opacity: 0;
-  transition: all 0.3s;
-}
-
-div.decor a:before {
-  top: 0px;
-  transform: translateX(10px), translateY(-10px);
-}
-
-div.decor a:after {
-  bottom: 0px;
-  transform: translateX(-10px), translateY(10px);
-}
-
-div.decor a:hover:before,
-div.decor a:hover:after {
-  opacity: 1;
-  transform: translateX(0px);
-} */
-/* 
-.page-header {
-  background-color: #262626;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: grid;
-  grid-template-columns: 20% 80%;
-  align-items: center;
-  z-index: 100;
-  color: white;
-  height: 55px;
-}
-
-.page-header__item:nth-child(1) {
-  margin-left: 70px;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.page-header__item:nth-child(1) .logo {
-  width: 50px;
-  object-fit: contain;
-  position: absolute;
-  top: 9px;
-  left: 1.3rem;
-}
-
-.navigation-list {
-  margin-top: auto;
-  margin-bottom: auto;
-  display: grid;
-  grid-template-columns: 7% 7% 80%;
-  width: 100%;
-}
-
-.navigation-list__item:last-child {
-  justify-self: flex-end !important;
+.offcanvas_item {
   display: flex;
-}
-
-.navigation-list {
-  list-style-type: none;
-} */
-
-/* div.nav a {
-  text-decoration: none;
-  z-index: 0;
-  position: relative;
-  cursor: pointer;
-  color: white;
-  opacity: 1;
-}
-
-div.nav a:hover {
-  color: rgb(60, 255, 1);
-  opacity: 0.8;
-}
-
-div.nav div:hover {
-  color: rgb(60, 255, 1);
-  opacity: 0.8;
-  cursor: pointer;
-} */
-
-/* .menu-close-icon {
-  position: absolute;
-  border: none;
-  top: 5px;
-  right: 1.3rem;
-  padding: 4px;
-  background: transparent;
-  cursor: pointer;
-}
-
-.menu-drop-down {
-  color: white;
-  list-style: none;
-  position: absolute;
-  border-radius: 8%;
-  right: 0;
-  top: 0;
-  left: 0;
-  z-index: 99;
-  margin: 0;
-  padding: 0;
-  background-color: #262626;
-  transition: all ease 0.6s;
-}
-
-.menu-drop-down.open {
-  animation: appear 1s forwards;
-  transition: all ease 0.6s;
-}
-
-.menu-drop-down.close {
-  animation: disappear 1s forwards;
-  transition: all ease 0.6s;
-}
-
-.menu-drop-down.hidden {
-  display: none;
-}
-
-.menu-drop-down-grid {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: 30px;
-  margin-right: 35px;
-}
-
-.drop-down-item a {
-  text-decoration: none;
-  font-size: 25px;
-  opacity: 1;
-  color: white;
-}
-
-.drop-down-item a:hover {
-  color: rgb(60, 255, 1);
-  opacity: 0.8;
-}
-
-.drop-down-item {
-  margin-top: 30px;
+  flex-direction: column;
+  justify-content: center;
+  width: 80px;
+  margin-top: 20px;
+  margin-bottom: 15px;
   text-align: center;
-} */
+  font-size: 15px !important;
+  cursor: pointer;
+}
+
+.offcanvas-item-title {
+  width: 80px;
+  text-align: center;
+}
+
+.off-canvas-container {
+  transition: ease;
+  opacity: 0;
+  transform: translateX(250%);
+  position: fixed;
+  right: 3%;
+  top: 3%;
+  z-index: 10000000 !important;
+}
+
+.off-canvas-body {
+  color: white;
+  height: fit-content;
+  width: 80px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.off-canvas-container.show {
+  animation: slide-left 0.35s ease forwards;
+}
+
+.off-canvas-container.hide {
+  animation: slide-right 0.35s ease forwards;
+}
+
+@keyframes slide-left {
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(250%);
+    opacity: 0;
+  }
+}
