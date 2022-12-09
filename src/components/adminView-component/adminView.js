@@ -160,7 +160,7 @@ export default function AdminView(props) {
                         </div>
                         <Card.Body>
                           <div style={{ minHeight: '120px' }}>
-                            <Card.Text className='project-status'>Status: <Badge className='p-2'>{project.status.title}</Badge></Card.Text>
+                            <Card.Text className='project-status'>Status: <Badge bg={project.status.color} className='p-2'>{project.status.title}</Badge></Card.Text>
                             <Card.Text><MapPin width={20} height={20} className='mb-1' /> {project.location}</Card.Text>
                             <Row style={{ display: 'flex' }}>
                               <Col xs={2} sm={2} md={2} ><User width={20} height={20} /></Col>

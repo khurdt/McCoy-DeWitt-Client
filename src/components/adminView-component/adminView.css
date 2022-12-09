@@ -16,14 +16,16 @@
 
 .adminEditPosition {
   position: absolute;
-  top: 2%;
+  top: 3%;
   right: 5%;
   height: 40px;
   width: 35px;
+  margin-top: 15px;
   padding: 0;
   color: black;
   border-color: white;
   background-color: white;
+  border-radius: 10%;
 }
 
 .adminEditButton {
