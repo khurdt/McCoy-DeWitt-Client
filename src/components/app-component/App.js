@@ -20,6 +20,7 @@ import Footer from '../footer-component/footer';
 // const FrontPage = lazy(() => import('../frontPage-component/frontPage'));
 import Contact from '../contact-component/contact';
 import FrontPage from '../frontPage-component/frontPage';
+import PasswordReset from '../passwordReset-component/passwordReset';
 // import Project from '../projectView-component/project';
 const Project = lazy(() => import('../projectView-component/project'));
 // import AdminView from '../adminView-component/adminView';
@@ -58,7 +59,7 @@ function App() {
   }, []);
 
   const getClientInfo = () => {
-    getUserData(setUserData, getAdminInfo);
+    getUserData(setUserData, getAdminInfo, navigate);
     getProjects(setProjects);
   }
 
@@ -78,11 +79,9 @@ function App() {
   //When a user successfully logs in, this function updates the 'user' property from null to particular user
   const onLoggedIn = (token, username) => {
     if (username === admin) {
-      getUserData(setUserData, getAdminInfo);
-      navigate('admin');
+      getUserData(setUserData, getAdminInfo, navigate);
     } else {
       getClientInfo();
-      navigate('profile');
     }
   }
 
@@ -208,6 +207,15 @@ function App() {
                   />
                   :
                   <Loading primaryColor={primaryColor} />
+              }
+            />
+             <Route
+              path='resetpassword/:id/:resetString'
+              loader={({ params }) => {
+                console.log(params["id", "resetString"]); // "one/two"
+              }}
+              element={
+                <PasswordReset />
               }
             />
           </Routes>

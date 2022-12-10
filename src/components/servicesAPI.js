@@ -1,5 +1,6 @@
 import axios from 'axios';
 const admin = 'khurdt';
+const server = 'https://polar-tor-24509.herokuapp.com';
 
 export const services = [
   {
@@ -58,10 +59,9 @@ export const services = [
 
 export const getAllProjects = (setAdminProjects) => {
   let token = localStorage.getItem('token');
-  axios.get('https://polar-tor-24509.herokuapp.com/projects', {
+  axios.get(`${server}/projects`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
-    console.log(response);
     let allProjects = response.data;
     setAdminProjects(allProjects);
   }).catch(function (error) {
@@ -71,10 +71,9 @@ export const getAllProjects = (setAdminProjects) => {
 
 export const getAllUsers = (setAdminClients) => {
   let token = localStorage.getItem('token');
-  axios.get('https://polar-tor-24509.herokuapp.com/users', {
+  axios.get(`${server}/users`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
-    console.log(response);
     let allUsers = response.data;
     setAdminClients(allUsers);
   }).catch((error) => {
@@ -82,15 +81,15 @@ export const getAllUsers = (setAdminClients) => {
   })
 }
 
-export const getUserData = (setUserData, getAdminInfo) => {
+export const getUserData = (setUserData, getAdminInfo, navigate) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
-  axios.get(`https://polar-tor-24509.herokuapp.com/users/${username}`, {
+  axios.get(`${server}/users/${username}`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
-    console.log(response);
+
     let userData = response.data;
-    if (userData.username === admin) { getAdminInfo() }
+    if (userData.username === admin) { getAdminInfo(); navigate('admin') } else { navigate('profile') }
     setUserData(userData);
   })
     .catch(function (error) {
@@ -101,10 +100,10 @@ export const getUserData = (setUserData, getAdminInfo) => {
 export const getProjects = (setProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
-  axios.get(`https://polar-tor-24509.herokuapp.com/projects/${username}`, {
+  axios.get(`${server}/projects/${username}`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
-    console.log(response);
+
     let projects = response.data;
     setProjects(projects);
   }).catch(function (error) {
@@ -123,7 +122,7 @@ export const updateProject = (validate, updateProjectData, setProject, setEditin
       message: 'Updating Project',
       loading: true
     });
-    axios.put(`https://polar-tor-24509.herokuapp.com/projects/${projectId}`, updateProjectData,
+    axios.put(`${server}/projects/${projectId}`, updateProjectData,
       {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -155,11 +154,11 @@ export const removeFiles = (fileName, setProject, setEditing, projectId, setSnac
     loading: true,
     show: 'true'
   });
-  axios.delete(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${projectId}`,
+  axios.delete(`${server}/files/${fileName}/projects/${projectId}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
-      console.log(response);
+
       setSnackBarInfo({
         message: 'Files Updated',
         loading: false,
@@ -178,7 +177,7 @@ export const removeFiles = (fileName, setProject, setEditing, projectId, setSnac
 
 export const getProject = (setProject, setEditing, projectId) => {
   let token = localStorage.getItem('token');
-  axios.get(`https://polar-tor-24509.herokuapp.com/oneProject/${projectId}`,
+  axios.get(`${server}/oneProject/${projectId}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
@@ -196,11 +195,10 @@ export const updateFiles = (fileName, setProject, setEditing, projectId, setSnac
     loading: true,
     show: 'true'
   });
-  axios.post(`https://polar-tor-24509.herokuapp.com/files/${fileName}/projects/${projectId}`, { jwt: 'token' },
+  axios.post(`${server}/files/${fileName}/projects/${projectId}`, { jwt: 'token' },
     {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
-      console.log(response);
       setSnackBarInfo({
         message: 'Update Successful',
         loading: false,
@@ -229,14 +227,13 @@ export const sendContactInfo = (event, form, validate, handleReset, setSnackBarI
       loading: true,
       show: 'true'
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/contact`, {
+    axios.post(`${server}/contact`, {
       name: (firstName + ' ' + lastName),
       email: email,
       phone: phone,
       message: message,
     })
       .then((response) => {
-        console.log(response);
         setSnackBarInfo({
           show: 'true',
           message: 'Email Sent! Thank You',
@@ -266,7 +263,7 @@ export const login = (form, validate, setShowLogin, onLoggedIn, setSnackBarInfo)
       message: 'Logging In',
       loading: true
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/login`, {
+    axios.post(`${server}/login`, {
       username: username,
       password: password
     }).then((response) => {
@@ -308,7 +305,7 @@ export const register = (errors, setPageNumber, form, validate, handleLogin, set
       message: 'Registering Account',
       loading: true
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/users`, {
+    axios.post(`${server}/users`, {
       firstName: firstName,
       lastName: lastName,
       email: email,
@@ -346,7 +343,7 @@ export const removeAdminProject = (projectId, setSnackBarInfo, setAdminProjects)
     loading: true,
     show: 'true'
   });
-  axios.delete(`https://polar-tor-24509.herokuapp.com/projects/${projectId}`, {
+  axios.delete(`${server}/projects/${projectId}`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
     setSnackBarInfo({
@@ -377,7 +374,7 @@ export const updateUser = (validate, updatedData, setEditing, setSnackBarInfo, s
       message: 'Updating Information',
       loading: true
     });
-    axios.put(`https://polar-tor-24509.herokuapp.com/users/${username}`, updatedData,
+    axios.put(`${server}/users/${username}`, updatedData,
       {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -411,7 +408,7 @@ export const removeProject = (projectId, setShowCreateProject, setSnackBarInfo, 
     loading: true,
     show: 'true'
   });
-  axios.delete(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${projectId}`,
+  axios.delete(`${server}/users/${username}/projects/${projectId}`,
     {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -446,7 +443,7 @@ export const createProject = (validate, projectData, setShowCreateProject, setSn
       loading: true,
       show: 'true'
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/projects`, projectData,
+    axios.post(`${server}/projects`, projectData,
       {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -483,12 +480,12 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
       loading: true,
       show: 'true'
     });
-    axios.post(`https://polar-tor-24509.herokuapp.com/users/${username}/projects/${projectId}`, { 'jwt': token },
+    axios.post(`${server}/users/${username}/projects/${projectId}`, { 'jwt': token },
       {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
+
         setSnackBarInfo({
           show: 'true',
           message: 'Project Added!',
@@ -512,22 +509,29 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
   }
 }
 
-    // const onDeleteAccount = () => {
-    //     const username = localStorage.getItem('user');
-    //     const token = localStorage.getItem('token');
-    //     axios.delete(`https://kh-movie-app.herokuapp.com/users/${username}`,
-    //         {
-    //             headers: { Authorization: `Bearer ${token}` },
-    //         })
-    //         .then((response) => {
-    //             console.log(response);
-    //             alert('user unregisterd');
-    //             localStorage.removeItem('user');
-    //             localStorage.removeItem('token');
-    //             window.open('/', '_self');
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
+export const onDeleteAccount = (setSnackBarInfo, navigate) => {
+  const username = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  axios.delete(`${server}/users/${username}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((response) => {
+      setSnackBarInfo({
+        show: 'true',
+        message: 'Your account has been deleted',
+        loading: false
+      });
+      localStorage.clear();
+      navigate('/');
+    })
+    .catch(function (error) {
+      console.log(error);
+      setSnackBarInfo({
+        show: 'true',
+        message: 'Failed to delete account',
+        loading: false
+      });
+    });
+}
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './profile.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
@@ -8,12 +7,13 @@ import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import { Image } from 'cloudinary-react'
-import { Check, Edit, Mail, MapPin, Minus, MoreVertical, Phone, Plus, User, X } from 'react-feather';
+import { Check, Edit, Mail, MapPin, Minus, MoreHorizontal, Phone, Plus, User, X } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
-import { services, updateUser, getUserData, getProjects, removeProject } from '../servicesAPI';
+import { services, updateUser, getUserData, getProjects, removeProject, onDeleteAccount } from '../servicesAPI';
 import CreateProject from '../createProject component/createProject';
 import CustomButton from '../button-component/customButton';
 import Confirmation from '../confirmation-component/confirmation';
+import './profile.css';
 
 
 export default function Profile(props) {
@@ -43,6 +43,7 @@ export default function Profile(props) {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmationInfo, setConfirmationInfo] = useState({
         title: null,
+        action: null,
         _id: null
     });
 
@@ -126,8 +127,21 @@ export default function Profile(props) {
 
     const handleRemoveProject = (projectId) => { removeProject(projectId, setShowCreateProject, setSnackBarInfo, setProjects); getProjects(); }
     const handleUpdateProfile = () => { updateUser(validate, updatedData, setEditing, setSnackBarInfo, setUserData) }
+    const handleRemoveAccount = (username) => { onDeleteAccount(setSnackBarInfo, navigate) }
 
     const userInitials = (firstName.slice(0, 1) + lastName.slice(0, 1));
+
+    const optionsIcon = () => {
+        return (
+            <MoreHorizontal width={30} height={30}
+                // style={{
+                //     cursor: 'pointer',
+                //     border: `3px solid ${myColor}`,
+                //     borderRadius: '50%'
+                // }} 
+                alt='options icon' />
+        );
+    }
 
     return (
         <div>
@@ -135,7 +149,7 @@ export default function Profile(props) {
                 <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setProjects={setProjects} />
             }
             {showConfirmation &&
-                <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveProject} primaryColor={primaryColor} />
+                <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} primaryColor={primaryColor} />
             }
             <div style={{ position: 'relative' }}>
                 <div className='profile-background'></div>
@@ -151,11 +165,43 @@ export default function Profile(props) {
             <div className={(showCreateProject) ? 'hideProfile' : 'mt-4 mb-5'} style={{ position: 'relative' }}>
                 <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
                     {!editing ?
-                        <Button className="editPosition">
-                            <div className='profileEditButton'>
-                                <Edit color='black' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
-                            </div>
-                        </Button>
+                        <div className="editPosition">
+                            <Dropdown className='profileEditButton'>
+                                <Dropdown.Toggle as={MoreHorizontal} id="dropdown-basic"
+                                    style={{
+                                        width: '30px',
+                                        height: '30px',
+                                        cursor: 'pointer',
+                                        border: `3px solid ${myColor}`,
+                                        borderRadius: '50%'
+                                    }}
+                                    alt='options icon' />
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => { setEditing(true); }}>
+                                        <div className='text-center p-3'>
+                                            Edit Profile
+                                        </div>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => { }}>
+                                        <div className='text-center p-3'>
+                                            Reset Password
+                                        </div>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => {
+                                        setShowConfirmation(true);
+                                        setConfirmationInfo({
+                                            title: 'Remove your account?',
+                                            action: handleRemoveAccount,
+                                            _id: username
+                                        })
+                                    }}>
+                                        <div className='text-center p-3' style={{ color: 'red' }}>
+                                            Delete Account
+                                        </div>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
                         :
                         <div className="editPosition">
                             <Button style={{ backgroundColor: 'green', width: '50px', marginRight: '10px' }} onClick={() => handleUpdateProfile()} className='profileEditButton'>
@@ -293,27 +339,15 @@ export default function Profile(props) {
                                 <div>
                                     {!deleteProject ?
                                         <Dropdown style={{ marginLeft: '10px' }}>
-                                            <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
+                                            <Dropdown.Toggle as={MoreHorizontal} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
                                             <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} style={{ display: 'flex', margin: 'auto' }}>
-                                                    <div>
-                                                        <Plus
-                                                            width={20}
-                                                            height={20}
-                                                            style={{ color: 'green' }} />
-                                                    </div>
-                                                    <div className='text-center'>
+                                                <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }}>
+                                                    <div className='text-center p-3' style={{ color: 'green' }}>
                                                         Add Project
                                                     </div>
                                                 </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => { setDeleteProject(true); }} style={{ display: 'flex', margin: 'auto' }}>
-                                                    <div>
-                                                        <Minus
-                                                            width={20}
-                                                            height={20}
-                                                            style={{ color: 'red' }} />
-                                                    </div>
-                                                    <div className='text-center'>
+                                                <Dropdown.Item onClick={() => { setDeleteProject(true); }}>
+                                                    <div className='text-center p-3' style={{ color: 'red' }}>
                                                         Remove Project
                                                     </div>
                                                 </Dropdown.Item>
@@ -351,6 +385,7 @@ export default function Profile(props) {
                                                                 setShowConfirmation(true);
                                                                 setConfirmationInfo({
                                                                     title: 'Remove this project?',
+                                                                    action: handleRemoveProject,
                                                                     _id: project._id
                                                                 })
                                                             }}

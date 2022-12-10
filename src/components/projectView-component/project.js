@@ -36,6 +36,7 @@ export default function Project(props) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationInfo, setConfirmationInfo] = useState({
     title: null,
+    action: null,
     _id: null
   });
 
@@ -117,7 +118,7 @@ export default function Project(props) {
   return (
     <div>
       {showConfirmation &&
-        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveFiles} primaryColor={primaryColor} />
+        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} primaryColor={primaryColor} />
       }
       <div style={{ position: 'relative' }}>
         <div className='project-background'></div>
@@ -513,6 +514,7 @@ export default function Project(props) {
                     setShowConfirmation(true);
                     setConfirmationInfo({
                       title: 'Remove this file?',
+                      action: handleRemoveFiles,
                       _id: file.name
                     })
                   }}>delete</Button>

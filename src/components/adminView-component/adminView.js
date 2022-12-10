@@ -39,6 +39,7 @@ export default function AdminView(props) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationInfo, setConfirmationInfo] = useState({
     title: null,
+    action: null,
     _id: null
   });
   const [filter, setFilter] = useState('');
@@ -77,7 +78,7 @@ export default function AdminView(props) {
   return (
     <>
       {showConfirmation &&
-        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} handleRemove={handleRemoveAdminProject} primaryColor={primaryColor} />
+        <Confirmation setShowConfirmation={setShowConfirmation} showConfirmation={showConfirmation} confirmationInfo={confirmationInfo} primaryColor={primaryColor} />
       }
       {showCreateProject &&
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
@@ -183,6 +184,7 @@ export default function AdminView(props) {
                                   setShowConfirmation(true);
                                   setConfirmationInfo({
                                     title: 'Remove this project?',
+                                    action: handleRemoveAdminProject,
                                     _id: project._id
                                   })
                                 }}
