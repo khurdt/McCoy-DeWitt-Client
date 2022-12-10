@@ -38,6 +38,7 @@ function App() {
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
   const [showLogin, setShowLogin] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [createProjectButton, setCreateProjectButton] = useState(false);
   const [userData, setUserData] = useState({});
   const [projects, setProjects] = useState([]);
@@ -106,7 +107,9 @@ function App() {
           secondaryColor={secondaryColor}
           createProjectButton={createProjectButton}
           admin={admin}
-          setSnackBarInfo={setSnackBarInfo} />
+          setSnackBarInfo={setSnackBarInfo}
+          forgotPassword={forgotPassword}
+          setForgotPassword={setForgotPassword} />
         <Snackbar
           showLogin={showLogin}
           primaryColor={primaryColor}
@@ -156,6 +159,8 @@ function App() {
                     setSnackBarInfo={setSnackBarInfo}
                     setUserData={setUserData}
                     setProjects={setProjects}
+                    setShowLogin={setShowLogin}
+                    setForgotPassword={setForgotPassword}
                   />
                   :
                   ((projects && projects.length > 0) && userData.firstName) ?
@@ -171,6 +176,8 @@ function App() {
                       setSnackBarInfo={setSnackBarInfo}
                       setUserData={setUserData}
                       setProjects={setProjects}
+                      setShowLogin={setShowLogin}
+                      setForgotPassword={setForgotPassword}
                     />
                     :
                     <Loading primaryColor={primaryColor} />
@@ -209,13 +216,13 @@ function App() {
                   <Loading primaryColor={primaryColor} />
               }
             />
-             <Route
+            <Route
               path='resetpassword/:id/:resetString'
-              loader={({ params }) => {
-                console.log(params["id", "resetString"]); // "one/two"
-              }}
               element={
-                <PasswordReset />
+                <PasswordReset
+                  setSnackBarInfo={setSnackBarInfo}
+                  navigate={navigate}
+                />
               }
             />
           </Routes>

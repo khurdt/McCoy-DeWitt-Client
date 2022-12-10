@@ -535,3 +535,45 @@ export const onDeleteAccount = (setSnackBarInfo, navigate) => {
     });
 }
 
+export const sendResetPasswordRequest = (email, setSnackBarInfo) => {
+  axios.post(`${server}/password-reset/${email}`).then((response) => {
+    console.log(response);
+    setSnackBarInfo({
+      show: 'true',
+      message: 'Password reset link was sent your email',
+      loading: false
+    });
+  }).catch(function (error) {
+    console.log(error);
+    setSnackBarInfo({
+      show: 'true',
+      message: 'Failed to send password reset link',
+      loading: false
+    });
+  });
+}
+
+export const resetPassword = (password, resetString, id, setSnackBarInfo, navigate) => {
+  let data = {
+    resetString: resetString,
+    password: password,
+    id: id
+  }
+  axios.put(`${server}/password-reset`, data,).then((response) => {
+    console.log(response);
+    setSnackBarInfo({
+      show: 'true',
+      message: 'Your password has been reset',
+      loading: false
+    });
+    navigate('/');
+  }).catch(function (error) {
+    console.log(error);
+    setSnackBarInfo({
+      show: 'true',
+      message: 'Failed to reset password',
+      loading: false
+    });
+  });
+}
+

@@ -12,7 +12,7 @@ import { InView } from 'react-intersection-observer';
 import './adminView.css';
 import CustomButton from '../button-component/customButton';
 import { removeAdminProject, services } from "../servicesAPI";
-import { Check, Plus, Minus, MoreVertical, MapPin, User } from "react-feather";
+import { Check, MoreHorizontal, MapPin, User } from "react-feather";
 import CreateProject from "../createProject component/createProject";
 import SearchBar from "../searchBar-component/searchBar";
 import Confirmation from "../confirmation-component/confirmation";
@@ -88,27 +88,23 @@ export default function AdminView(props) {
           {!deleteProject ?
             <div className="adminEditPosition">
               <Dropdown>
-                <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '35px', height: '35px' }} id="dropdown-basic" />
+                <Dropdown.Toggle as={MoreHorizontal} id="dropdown-basic"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    cursor: 'pointer',
+                    border: `3px solid ${primaryColor}`,
+                    borderRadius: '50%'
+                  }}
+                  alt='options icon' />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }} style={{ display: 'flex', margin: 'auto' }}>
-                    <div>
-                      <Plus
-                        width={20}
-                        height={20}
-                        style={{ color: 'green', marginRight: '5px' }} />
-                    </div>
-                    <div className='text-center'>
+                  <Dropdown.Item onClick={() => { setShowCreateProject(true); window.scrollTo(0, 0); }}>
+                    <div className='text-center p-3' style={{ color: 'green' }}>
                       Add Project
                     </div>
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => { setDeleteProject(true); }} style={{ display: 'flex', margin: 'auto' }}>
-                    <div>
-                      <Minus
-                        width={20}
-                        height={20}
-                        style={{ color: 'red', marginRight: '5px' }} />
-                    </div>
-                    <div className='text-center'>
+                  <Dropdown.Item onClick={() => { setDeleteProject(true); }}>
+                    <div className='text-center p-3' style={{ color: 'red' }}>
                       Remove Project
                     </div>
                   </Dropdown.Item>

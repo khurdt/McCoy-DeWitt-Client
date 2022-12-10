@@ -26,7 +26,9 @@ export default function Profile(props) {
         navigate,
         setSnackBarInfo,
         setUserData,
-        setProjects } = props;
+        setProjects,
+        setShowLogin,
+        setForgotPassword } = props;
 
     const [username, setUsername] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -182,7 +184,7 @@ export default function Profile(props) {
                                             Edit Profile
                                         </div>
                                     </Dropdown.Item>
-                                    <Dropdown.Item onClick={() => { }}>
+                                    <Dropdown.Item onClick={() => { setShowLogin(true); setForgotPassword(true); }}>
                                         <div className='text-center p-3'>
                                             Reset Password
                                         </div>

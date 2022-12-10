@@ -7,14 +7,16 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import FormAlert from '../formAlert-component/formAlert';
 import Row from 'react-bootstrap/Row';
-import './login.css';
 import CustomButton from '../button-component/customButton';
-import { register, login } from '../servicesAPI';
+import { register, login, sendResetPasswordRequest } from '../servicesAPI';
+import './login.css';
 
 export default function Login(props) {
     const {
         showLogin,
         setShowLogin,
+        forgotPassword,
+        setForgotPassword,
         onLoggedIn,
         primaryColor,
         secondaryColor,
@@ -44,6 +46,7 @@ export default function Login(props) {
 
     const handleLogin = () => login(form, validate, setShowLogin, onLoggedIn, setSnackBarInfo);
     const handleRegister = () => register(errors, setPageNumber, form, validate, handleLogin, setShowLogin, setSnackBarInfo);
+    const handleResetPassword = () => (resetPasswordValidation()) && sendResetPasswordRequest(form.email, setSnackBarInfo);
 
     const validate = () => {
         let { firstName, lastName, email, phone, username, password, company } = form;
@@ -107,6 +110,21 @@ export default function Login(props) {
         return isValid;
     }
 
+    const resetPasswordValidation = () => {
+        const { email } = form;
+        let isValid = true;
+        let newErrors = {};
+        if (!email) {
+            newErrors.email = 'required'
+            isValid = false;
+        } else if (email.indexOf('@') === -1) {
+            newErrors.email = 'invalid'
+            isValid = false;
+        }
+        setErrors(newErrors);
+        return isValid;
+    }
+
     const formatPhoneNumber = (value) => {
         if (!value) return value;
         const phoneNumber = value.replace(/[^\d]/g, '');
@@ -125,7 +143,10 @@ export default function Login(props) {
                     {notRegistered ?
                         <Modal.Title>Register</Modal.Title>
                         :
-                        <Modal.Title>Sign In</Modal.Title>
+                        (!forgotPassword) ?
+                            <Modal.Title>Sign In</Modal.Title>
+                            :
+                            <Modal.Title>Request Password Reset</Modal.Title>
                     }
                 </Modal.Header>
                 <Modal.Body>
@@ -268,7 +289,7 @@ export default function Login(props) {
                                         </Form.Group>
                                     </Form>
                                 }
-                                {!notRegistered &&
+                                {(!notRegistered && !forgotPassword) &&
                                     <>
                                         <Form
                                             ref={formRef}
@@ -300,6 +321,31 @@ export default function Login(props) {
                                         </Form>
                                     </>
                                 }
+                                {forgotPassword &&
+                                    <>
+                                        <div className='m-2 text-center'>Enter Your Email</div>
+                                        <Form
+                                            ref={formRef}
+                                            style={{ maxWidth: '500px' }}>
+                                            <Form.Group >
+                                                <FloatingLabel
+                                                    label='Email Address'
+                                                    className="mb-3">
+                                                    <Form.Control
+                                                        value={form.email}
+                                                        type='email'
+                                                        placeholder='Email Address'
+                                                        onChange={(e) => { setField('email', e.target.value); (errors.email) && validate() }} />
+                                                    {(errors.email) && <FormAlert message={errors.email} type={'error'} />}
+                                                </FloatingLabel >
+                                            </Form.Group>
+                                        </Form>
+                                        <CustomButton primaryColor={primaryColor}
+                                            onClickFunction={function () { handleResetPassword() }}
+                                            currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                            text={'Send Request'} submitButton={true} />
+                                    </>
+                                }
                                 <Row className='justify-content-md-center'>
                                     {(notRegistered && pageNumber === 2) &&
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -310,14 +356,17 @@ export default function Login(props) {
                                             <CustomButton primaryColor={primaryColor}
                                                 onClickFunction={function () { handleRegister(); }}
                                                 currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-                                                text={'Register'} register={true} />
+                                                text={'Register'} register={true} submitButton={true} />
                                         </div>
                                     }
-                                    {!notRegistered &&
-                                        <CustomButton primaryColor={primaryColor}
-                                            onClickFunction={function () { handleLogin() }}
-                                            currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-                                            text={'Sign In'} login={true} />
+                                    {(!notRegistered && !forgotPassword) &&
+                                        <>
+                                            <CustomButton primaryColor={primaryColor}
+                                                onClickFunction={function () { handleLogin() }}
+                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                text={'Sign In'} login={true} submitButton={true} />
+                                            <div className='forgotPasswordButton' onClick={() => setForgotPassword(true)}>Forgot Password?</div>
+                                        </>
                                     }
                                 </Row>
                             </Row>
@@ -326,13 +375,24 @@ export default function Login(props) {
                 </Modal.Body >
                 <Modal.Footer>
                     {notRegistered ?
-                        <CustomButton primaryColor={primaryColor}
-                            onClickFunction={function () { setNotRegistered(false) }}
-                            text={'Sign In'} login={true} submitButton={true} />
+                        <div style={{ marginRight: 'auto' }}>
+                            <CustomButton primaryColor={primaryColor}
+                                onClickFunction={function () { setNotRegistered(false) }}
+                                text={'Sign In'} login={true} submitButton={true} />
+                        </div>
                         :
-                        <CustomButton primaryColor={primaryColor}
-                            onClickFunction={function () { setNotRegistered(true) }}
-                            text={'Register'} register={true} submitButton={true} />
+                        (!forgotPassword) ?
+                            <div style={{ marginRight: 'auto' }}>
+                                <CustomButton primaryColor={primaryColor}
+                                    onClickFunction={function () { setNotRegistered(true) }}
+                                    text={'Register'} register={true} submitButton={true} />
+                            </div>
+                            :
+                            <div style={{ marginRight: 'auto' }}>
+                                <CustomButton primaryColor={primaryColor}
+                                    onClickFunction={function () { setForgotPassword(false) }}
+                                    text={'Back'} register={true} submitButton={true} />
+                            </div>
                     }
                     <Button variant="secondary" onClick={handleClose}>
                         Close
