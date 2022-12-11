@@ -60,7 +60,7 @@ function App() {
   }, []);
 
   const getClientInfo = () => {
-    getUserData(setUserData, getAdminInfo, navigate);
+    getUserData(setUserData, getAdminInfo);
     getProjects(setProjects);
   }
 
@@ -80,9 +80,11 @@ function App() {
   //When a user successfully logs in, this function updates the 'user' property from null to particular user
   const onLoggedIn = (token, username) => {
     if (username === admin) {
-      getUserData(setUserData, getAdminInfo, navigate);
+      getUserData(setUserData, getAdminInfo);
+      navigate('admin');
     } else {
       getClientInfo();
+      navigate('profile');
     }
   }
 

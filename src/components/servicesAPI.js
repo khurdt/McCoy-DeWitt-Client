@@ -81,7 +81,7 @@ export const getAllUsers = (setAdminClients) => {
   })
 }
 
-export const getUserData = (setUserData, getAdminInfo, navigate) => {
+export const getUserData = (setUserData, getAdminInfo) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   axios.get(`${server}/users/${username}`, {
@@ -89,7 +89,7 @@ export const getUserData = (setUserData, getAdminInfo, navigate) => {
   }).then((response) => {
 
     let userData = response.data;
-    if (userData.username === admin) { getAdminInfo(); navigate('admin') } else { navigate('profile') }
+    if (userData.username === admin) { getAdminInfo(); }
     setUserData(userData);
   })
     .catch(function (error) {
