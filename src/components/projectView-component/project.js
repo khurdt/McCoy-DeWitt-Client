@@ -479,18 +479,18 @@ export default function Project(props) {
                     <Dropdown.Toggle as={MoreHorizontal} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => { handleWidget(); setAdd('image'); }}>
-                        <div className='text-center'>
-                          Add A Image
+                        <div className='text-center p-3' style={{ color: 'green' }}>
+                          Add Image
                         </div>
                       </Dropdown.Item>
                       <Dropdown.Item onClick={() => { handleWidget(); setAdd('document'); }}>
-                        <div className='text-center'>
-                          Add A Document
+                        <div className='text-center p-3' style={{ color: 'green' }}>
+                          Add Document
                         </div>
                       </Dropdown.Item>
                       <Dropdown.Item onClick={() => { setDeleteFiles(true) }}>
-                        <div className='text-center'>
-                          Remove Files
+                        <div className='text-center p-3' style={{ color: 'red' }}>
+                          Remove File
                         </div>
                       </Dropdown.Item>
                     </Dropdown.Menu>
