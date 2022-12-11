@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
 import './footer.css';
-import Logo from '../../images/logo3.png';
+import Logo from '../../images/default-monochrome-white.svg';
 import { Home, Mail, User } from 'react-feather';
 
 export default function Footer(props) {
@@ -34,10 +34,9 @@ export default function Footer(props) {
             <img
               alt="logo"
               src={Logo}
-              width="55"
+              width="300"
               height="38"
             />{' '}
-            McCoy DeWitt LLC
           </h3>
         </div>
       </Row>

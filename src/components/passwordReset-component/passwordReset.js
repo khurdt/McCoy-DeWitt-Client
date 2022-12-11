@@ -32,7 +32,7 @@ export default function PasswordReset(props) {
   }
 
   return (
-    <div style={{ minHeight: '80vh', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center' }}>
       <Card style={{ marginTop: '100px', width: 'fit-content', height: 'fit-content', padding: '30px' }}>
         <Card.Title className='text-center m-3'>Enter Your New Password</Card.Title>
         <Form
@@ -51,7 +51,7 @@ export default function PasswordReset(props) {
           </Form.Group>
         </Form>
         <Card.Footer style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button style={{width: '100px'}} onClick={() => handleResetPassword()} className='text-center mt-4'>Submit</Button>
+          <Button style={{ width: '100px' }} onClick={() => handleResetPassword()} className='text-center mt-4'>Submit</Button>
         </Card.Footer>
       </Card>
     </div>

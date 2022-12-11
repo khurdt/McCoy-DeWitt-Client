@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Mail, Home, LogIn, User, ChevronRight } from 'react-feather';
-import Logo from '../../images/logo3.png';
+import Logo from '../../images/default-monochrome-white.svg';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
@@ -83,11 +83,10 @@ export default function Navigation(props) {
             <img
               alt="logo"
               src={Logo}
-              width="45"
+              width="300"
               height="30"
-              className="d-inline-block align-top"
+              className=""
             />{' '}
-            McCoy DeWitt LLC
           </Navbar.Brand>
           {windowSmall ?
             <Nav className="ml-auto">
