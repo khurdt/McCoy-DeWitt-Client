@@ -84,7 +84,7 @@ export default function AdminView(props) {
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
       }
       <div style={{ position: 'relative', minHeight: '80vh', paddingTop: '10px' }}>
-        <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
+        <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000', width: '30px', height: '30px', borderRadius: '50%' }}>
           {!deleteProject ?
             <div className="adminEditPosition">
               <Dropdown>
