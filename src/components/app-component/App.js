@@ -209,11 +209,8 @@ function App() {
                   <Loading primaryColor={primaryColor} />
               }
             />
-             <Route
-              path='resetpassword/:id/:resetString'
-              loader={({ params }) => {
-                console.log(params["id", "resetString"]); // "one/two"
-              }}
+            <Route
+              path='resetpassword/:id/token/:token'
               element={
                 <PasswordReset />
               }
