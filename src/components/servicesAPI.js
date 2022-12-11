@@ -512,6 +512,11 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
 export const onDeleteAccount = (setSnackBarInfo, navigate) => {
   const username = localStorage.getItem('user');
   const token = localStorage.getItem('token');
+  setSnackBarInfo({
+    show: 'true',
+    message: 'Deleting account',
+    loading: true
+  });
   axios.delete(`${server}/users/${username}`,
     {
       headers: { Authorization: `Bearer ${token}` },
@@ -536,18 +541,23 @@ export const onDeleteAccount = (setSnackBarInfo, navigate) => {
 }
 
 export const sendResetPasswordRequest = (email, setSnackBarInfo) => {
+  setSnackBarInfo({
+    show: 'true',
+    message: 'Sending you an email',
+    loading: true
+  });
   axios.post(`${server}/password-reset/${email}`).then((response) => {
     console.log(response);
     setSnackBarInfo({
       show: 'true',
-      message: 'Password reset link was sent your email',
+      message: 'Check your inbox for reset link',
       loading: false
     });
   }).catch(function (error) {
     console.log(error);
     setSnackBarInfo({
       show: 'true',
-      message: 'Failed to send password reset link',
+      message: 'Failed to send reset link',
       loading: false
     });
   });
@@ -559,6 +569,11 @@ export const resetPassword = (password, resetString, id, setSnackBarInfo, naviga
     password: password,
     id: id
   }
+  setSnackBarInfo({
+    show: 'true',
+    message: 'Resetting your password',
+    loading: true
+  });
   axios.put(`${server}/password-reset`, data,).then((response) => {
     console.log(response);
     setSnackBarInfo({

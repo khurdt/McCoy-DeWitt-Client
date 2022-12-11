@@ -51,7 +51,7 @@ export default function PasswordReset(props) {
           </Form.Group>
         </Form>
         <Card.Footer style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button onClick={() => handleResetPassword()} className='text-center mt-3'>Submit</Button>
+          <Button style={{width: '100px'}} onClick={() => handleResetPassword()} className='text-center mt-4'>Submit</Button>
         </Card.Footer>
       </Card>
     </div>

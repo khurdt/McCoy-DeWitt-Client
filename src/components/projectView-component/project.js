@@ -483,11 +483,11 @@ export default function Project(props) {
                           Add Image
                         </div>
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={() => { handleWidget(); setAdd('document'); }}>
+                      {/* <Dropdown.Item onClick={() => { handleWidget(); setAdd('document'); }}>
                         <div className='text-center p-3' style={{ color: 'green' }}>
                           Add Document
                         </div>
-                      </Dropdown.Item>
+                      </Dropdown.Item> */}
                       <Dropdown.Item onClick={() => { setDeleteFiles(true) }}>
                         <div className='text-center p-3' style={{ color: 'red' }}>
                           Remove File
