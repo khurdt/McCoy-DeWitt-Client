@@ -13,7 +13,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { Image } from 'cloudinary-react';
 import './project.css';
 import { useLocation } from "react-router-dom";
-import { Check, MapPin, MoreVertical, User, X, DollarSign, File, Key, Copy, Eye, EyeOff, Edit } from 'react-feather';
+import { Check, MapPin, MoreHorizontal, User, X, DollarSign, File, Key, Copy, Eye, EyeOff, Edit } from 'react-feather';
 import FormAlert from '../formAlert-component/formAlert';
 import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
 import CustomButton from "../button-component/customButton";
@@ -134,7 +134,7 @@ export default function Project(props) {
           {!editing ?
             <Button className="editPosition">
               <div className='projectEditButton'>
-                <Edit color='black' as={MoreVertical} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
+                <Edit color='black' as={MoreHorizontal} onClick={() => setEditing(true)} style={{ cursor: 'pointer', width: '25px', height: '25px', color: secondaryColor }} id="dropdown-basic" />
               </div>
             </Button>
             :
@@ -476,7 +476,7 @@ export default function Project(props) {
                 }
                 {(!deleteFiles) ?
                   <Dropdown style={{ marginLeft: '10px' }}>
-                    <Dropdown.Toggle as={MoreVertical} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
+                    <Dropdown.Toggle as={MoreHorizontal} style={{ cursor: 'pointer', width: '25px', height: '25px' }} id="dropdown-basic" />
                     <Dropdown.Menu>
                       <Dropdown.Item onClick={() => { handleWidget(); setAdd('image'); }}>
                         <div className='text-center'>
