@@ -217,7 +217,7 @@ function App() {
               }
             />
             <Route
-
+              path='resetpassword/:id/token/:resetString'
               element={
                 <PasswordReset
                   setSnackBarInfo={setSnackBarInfo}
