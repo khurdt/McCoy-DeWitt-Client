@@ -3,12 +3,17 @@
   "name": "McCoy DeWitt LLC",
   "icons": [
     {
-      "src": "favicon-196x196.png",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "src": "32.png",
+      "sizes": "32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "favicon-196x196.png",
+      "src": "60.png",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "196.png",
       "type": "image/png",
       "sizes": "192x192"
     },
