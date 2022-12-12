@@ -3,17 +3,17 @@
   "name": "McCoy DeWitt LLC",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "apple-touch-icon-60x60.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "cover.svg",
+      "src": "favicon-196x196.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "default.svg",
+      "src": "default.png",
       "type": "image/png",
       "sizes": "512x512"
     }
