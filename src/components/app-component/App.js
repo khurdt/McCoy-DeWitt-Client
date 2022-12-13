@@ -224,6 +224,7 @@ function App() {
                 <PasswordReset
                   setSnackBarInfo={setSnackBarInfo}
                   navigate={navigate}
+                  primaryColor={primaryColor}
                 />
               }
             />

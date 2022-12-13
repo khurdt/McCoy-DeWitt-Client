@@ -55,7 +55,7 @@ export default function FrontPage(props) {
           </Card>
         </div>
         <h3 className='m-4' style={{ textAlign: 'center' }}>Services</h3>
-        <hr style={{ marginRight: '20px', marginLeft: '20px', color: primaryColor }} />
+        <hr className='hr m-auto' style={{ color: primaryColor }} />
         <Row className='m-auto'>
           {services.map((s) => {
             return (
