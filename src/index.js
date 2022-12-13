@@ -9,8 +9,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CloudinaryContext } from 'cloudinary-react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-// const cloudName = process.env.REACT_APP_CLOUD_NAME;
-const cloudName = 'dcrbfhcxx';
+const cloudName = process.env.REACT_APP_CLOUD_NAME;
+// const cloudName = '';
 root.render(
   <React.StrictMode>
     <HashRouter>
