@@ -76,6 +76,9 @@ export default function Login(props) {
                     isValid = false;
                 }
             }
+            if (!company) {
+                setField('company', 'Individual Client')
+            }
             if (!username) {
                 newErrors.username = 'required';
                 isValid = false;

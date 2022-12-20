@@ -51,7 +51,7 @@ export default function AdminView(props) {
     let firstNameClients = adminClients.filter(c => c.firstName.toLowerCase().includes(filter.toLowerCase()));
     let lastNameClients = adminClients.filter(c => c.lastName.toLowerCase().includes(filter.toLowerCase()));
     let usernameClients = adminClients.filter(c => c.username.toLowerCase().includes(filter.toLowerCase()));
-    let companyClients = adminClients.filter(c => c.company.toLowerCase().includes(filter.toLowerCase()));
+    let companyClients = adminClients.filter(c => (c.compnay) && c.company.toLowerCase().includes(filter.toLowerCase()));
     let combinedClients = firstNameClients.concat(lastNameClients).concat(usernameClients).concat(companyClients);
     filteredClients = [...new Set(combinedClients)];
   }
