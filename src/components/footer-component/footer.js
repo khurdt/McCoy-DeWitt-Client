@@ -56,6 +56,11 @@ export default function Footer(props) {
           }
         </div>
         <div style={{ textAlign: 'center', color: 'white', fontSize: '12px' }}>@Copyright. All rights reserved.</div>
+        <div style={{ textAlign: 'center', color: 'white', fontSize: '12px' }}>
+          <a href='mccoydewitt.com/privacy.html'>Terms & Conditions</a>
+          <span>    </span>
+          <a href='mccoydewitt.com/privacy.html'>Privacy Policy</a>
+        </div>
       </Row>
     </div>
   );

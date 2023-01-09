@@ -142,15 +142,10 @@ export default function Login(props) {
     return (
         <>
             <Modal show={showLogin} onHide={handleClose} className='details-modal .modal-content'>
-                <Modal.Header closeButton>
-                    {notRegistered ?
-                        <Modal.Title>Register</Modal.Title>
-                        :
-                        (!forgotPassword) ?
-                            <Modal.Title>Sign In</Modal.Title>
-                            :
-                            <Modal.Title>Request Password Reset</Modal.Title>
-                    }
+                <Modal.Header className="px-4" closeButton>
+                    <Modal.Title className='ms-auto'>
+                        {notRegistered ? 'Create An Account' : (!forgotPassword) ? 'Sign In' : 'Request Password Reset'}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {createProjectButton &&
@@ -351,16 +346,25 @@ export default function Login(props) {
                                 }
                                 <Row className='justify-content-md-center'>
                                     {(notRegistered && pageNumber === 2) &&
-                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <CustomButton primaryColor={primaryColor}
-                                                onClickFunction={function () { setPageNumber(1) }}
-                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-                                                text={'Back'} arrowLeft={true} />
-                                            <CustomButton primaryColor={primaryColor}
-                                                onClickFunction={function () { handleRegister(); }}
-                                                currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
-                                                text={'Register'} register={true} submitButton={true} />
-                                        </div>
+                                        <>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <CustomButton primaryColor={primaryColor}
+                                                    onClickFunction={function () { setPageNumber(1) }}
+                                                    currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                    text={'Back'} arrowLeft={true} />
+                                                <CustomButton primaryColor={primaryColor}
+                                                    onClickFunction={function () { handleRegister(); }}
+                                                    currentChoice={currentChoice} setCurrentChoice={setCurrentChoice}
+                                                    text={'Register'} register={true} submitButton={true} />
+                                            </div>
+                                            <div style={{ fontSize: '12px', opacity: '0.5', marginTop: '10px' }}>
+                                                <span>By registering you agree to our </span>
+                                                <span><a href='mccoydewitt.com/privacy.html'>Terms & Conditions</a></span>
+                                                <span> and </span>
+                                                <span><a href='mccoydewitt.com/privacy.html'>Privacy Policy</a></span>
+                                                . You also consent to some of your data being stored by McCoy DeWitt LLC, which may be used to contact you or complete requested services.
+                                            </div>
+                                        </>
                                     }
                                     {(!notRegistered && !forgotPassword) &&
                                         <>
@@ -370,6 +374,7 @@ export default function Login(props) {
                                                 text={'Sign In'} login={true} submitButton={true} />
                                             <div className='forgotPasswordButton' onClick={() => setForgotPassword(true)}>Forgot Password?</div>
                                         </>
+
                                     }
                                 </Row>
                             </Row>
@@ -378,17 +383,19 @@ export default function Login(props) {
                 </Modal.Body >
                 <Modal.Footer>
                     {notRegistered ?
-                        <div style={{ marginRight: 'auto' }}>
-                            <CustomButton primaryColor={primaryColor}
-                                onClickFunction={function () { setNotRegistered(false) }}
-                                text={'Sign In'} login={true} submitButton={true} />
+                        <div className='me-auto' style={{ fontSize: '14px', display: 'flex' }}>
+                            <span className='pr-2'>Already Have An Account?</span>
+                            <div className='createAccountButton' onClick={() => setNotRegistered(false)}>
+                                Sign In
+                            </div>
                         </div>
                         :
                         (!forgotPassword) ?
-                            <div style={{ marginRight: 'auto' }}>
-                                <CustomButton primaryColor={primaryColor}
-                                    onClickFunction={function () { setNotRegistered(true) }}
-                                    text={'Register'} register={true} submitButton={true} />
+                            <div className='me-auto' style={{ fontSize: '14px', display: 'flex' }}>
+                                <span className='pr-2'>Don't Have An Account?</span>
+                                <div className='createAccountButton' onClick={() => setNotRegistered(true)}>
+                                    Create An Account
+                                </div>
                             </div>
                             :
                             <div style={{ marginRight: 'auto' }}>
