@@ -57,9 +57,9 @@ export default function Footer(props) {
         </div>
         <div style={{ textAlign: 'center', color: 'white', fontSize: '12px' }}>@Copyright. All rights reserved.</div>
         <div style={{ textAlign: 'center', color: 'white', fontSize: '12px' }}>
-          <a href='termsConditions.html'>Terms & Conditions</a>
+          <a href='termsConditions.html' target="_blank">Terms & Conditions</a>
           <span>    </span>
-          <a href='privacy.html'>Privacy Policy</a>
+          <a href='privacy.html' target="_blank">Privacy Policy</a>
         </div>
       </Row>
     </div>

@@ -359,9 +359,9 @@ export default function Login(props) {
                                             </div>
                                             <div style={{ fontSize: '12px', opacity: '0.5', marginTop: '10px' }}>
                                                 <span>By registering you agree to our </span>
-                                                <span><a href='termsConditions.html'>Terms & Conditions</a></span>
+                                                <span><a href='termsConditions.html' target="_blank">Terms & Conditions</a></span>
                                                 <span> and </span>
-                                                <span><a href='privacy.html'>Privacy Policy</a></span>
+                                                <span><a href='privacy.html' target="_blank">Privacy Policy</a></span>
                                                 . You also consent to some of your data being stored by McCoy DeWitt LLC, which may be used to contact you or complete requested services.
                                             </div>
                                         </>
