@@ -1,5 +1,5 @@
 import axios from 'axios';
-const admin = [process.env.HURDT_USERNAME, process.env.DEWITT_USERNAME];
+const admin = [process.env.REACT_APP_ADMIN_HURDT, process.env.REACT_APP_ADMIN_DEWITT];
 const server = 'https://polar-tor-24509.herokuapp.com';
 
 export const services = [

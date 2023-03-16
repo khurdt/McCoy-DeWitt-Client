@@ -23,6 +23,8 @@ export default function AdminView(props) {
     adminProjects,
     primaryColor,
     secondaryColor,
+    setPrimaryColor,
+    setSecondaryColor,
     navigate,
     setSnackBarInfo,
     username,
@@ -88,7 +90,9 @@ export default function AdminView(props) {
       {showCreateProject &&
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
       }
-      <div style={{ position: 'relative', minHeight: '60vh', paddingTop: '10px' }}>
+      <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+      <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
+      <div style={showCreateProject ? { minHeight: '20vh' } : { position: 'relative', minHeight: '100vh', paddingTop: '10px' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!deleteProject ?
             <div className="adminEditPosition">
@@ -144,7 +148,7 @@ export default function AdminView(props) {
         </Row>
         <div className={(showCreateProject) ? 'hideProjects' : ''}>
           {(projectsInView) ?
-            <Row className='m-auto' style={{ justifyContent: 'center', position: 'relative' }}>
+            <Row className='m-auto pt-4' style={{ justifyContent: 'center', position: 'relative' }}>
               {filteredProjects.length === 0 && (
                 <div style={{ height: '80vh' }} className='text-center p-5'>Didn't Find Any Projects</div>
               )}
@@ -211,7 +215,7 @@ export default function AdminView(props) {
               })}
             </Row>
             :
-            <Row className='m-auto' style={{ justifyContent: 'center' }}>
+            <Row className='m-auto pt-4' style={{ justifyContent: 'center' }}>
               {filteredClients.length === 0 && (
                 <div style={{ height: '80vh' }} className='text-center p-5'>Didn't Find Any Clients</div>
               )}

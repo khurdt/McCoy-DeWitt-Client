@@ -36,7 +36,7 @@ function App() {
   let navigate = useNavigate();
   // primary color options #22d1da #2ab400 #ef2922
   // secondary color options #262626
-  const admin = [process.env.HURDT_USERNAME, process.env.DEWITT_USERNAME];
+  const admin = [process.env.REACT_APP_ADMIN_HURDT, process.env.REACT_APP_ADMIN_DEWITT];
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
@@ -206,6 +206,8 @@ function App() {
                   <AdminView
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
+                    setPrimaryColor={setPrimaryColor}
+                    setSecondaryColor={setSecondaryColor}
                     navigate={navigate}
                     adminClients={adminClients}
                     adminProjects={adminProjects}
@@ -221,6 +223,8 @@ function App() {
                     <AdminView
                       primaryColor={primaryColor}
                       secondaryColor={secondaryColor}
+                      setPrimaryColor={setPrimaryColor}
+                      setSecondaryColor={setSecondaryColor}
                       navigate={navigate}
                       adminClients={adminClients}
                       adminProjects={adminProjects}
