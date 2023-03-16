@@ -29,11 +29,14 @@ const Profile = lazy(() => import('../profile-component/profile'));
 const AdminView = lazy(() => import('../adminView-component/adminView'));
 
 
+{/* <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+<input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} /> */}
+
 function App() {
   let navigate = useNavigate();
   // primary color options #22d1da #2ab400 #ef2922
   // secondary color options #262626
-  const admin = 'khurdt';
+  const admin = ['khurdt', 'jocidewitt'];
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
@@ -79,7 +82,7 @@ function App() {
 
   //When a user successfully logs in, this function updates the 'user' property from null to particular user
   const onLoggedIn = (token, username) => {
-    if (username === admin) {
+    if (admin.includes(username)) {
       getUserData(setUserData, getAdminInfo);
       navigate('admin');
     } else {
@@ -97,8 +100,6 @@ function App() {
           setShowLogin={setShowLogin}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
-          setPrimaryColor={setPrimaryColor}
-          setSecondaryColor={setSecondaryColor}
           admin={admin}
           navigate={navigate} />
         <Login
@@ -108,7 +109,6 @@ function App() {
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           createProjectButton={createProjectButton}
-          admin={admin}
           setSnackBarInfo={setSnackBarInfo}
           forgotPassword={forgotPassword}
           setForgotPassword={setForgotPassword} />

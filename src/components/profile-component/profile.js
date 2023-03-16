@@ -55,7 +55,11 @@ export default function Profile(props) {
         if (createProjectButton) {
             setShowCreateProject(true);
             setCreateProjectButton(false);
-            window.scrollTo(0, 0);
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'instant'
+            });
         }
         setUsername(userData.username);
         setEmail(userData.email);

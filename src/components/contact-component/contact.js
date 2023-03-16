@@ -1,6 +1,6 @@
 import './contact.css';
 import { Image } from 'cloudinary-react';
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
@@ -18,6 +18,15 @@ export default function Contact(props) {
     const formRef = useRef(null);
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
+    }, []);
+
     const setField = (field, value) => {
         setForm({
             ...form,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const admin = 'khurdt';
+const admin = ['khurdt', 'jocidewitt'];
 const server = 'https://polar-tor-24509.herokuapp.com';
 
 export const services = [
@@ -89,7 +89,7 @@ export const getUserData = (setUserData, getAdminInfo) => {
   }).then((response) => {
 
     let userData = response.data;
-    if (userData.username === admin) { getAdminInfo(); }
+    if (admin.includes(userData.username)) { getAdminInfo(); }
     setUserData(userData);
   })
     .catch(function (error) {
@@ -453,7 +453,7 @@ export const createProject = (validate, projectData, setShowCreateProject, setSn
           message: 'Project Created!',
           loading: false,
         });
-        if (username === admin) {
+        if (admin.includes(username)) {
           getAllProjects(setAdminProjects);
         } else {
           getProjects(setProjects);
@@ -491,7 +491,7 @@ export const addProject = (projectIdValidaton, projectId, setShowCreateProject, 
           message: 'Project Added!',
           loading: false,
         });
-        if (username === admin) {
+        if (admin.includes(username)) {
           getAllProjects(setAdminProjects);
         } else {
           getProjects(setProjects);

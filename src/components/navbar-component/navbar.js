@@ -14,8 +14,6 @@ export default function Navigation(props) {
     setShowLogin,
     primaryColor,
     secondaryColor,
-    setPrimaryColor,
-    setSecondaryColor,
     admin,
     navigate } = props;
 
@@ -121,26 +119,11 @@ export default function Navigation(props) {
                   <Nav className='ml-auto'>
                     <Nav.Link>
                       <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to={(admin.includes(user)) ? 'admin' : 'profile'} onClick={() => { setPageActive('user') }}>Account</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={onLoggedOut}>
                           <div>Sign Out</div>
                         </NavDropdown.Item>
-                        {user === admin &&
-                          <>
-                            <NavDropdown.Divider />
-                            <div className='pt-2'>
-                              <div style={{ display: 'flex', color: 'white', margin: 'auto' }}>Color
-                                <div>
-                                  <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-                                </div>
-                                <div>
-                                  <input className='colorInput m-2' style={{ position: 'relative' }} type='color' value={secondaryColor} onChange={(e) => setSecondaryColor(e.target.value)} />
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        }
                       </NavDropdown>
                     </Nav.Link>
                   </Nav>
@@ -180,7 +163,7 @@ export default function Navigation(props) {
                 <Nav>
                   <Nav.Link className='offcanvas_item'>
                     <NavDropdown style={userTab} title={<UserIcon />} id="basic-nav-dropdown">
-                      <NavDropdown.Item as={Link} to={(user === admin) ? 'admin' : 'profile'} onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
+                      <NavDropdown.Item as={Link} to={(admin.includes(user)) ? 'admin' : 'profile'} onClick={() => { handleClose(); setPageActive('user') }}>Account</NavDropdown.Item>
                       <NavDropdown.Divider />
                       <NavDropdown.Item onClick={() => { handleClose(); onLoggedOut() }} style={{ display: 'flex' }}>
                         <div>Sign Out</div>

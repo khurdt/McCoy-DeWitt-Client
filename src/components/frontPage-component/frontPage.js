@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './frontPage.css'
 import { Image } from 'cloudinary-react';
 import { services } from '../servicesAPI';
@@ -14,14 +14,29 @@ import Row from 'react-bootstrap/Row';
 import { ChevronsRight } from 'react-feather'
 
 export default function FrontPage(props) {
-  const { setPageActive, primaryColor, secondaryColor, setCreateProjectButton, setShowLogin, navigate, admin } = props;
+  const {
+    setPageActive,
+    primaryColor,
+    secondaryColor,
+    setCreateProjectButton,
+    setShowLogin,
+    navigate,
+    admin } = props;
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, []);
 
   const handleCreateProject = () => {
     setCreateProjectButton(true);
     let user = localStorage.getItem('user');
     if (!user) {
       setShowLogin(true);
-    } else if (user === admin) {
+    } else if (admin.includes(user)) {
       navigate('admin');
       setPageActive('user');
     } else {

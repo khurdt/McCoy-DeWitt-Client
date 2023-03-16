@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './createProject.css';
 import { ArrowLeft, X } from 'react-feather';
 import { services } from '../servicesAPI';
@@ -48,6 +48,14 @@ export default function CreateProject(props) {
     users: [username],
     status: { title: 'pending review', description: 'we have not yet reviewed your submitted project, thank you for waiting' },
   }
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, []);
 
   const validate = () => {
     let isReq = true;

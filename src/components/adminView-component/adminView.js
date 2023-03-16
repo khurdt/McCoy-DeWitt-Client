@@ -69,7 +69,11 @@ export default function AdminView(props) {
     if (createProjectButton) {
       setShowCreateProject(true);
       setCreateProjectButton(false);
-      window.scrollTo(0, 0);
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant'
+      });
     }
   }, [adminProjects]);
 
@@ -83,7 +87,7 @@ export default function AdminView(props) {
       {showCreateProject &&
         <CreateProject setShowCreateProject={setShowCreateProject} username={username} primaryColor={primaryColor} setSnackBarInfo={setSnackBarInfo} setAdminProjects={setAdminProjects} />
       }
-      <div style={{ position: 'relative', minHeight: '80vh', paddingTop: '10px' }}>
+      <div style={{ position: 'relative', minHeight: '60vh', paddingTop: '10px' }}>
         <div style={{ position: '-webkit-sticky', position: 'sticky', top: '10px', zIndex: '1000' }}>
           {!deleteProject ?
             <div className="adminEditPosition">
@@ -163,7 +167,7 @@ export default function AdminView(props) {
                               <Col xs={2} sm={2} md={2} ><User width={20} height={20} /></Col>
                               {project.users.map((a, e, i) => {
                                 return (
-                                  (a === admin) ?
+                                  (admin.includes(a)) ?
                                     <></>
                                     :
                                     <Col xs={3} sm={3} md={3} style={{ display: 'flex', justifyContent: 'left' }}>

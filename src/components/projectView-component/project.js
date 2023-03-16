@@ -60,7 +60,11 @@ export default function Project(props) {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
     getProject(setProject, setEditing, project._id);
   }, []);
 
@@ -149,6 +153,7 @@ export default function Project(props) {
           }
         </div>
         <Card className='projectIntro projectIntro ml-auto'>
+          <Card.Text className="pl-3">Created: {project.createdAt}</Card.Text>
           {/* OVERVIEW ----------------------------------------------------------------------------------------------------------- */}
           <div style={{ marginRight: '45px' }}>
             <Card.Title className='project-overview' style={{ fontSize: '21px', padding: '10px' }}>Overview:
@@ -178,7 +183,7 @@ export default function Project(props) {
             </Card.Title>
             <div style={{ width: 'fit-content', padding: '10px' }}>
               {/* STATUS ----------------------------------------------------------------------------------------------------------- */}
-              {editing && (admin === (localStorage.getItem('user'))) ?
+              {editing && (admin.includes(localStorage.getItem('user'))) ?
                 <>
                   <Form style={{ width: 'auto', maxWidth: '350px' }}>
                     <Form.Group className='m-1'>
@@ -311,7 +316,7 @@ export default function Project(props) {
               <Row className="justify-content-center align-items-center" style={{ fontSize: '17px', marginLeft: '50px' }}>
                 {project.users.map((a, e, i) => {
                   return (
-                    (a === admin) ?
+                    (admin.includes(a)) ?
                       <div></div>
                       :
                       <>
@@ -522,6 +527,7 @@ export default function Project(props) {
               </Col>
             )
           })}
+          {(project.files.length === 0) && <div className="text-center">This project does not have any files</div>}
         </Row>
       </div >
     </div >
