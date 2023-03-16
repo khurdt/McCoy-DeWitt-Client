@@ -1,5 +1,5 @@
 import axios from 'axios';
-const admin = ['khurdt', 'jocidewitt'];
+const admin = [process.env.HURDT_USERNAME, process.env.DEWITT_USERNAME];
 const server = 'https://polar-tor-24509.herokuapp.com';
 
 export const services = [
@@ -57,12 +57,13 @@ export const services = [
 
 // APP PAGE ----------------------------------------------------------------------------------------------------------------------------------------------
 
-export const getAllProjects = (setAdminProjects) => {
+export const getAllProjects = (setAdminProjects, setAdminNoProjects) => {
   let token = localStorage.getItem('token');
   axios.get(`${server}/projects`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
     let allProjects = response.data;
+    if (allProjects.length === 0) { setAdminNoProjects(true); }
     setAdminProjects(allProjects);
   }).catch(function (error) {
     console.log(error);
@@ -97,14 +98,14 @@ export const getUserData = (setUserData, getAdminInfo) => {
     });
 }
 
-export const getProjects = (setProjects) => {
+export const getProjects = (setProjects, setNoProjects) => {
   let username = localStorage.getItem('user');
   let token = localStorage.getItem('token');
   axios.get(`${server}/projects/${username}`, {
     headers: { Authorization: `Bearer ${token}` }
   }).then((response) => {
-
     let projects = response.data;
+    if (projects.length === 0) { setNoProjects(true); }
     setProjects(projects);
   }).catch(function (error) {
     console.log(error);

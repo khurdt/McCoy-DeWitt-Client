@@ -58,6 +58,7 @@ export default function Project(props) {
     let date = (project.insuranceClaim.dateOfInspection !== null) ? project.insuranceClaim.dateOfInspection.slice(0, 10) : 'none';
     return date;
   }
+  const formattedProjectDate = new Date(project.createdAt).toString().slice(4, 16);
 
   useEffect(() => {
     window.scrollTo({
@@ -153,7 +154,7 @@ export default function Project(props) {
           }
         </div>
         <Card className='projectIntro projectIntro ml-auto'>
-          <Card.Text className="pl-3">Created: {project.createdAt}</Card.Text>
+          <Card.Text className="pl-3">Created {formattedProjectDate}</Card.Text>
           {/* OVERVIEW ----------------------------------------------------------------------------------------------------------- */}
           <div style={{ marginRight: '45px' }}>
             <Card.Title className='project-overview' style={{ fontSize: '21px', padding: '10px' }}>Overview:
@@ -162,7 +163,8 @@ export default function Project(props) {
                   <Form.Group className='m-1'>
                     <div style={{ position: 'relative' }}>
                       <Form.Control
-                        type='text'
+                        as='textarea'
+                        rows={4}
                         placeholder='Overview'
                         value={project.description}
                         onChange={(e) => {
@@ -207,7 +209,8 @@ export default function Project(props) {
                     <Form.Group className='m-1'>
                       <div style={{ position: 'relative' }}>
                         <Form.Control
-                          type='text'
+                          as='textarea'
+                          rows={4}
                           placeholder='Description'
                           value={project.status.description}
                           onChange={(e) => {

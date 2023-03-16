@@ -36,7 +36,7 @@ function App() {
   let navigate = useNavigate();
   // primary color options #22d1da #2ab400 #ef2922
   // secondary color options #262626
-  const admin = ['khurdt', 'jocidewitt'];
+  const admin = [process.env.HURDT_USERNAME, process.env.DEWITT_USERNAME];
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
   const [pageActive, setPageActive] = useState('');
@@ -45,7 +45,9 @@ function App() {
   const [createProjectButton, setCreateProjectButton] = useState(false);
   const [userData, setUserData] = useState({});
   const [projects, setProjects] = useState([]);
+  const [noProjects, setNoProjects] = useState(false);
   const [adminProjects, setAdminProjects] = useState([]);
+  const [noAdminProjects, setAdminNoProjects] = useState(false);
   const [adminClients, setAdminClients] = useState([]);
   const [snackBarInfo, setSnackBarInfo] = useState({
     message: '',
@@ -64,11 +66,11 @@ function App() {
 
   const getClientInfo = () => {
     getUserData(setUserData, getAdminInfo);
-    getProjects(setProjects);
+    getProjects(setProjects, setNoProjects);
   }
 
   const getAdminProjects = () => {
-    getAllProjects(setAdminProjects);
+    getAllProjects(setAdminProjects, setAdminNoProjects);
   }
 
   const getAdminClients = () => {
@@ -148,7 +150,7 @@ function App() {
             <Route
               path='profile'
               element={
-                (projects && userData.firstName) ?
+                (noProjects && userData.firstName) ?
                   <Profile
                     onBackClick={() => navigate(-1)}
                     userData={userData}
@@ -165,7 +167,7 @@ function App() {
                     setForgotPassword={setForgotPassword}
                   />
                   :
-                  ((projects && projects.length > 0) && userData.firstName) ?
+                  ((!noProjects && projects.length > 0) && userData.firstName) ?
                     <Profile
                       onBackClick={() => navigate(-1)}
                       userData={userData}
@@ -200,7 +202,7 @@ function App() {
             <Route
               path='admin'
               element={
-                ((adminProjects.length > 0) && adminClients.length > 0) ?
+                (noAdminProjects && adminClients.length > 0) ?
                   <AdminView
                     primaryColor={primaryColor}
                     secondaryColor={secondaryColor}
@@ -215,7 +217,22 @@ function App() {
                     admin={admin}
                   />
                   :
-                  <Loading primaryColor={primaryColor} />
+                  (!noAdminProjects && adminProjects.length > 0 && adminClients.length > 0) ?
+                    <AdminView
+                      primaryColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      navigate={navigate}
+                      adminClients={adminClients}
+                      adminProjects={adminProjects}
+                      setSnackBarInfo={setSnackBarInfo}
+                      username={userData.username}
+                      setAdminProjects={setAdminProjects}
+                      setCreateProjectButton={setCreateProjectButton}
+                      createProjectButton={createProjectButton}
+                      admin={admin}
+                    />
+                    :
+                    <Loading primaryColor={primaryColor} />
               }
             />
             <Route

@@ -61,6 +61,7 @@ export default function AdminView(props) {
     let locationProjects = adminProjects.filter(p => p.location.toLowerCase().includes(filter.toLowerCase()));
     let statusProjects = adminProjects.filter(p => p.status.title.toLowerCase().includes(filter.toLowerCase()));
     let userProjects = adminProjects.filter(p => p.users.some((a, e, i) => a.toLowerCase().includes(filter.toLowerCase())));
+    // let dateProjects = adminProjects.filter(p => new Date(p.createdAt).toString().slice(4, 16).toLowerCase().includes(filter.toLowerCase()));
     let combinedProjects = serviceProjects.concat(locationProjects).concat(statusProjects).concat(userProjects);
     filteredProjects = [...new Set(combinedProjects)];
   }
