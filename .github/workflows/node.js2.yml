@@ -26,6 +26,8 @@ jobs:
         npm run build
       env:
         REACT_APP_CLOUD_NAME: ${{ secrets.REACT_APP_CLOUD_NAME }}
+        REACT_APP_ADMIN_DEWITT: ${{ secrets.REACT_APP_ADMIN_DEWITT }}
+        REACT_APP_ADMIN_HURDT: ${{ secrets.REACT_APP_ADMIN_HURDT }}
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
