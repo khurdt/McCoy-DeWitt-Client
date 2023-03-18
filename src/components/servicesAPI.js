@@ -235,6 +235,7 @@ export const sendContactInfo = (event, form, validate, handleReset, setSnackBarI
       message: message,
     })
       .then((response) => {
+        console.log(response);
         setSnackBarInfo({
           show: 'true',
           message: 'Email Sent! Thank You',
