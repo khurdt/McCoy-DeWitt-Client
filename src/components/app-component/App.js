@@ -34,8 +34,8 @@ const AdminView = lazy(() => import('../adminView-component/adminView'));
 
 function App() {
   let navigate = useNavigate();
-  // primary color #22d1da #2ab400 #ef2922
-  // secondary color  #262626
+  // primary color options #22d1da #2ab400 #ef2922
+  // secondary color options #262626
   const admin = [process.env.REACT_APP_ADMIN_HURDT, process.env.REACT_APP_ADMIN_DEWITT];
   const [primaryColor, setPrimaryColor] = useState('#22d1da');
   const [secondaryColor, setSecondaryColor] = useState('#262626');
